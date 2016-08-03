@@ -15,6 +15,7 @@
 hook OnGameModeInit()
 {
 	Command_AddAltNamed("ir",    		"goto");
+	Command_AddAltNamed("pm",    		"mp");
 	return 1;
 }
 
@@ -48,5 +49,27 @@ YCMD:ir(playerid, params[], help)
 
    SendClientMessagef(targetid, COLOR_PLAYER_COMMAND, "* %s veio até você.", GetPlayerNamef(playerid));
    SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você foi até %s.", GetPlayerNamef(targetid));
+   return 1;
+}
+
+//------------------------------------------------------------------------------
+
+YCMD:pm(playerid, params[], help)
+{
+   new targetid, message[128];
+   if(sscanf(params, "us[128]", targetid, message))
+       return SendClientMessage(playerid, COLOR_INFO, "* /pm [playerid] [mensagem]");
+
+   else if(!IsPlayerLogged(targetid))
+       return SendClientMessage(playerid, COLOR_ERROR, "* O jogador não está conectado.");
+
+   else if(playerid == targetid)
+       return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode mandar mensagem privada para você mesmo.");
+
+   new output[144];
+   format(output, sizeof(output), "* [PM] %s(ID: %d): %s", GetPlayerNamef(playerid), playerid, message);
+   SendClientMessage(targetid, COLOR_MUSTARD, output);
+   format(output, sizeof(output), "* [PM] para %s(ID: %d): %s", GetPlayerNamef(targetid), targetid, message);
+   SendClientMessage(playerid, COLOR_MUSTARD, output);
    return 1;
 }
