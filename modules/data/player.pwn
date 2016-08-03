@@ -34,6 +34,7 @@ enum e_player_adata
     e_player_ip[16],
     e_player_money,
     e_player_bank,
+    e_player_played_time,
     e_player_lastlogin
 }
 static gPlayerAccountData[MAX_PLAYERS][e_player_adata];
@@ -352,6 +353,16 @@ GetPlayerCash(playerid)
 SetPlayerCash(playerid, value)
 {
     gPlayerAccountData[playerid][e_player_money] = value;
+}
+
+GetPlayerPlayedTime(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_played_time];
+}
+
+SetPlayerPlayedTime(playerid, value)
+{
+    gPlayerAccountData[playerid][e_player_played_time] = value;
 }
 
 //------------------------------------------------------------------------------

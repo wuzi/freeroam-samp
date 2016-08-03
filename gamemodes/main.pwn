@@ -38,6 +38,7 @@ new gMySQL;
 #include <sscanf2>
 #include <a_mysql>
 #include <YSI\y_hooks>
+#include <YSI\y_timers>
 #include <YSI\y_commands>
 #include <YSI\y_va>
 #include <utils>
@@ -83,6 +84,9 @@ hook OnGameModeInit()
 
 /* Jogador */
 #include "../modules/player/commands.pwn"
+
+/* Core */
+#include "../modules/core/timers.pwn"
 
 /* Gameplay */
 #include "../modules/gameplay/bank.pwn"
