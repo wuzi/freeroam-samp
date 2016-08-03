@@ -32,6 +32,8 @@ enum e_player_adata
     e_player_regdate,
     e_player_email[64],
     e_player_ip[16],
+    e_player_money,
+    e_player_bank,
     e_player_lastlogin
 }
 static gPlayerAccountData[MAX_PLAYERS][e_player_adata];
@@ -329,3 +331,27 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     }
     return 1;
 }
+
+//------------------------------------------------------------------------------
+
+GetPlayerBankCash(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_bank];
+}
+
+SetPlayerBankCash(playerid, value)
+{
+    gPlayerAccountData[playerid][e_player_bank] = value;
+}
+
+GetPlayerCash(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_money];
+}
+
+SetPlayerCash(playerid, value)
+{
+    gPlayerAccountData[playerid][e_player_money] = value;
+}
+
+//------------------------------------------------------------------------------

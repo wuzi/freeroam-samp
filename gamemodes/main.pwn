@@ -84,6 +84,9 @@ hook OnGameModeInit()
 /* Jogador */
 #include "../modules/player/commands.pwn"
 
+/* Gameplay */
+#include "../modules/gameplay/bank.pwn"
+
 //------------------------------------------------------------------------------
 
 main()
