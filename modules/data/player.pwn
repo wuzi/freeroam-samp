@@ -173,6 +173,9 @@ public OnAccountRegister(playerid)
 {
     gPlayerAccountData[playerid][e_player_database_id] = cache_insert_id();
 
+    SetSpawnInfo(playerid, 255, 0, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
+    SpawnPlayer(playerid);
+
     new playerName[MAX_PLAYER_NAME];
     GetPlayerName(playerid, playerName, sizeof(playerName));
 	printf("[mysql] new player account registered on database. ID: %d, Username: %s", gPlayerAccountData[playerid][e_player_database_id], playerName);
