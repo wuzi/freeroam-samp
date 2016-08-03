@@ -12,6 +12,10 @@
 
 //------------------------------------------------------------------------------
 
+static gplCreatedVehicle[MAX_PLAYERS][MAX_CREATED_VEHICLE_PER_PLAYER];
+
+//------------------------------------------------------------------------------
+
 hook OnGameModeInit()
 {
 	Command_AddAltNamed("ir",    		"goto");
@@ -54,6 +58,82 @@ YCMD:ir(playerid, params[], help)
 
 //------------------------------------------------------------------------------
 
+YCMD:criarcar(playerid, params[], help)
+{
+    new
+  		idx,
+  		iString[ 128 ];
+
+  	if (isnull(params))
+  		return SendClientMessage(playerid, COLOR_INFO, "* /criarcar [nome]" );
+
+  	idx = GetVehicleModelIDFromName(params);
+
+  	if(idx == -1)
+  	{
+  		idx = strval(iString);
+
+  		if(idx < 400 || idx > 611)
+  			return SendClientMessage(playerid, COLOR_ERROR, "* Veículo inválido.");
+  	}
+
+    new Float:x, Float:y, Float:z, Float:a;
+    if(IsPlayerInAnyVehicle(playerid))
+    {
+        GetVehiclePos(GetPlayerVehicleID(playerid), x, y, z);
+        GetVehicleZAngle(GetPlayerVehicleID(playerid), a);
+    }
+    else
+    {
+        GetPlayerPos(playerid, x, y, z);
+        GetPlayerFacingAngle(playerid, a);
+    }
+
+    new bool:vehicle_created = false;
+    for(new i = 0; i < MAX_CREATED_VEHICLE_PER_PLAYER; i++)
+    {
+        if(IsPlayerInVehicle(playerid, gplCreatedVehicle[playerid][i]))
+        {
+            vehicle_created = true;
+            DestroyVehicle(gplCreatedVehicle[playerid][i]);
+            gplCreatedVehicle[playerid][i] = CreateVehicle(idx, x, y, z, a, random(255), random(255), -1);
+            PutPlayerInVehicle(playerid, gplCreatedVehicle[playerid][i], 0);
+            SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você criou um %s.", GetVehicleName(gplCreatedVehicle[playerid][i]));
+            break;
+        }
+    }
+
+    if(!vehicle_created)
+    {
+        for(new i = 0; i < MAX_CREATED_VEHICLE_PER_PLAYER; i++)
+        {
+            if(!gplCreatedVehicle[playerid][i])
+            {
+                vehicle_created = true;
+                gplCreatedVehicle[playerid][i] = CreateVehicle(idx, x, y, z, a, random(255), random(255), -1);
+                PutPlayerInVehicle(playerid, gplCreatedVehicle[playerid][i], 0);
+                SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você criou um %s.", GetVehicleName(gplCreatedVehicle[playerid][i]));
+                break;
+            }
+        }
+    }
+
+    if(!vehicle_created)
+    {
+        vehicle_created = true;
+        new vehicleid = random(MAX_CREATED_VEHICLE_PER_PLAYER);
+        DestroyVehicle(gplCreatedVehicle[playerid][vehicleid]);
+        gplCreatedVehicle[playerid][vehicleid] = CreateVehicle(idx, x, y, z, a, random(255), random(255), -1);
+        PutPlayerInVehicle(playerid, gplCreatedVehicle[playerid][vehicleid], 0);
+        SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você criou um %s.", GetVehicleName(gplCreatedVehicle[playerid][vehicleid]));
+        SendClientMessage(playerid, COLOR_WARNING, "* Você atingiu o limite de veículos por jogador, um de seus antigos veículos foi destruído.");
+    }
+
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
 YCMD:pm(playerid, params[], help)
 {
    new targetid, message[128];
@@ -72,4 +152,19 @@ YCMD:pm(playerid, params[], help)
    format(output, sizeof(output), "* [PM] para %s(ID: %d): %s", GetPlayerNamef(targetid), targetid, message);
    SendClientMessage(playerid, COLOR_MUSTARD, output);
    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+    for(new i = 0; i < MAX_CREATED_VEHICLE_PER_PLAYER; i++)
+    {
+        if(gplCreatedVehicle[playerid][i])
+        {
+            DestroyVehicle(gplCreatedVehicle[playerid][i]);
+            gplCreatedVehicle[playerid][i] = 0;
+        }
+    }
+    return 1;
 }
