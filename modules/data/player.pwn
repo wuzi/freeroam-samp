@@ -77,7 +77,7 @@ SavePlayerAccount(playerid)
 
     // Salvar conta
     new query[90];
-	mysql_format(gMySQL, query, sizeof(query), "UPDATE `players` SET `ip`='%s', `lastlogin`=%d WHERE `id`=%d", gPlayerAccountData[playerid][e_player_ip], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
+	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `ip`='%s', `lastlogin`=%d WHERE `id`=%d", gPlayerAccountData[playerid][e_player_ip], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
 	mysql_pquery(gMySQL, query);
     return 1;
 }
