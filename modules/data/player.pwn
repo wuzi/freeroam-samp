@@ -352,7 +352,9 @@ GetPlayerCash(playerid)
 
 SetPlayerCash(playerid, value)
 {
+    ResetPlayerMoney(playerid);
     gPlayerAccountData[playerid][e_player_money] = value;
+    GivePlayerMoney(playerid, value);
 }
 
 GetPlayerPlayedTime(playerid)

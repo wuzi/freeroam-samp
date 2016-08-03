@@ -16,6 +16,12 @@ ptask UpdatePlayerData[1000](playerid)
 	if(!IsPlayerLogged(playerid))
 		return 1;
 
+    if(GetPlayerCash(playerid) != GetPlayerMoney(playerid))
+    {
+        ResetPlayerMoney(playerid);
+        GivePlayerMoney(playerid, GetPlayerCash(playerid));
+    }
+
 	SetPlayerPlayedTime(playerid, GetPlayerPlayedTime(playerid) + 1);
     return 1;
 }
