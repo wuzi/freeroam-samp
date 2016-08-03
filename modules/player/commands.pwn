@@ -58,16 +58,13 @@ YCMD:ir(playerid, params[], help)
 
 //------------------------------------------------------------------------------
 
-YCMD:criarcar(playerid, params[], help)
+YCMD:car(playerid, params[], help)
 {
-    new
-  		idx,
-  		iString[ 128 ];
+	new vehicleName[32], color1 = random(255), color2 = random(255), idx, iString[128];
+	if(sscanf(params, "s[32]II", vehicleName, color1, color2))
+		return SendClientMessage(playerid, COLOR_INFO, "* /car [nome] [cor] [cor]");
 
-  	if (isnull(params))
-  		return SendClientMessage(playerid, COLOR_INFO, "* /criarcar [nome]" );
-
-  	idx = GetVehicleModelIDFromName(params);
+  	idx = GetVehicleModelIDFromName(vehicleName);
 
   	if(idx == -1)
   	{
@@ -96,7 +93,7 @@ YCMD:criarcar(playerid, params[], help)
         {
             vehicle_created = true;
             DestroyVehicle(gplCreatedVehicle[playerid][i]);
-            gplCreatedVehicle[playerid][i] = CreateVehicle(idx, x, y, z, a, random(255), random(255), -1);
+            gplCreatedVehicle[playerid][i] = CreateVehicle(idx, x, y, z, a, color1, color2, -1);
             PutPlayerInVehicle(playerid, gplCreatedVehicle[playerid][i], 0);
             SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você criou um %s.", GetVehicleName(gplCreatedVehicle[playerid][i]));
             break;
@@ -110,7 +107,7 @@ YCMD:criarcar(playerid, params[], help)
             if(!gplCreatedVehicle[playerid][i])
             {
                 vehicle_created = true;
-                gplCreatedVehicle[playerid][i] = CreateVehicle(idx, x, y, z, a, random(255), random(255), -1);
+                gplCreatedVehicle[playerid][i] = CreateVehicle(idx, x, y, z, a, color1, color2, -1);
                 PutPlayerInVehicle(playerid, gplCreatedVehicle[playerid][i], 0);
                 SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você criou um %s.", GetVehicleName(gplCreatedVehicle[playerid][i]));
                 break;
@@ -123,7 +120,7 @@ YCMD:criarcar(playerid, params[], help)
         vehicle_created = true;
         new vehicleid = random(MAX_CREATED_VEHICLE_PER_PLAYER);
         DestroyVehicle(gplCreatedVehicle[playerid][vehicleid]);
-        gplCreatedVehicle[playerid][vehicleid] = CreateVehicle(idx, x, y, z, a, random(255), random(255), -1);
+        gplCreatedVehicle[playerid][vehicleid] = CreateVehicle(idx, x, y, z, a, color1, color2, -1);
         PutPlayerInVehicle(playerid, gplCreatedVehicle[playerid][vehicleid], 0);
         SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você criou um %s.", GetVehicleName(gplCreatedVehicle[playerid][vehicleid]));
         SendClientMessage(playerid, COLOR_WARNING, "* Você atingiu o limite de veículos por jogador, um de seus antigos veículos foi destruído.");
