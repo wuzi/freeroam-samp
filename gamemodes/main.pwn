@@ -71,6 +71,7 @@ hook OnGameModeInit()
 /* Definições */
 #include "../modules/def/dialog.pwn"
 #include "../modules/def/colors.pwn"
+#include "../modules/def/messages.pwn"
 
 /* Dados */
 #include "../modules/data/player.pwn"
