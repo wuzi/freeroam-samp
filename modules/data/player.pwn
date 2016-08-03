@@ -189,7 +189,7 @@ public OnAccountCheck(playerid)
             ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Acesso", info, "Accessar", "Sair");
             PlaySelectSound(playerid);
 
-            // Caso o banimento do jogador expirar, deletar da coluna de bans
+            // Caso o banimento do jogador expirar, deletar da tabela de bans
             if(gPlayerBannedData[playerid][e_player_banned])
             {
                 new query[57 + MAX_PLAYER_NAME + 1];
