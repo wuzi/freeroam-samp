@@ -31,6 +31,7 @@ new gMySQL;
 //------------------------------------------------------------------------------
 
 // Bibliotecas
+#include <sscanf2>
 #include <a_mysql>
 #include <YSI\y_hooks>
 #include <YSI\y_commands>
