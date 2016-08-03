@@ -77,6 +77,9 @@ hook OnGameModeInit()
 /* Dados */
 #include "../modules/data/player.pwn"
 
+/* Jogador */
+#include "../modules/player/commands.pwn"
+
 //------------------------------------------------------------------------------
 
 main()

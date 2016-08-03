@@ -21,4 +21,9 @@
 #define COLOR_RED               0xCC0000FF
 #define COLOR_DARK_RED          0x8B0000FF
 
+#define COLOR_INFO              0x8CB4EFFF
+#define COLOR_SUCCESS           0xCCFF00FF
+#define COLOR_WARNING           0xFFD700FF
+#define COLOR_ERROR             0xFF7373FF
+
 #define COLOR_PLAYER_COMMAND    0x9CF000FF

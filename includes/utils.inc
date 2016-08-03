@@ -37,6 +37,23 @@ stock ClearPlayerScreen(playerid, lines = 100)
 
 //------------------------------------------------------------------------------
 
+stock GetPlayerNamef(playerid, bool:_removeUnderline = false)
+{
+    new playerName[MAX_PLAYER_NAME];
+    GetPlayerName(playerid, playerName, sizeof(playerName));
+    if(_removeUnderline == true) {
+        for(new i = 0; i < MAX_PLAYER_NAME; i++) {
+            if(playerName[i] == '_') playerName[i] = ' ';
+        }
+    }
+    if(isnull(playerName)) {
+        playerName = "Desconhecido";
+    }
+    return playerName;
+}
+
+//------------------------------------------------------------------------------
+
 // Convert UNIX time to human readable time
 stock convertTimestamp( timestamp, _form=0 )
 {
