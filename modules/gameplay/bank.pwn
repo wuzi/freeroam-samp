@@ -69,3 +69,11 @@ YCMD:sacar(playerid, params[], help)
 }
 
 //------------------------------------------------------------------------------
+
+YCMD:saldo(playerid, params[], help)
+{
+   SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você possui $%d no banco.", GetPlayerBankCash(playerid));
+   return 1;
+}
+
+//------------------------------------------------------------------------------
