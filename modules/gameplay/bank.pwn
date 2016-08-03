@@ -27,6 +27,9 @@ YCMD:transferir(playerid, params[], help)
    else if(GetPlayerBankCash(playerid) < amount)
        return SendClientMessage(playerid, COLOR_ERROR, "* Você não possui essa quantia de dinheiro no banco.");
 
+   else if(amount < 1)
+       return SendClientMessage(playerid, COLOR_ERROR, "* Apenas valores acima de 0 são permitidos.");
+
    SetPlayerBankCash(playerid, GetPlayerBankCash(playerid) - amount);
    SetPlayerBankCash(targetid, GetPlayerBankCash(targetid) + amount);
    SendClientMessagef(targetid, COLOR_PLAYER_COMMAND, "* %s transferiu $%d para você.", GetPlayerNamef(playerid), amount);
@@ -45,6 +48,9 @@ YCMD:depositar(playerid, params[], help)
    else if(GetPlayerCash(playerid) < amount)
        return SendClientMessage(playerid, COLOR_ERROR, "* Você não possui essa quantia de dinheiro na mão.");
 
+   else if(amount < 1)
+       return SendClientMessage(playerid, COLOR_ERROR, "* Apenas valores acima de 0 são permitidos.");
+
    SetPlayerCash(playerid, GetPlayerCash(playerid) - amount);
    SetPlayerBankCash(playerid, GetPlayerBankCash(playerid) + amount);
    SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você depositou $%d.", amount);
@@ -61,6 +67,9 @@ YCMD:sacar(playerid, params[], help)
 
    else if(GetPlayerBankCash(playerid) < amount)
        return SendClientMessage(playerid, COLOR_ERROR, "* Você não possui essa quantia de dinheiro no banco.");
+
+   else if(amount < 1)
+       return SendClientMessage(playerid, COLOR_ERROR, "* Apenas valores acima de 0 são permitidos.");
 
    SetPlayerCash(playerid, GetPlayerCash(playerid) + amount);
    SetPlayerBankCash(playerid, GetPlayerBankCash(playerid) - amount);
