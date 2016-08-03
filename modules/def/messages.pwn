@@ -18,14 +18,14 @@
 
 //------------------------------------------------------------------------------
 
-SendClientMessagef(playerid, color, const message[], va_args<>)
+stock SendClientMessagef(playerid, color, const message[], va_args<>)
 {
    new string[145];
    va_format(string, sizeof(string), message, va_start<3>);
    return SendClientMessage(playerid, color, string);
 }
 
-SendClientMessageToAllf(color, const message[], va_args<>)
+stock SendClientMessageToAllf(color, const message[], va_args<>)
 {
    new string[145];
    va_format(string, sizeof(string), message, va_start<2>);
@@ -34,7 +34,7 @@ SendClientMessageToAllf(color, const message[], va_args<>)
 
 //------------------------------------------------------------------------------
 
-SendClientLocalMessage(playerid, color, Float:radius, string[])
+stock SendClientLocalMessage(playerid, color, Float:radius, string[])
 {
 	new Float:fDist[3];
 	GetPlayerPos(playerid, fDist[0], fDist[1], fDist[2]);
@@ -50,7 +50,7 @@ SendClientLocalMessage(playerid, color, Float:radius, string[])
 
 //------------------------------------------------------------------------------
 
-SendMultiLineMessage(playerid, color, message[])
+stock SendMultiLineMessage(playerid, color, message[])
 {
     if(strlen(message) > 144)
     {
@@ -70,7 +70,7 @@ SendMultiLineMessage(playerid, color, message[])
     return 1;
 }
 
-SendMultiLineMessageToAll(color, message[])
+stock SendMultiLineMessageToAll(color, message[])
 {
     if(strlen(message) > 144)
     {
