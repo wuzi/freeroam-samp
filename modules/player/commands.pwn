@@ -60,8 +60,8 @@ YCMD:ir(playerid, params[], help)
 
 YCMD:car(playerid, params[], help)
 {
-	new vehicleName[32], color1 = random(255), color2 = random(255), idx, iString[128];
-	if(sscanf(params, "s[32]II", vehicleName, color1, color2))
+	new vehicleName[32], color1, color2, idx, iString[128];
+	if(sscanf(params, "s[32]I(-1)I(-1)", vehicleName, color1, color2))
 		return SendClientMessage(playerid, COLOR_INFO, "* /car [nome] [cor] [cor]");
 
   	idx = GetVehicleModelIDFromName(vehicleName);
