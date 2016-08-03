@@ -142,6 +142,10 @@ hook OnPlayerRequestClass(playerid, classid)
     InterpolateCameraPos(playerid, 1080.0939, -1013.4362, 208.6180, 1180.0939, -1113.4362, 203.6180, 30000, CAMERA_MOVE);
     InterpolateCameraLookAt(playerid, 1333.0903, -1205.6227, 203.4406, 1333.0903, -1205.6227, 197.4406, 30000, CAMERA_MOVE);
 
+    // Apenas fazer checagem se o jogador não estiver logado
+    if(IsPlayerLogged(playerid))
+        return 1;
+
     // Verifica se o jogador está banido e prossegue com a checagem da conta
     new query[57 + MAX_PLAYER_NAME + 1], playerName[MAX_PLAYER_NAME + 1];
     GetPlayerName(playerid, playerName, sizeof(playerName));
