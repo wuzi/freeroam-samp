@@ -25,6 +25,17 @@ hook OnGameModeInit()
 
 //------------------------------------------------------------------------------
 
+// Recomendável manter a lista em até 10 linhas, para melhor visualização
+YCMD:comandos(playerid, params[], help)
+{
+	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
+    SendClientMessage(playerid, COLOR_SUB_TITLE, "* /car - /reparar - /ir - /pm");
+	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
 YCMD:reparar(playerid, params[], help)
 {
 	if(!IsPlayerInAnyVehicle(playerid))
@@ -188,7 +199,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 		return COMMAND_DENIED;
 	}
 	else if(success != COMMAND_OK)
-		SendClientMessage(playerid, COLOR_ERROR, "* Este comando não existe.");
+		SendClientMessage(playerid, COLOR_ERROR, "* Este comando não existe. Veja /comandos.");
     return COMMAND_OK;
 }
 

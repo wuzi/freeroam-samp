@@ -18,7 +18,7 @@ static Float:gplMarkPos[MAX_PLAYERS][3];
 // Recomendável manter a lista em até 10 linhas, para melhor visualização
 YCMD:acmds(playerid, params[], help)
 {
-    if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_MODERATOR)
+    if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
  		return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
 
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos Administrativos ----------------------------------------");
