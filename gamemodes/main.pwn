@@ -33,6 +33,8 @@ new gMySQL;
 // Bibliotecas
 #include <a_mysql>
 #include <YSI\y_hooks>
+#include <YSI\y_commands>
+#include <YSI\y_va>
 #include <utils>
 
 //------------------------------------------------------------------------------
@@ -68,6 +70,7 @@ hook OnGameModeInit()
 // Modulos
 /* Definições */
 #include "../modules/def/dialog.pwn"
+#include "../modules/def/colors.pwn"
 
 /* Dados */
 #include "../modules/data/player.pwn"
