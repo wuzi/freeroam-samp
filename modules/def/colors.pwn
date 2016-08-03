@@ -25,5 +25,14 @@
 #define COLOR_SUCCESS           0xCCFF00FF
 #define COLOR_WARNING           0xFFD700FF
 #define COLOR_ERROR             0xFF7373FF
+#define COLOR_TITLE             0xCCFF00FF
+#define COLOR_SUB_TITLE         0xA4A4A4FF
 
 #define COLOR_PLAYER_COMMAND    0x9CF000FF
+#define COLOR_ADMIN_COMMAND     0xc0df74FF
+
+#define COLOR_RANK_OWNER        0x2fd0f9FF
+#define COLOR_RANK_SUB_OWNER    0x2dc4ebFF
+#define COLOR_RANK_MODERATOR    0x31b2d4FF
+#define COLOR_RANK_HELPER       0x259ab9FF
+#define COLOR_RANK_RECRUIT      0x238ba7FF

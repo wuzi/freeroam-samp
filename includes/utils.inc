@@ -294,6 +294,15 @@ stock GetVehicleName(vehicleid)
 
 //------------------------------------------------------------------------------
 
+stock Float:GetPlayerDistanceFromPlayer(playerid, targetid)
+{
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
+	return GetPlayerDistanceFromPoint(targetid, x, y, z);
+}
+
+//------------------------------------------------------------------------------
+
 // Convert UNIX time to human readable time
 stock convertTimestamp( timestamp, _form=0 )
 {

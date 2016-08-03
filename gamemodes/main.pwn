@@ -39,6 +39,7 @@ new gMySQL;
 #include <a_mysql>
 #include <YSI\y_hooks>
 #include <YSI\y_timers>
+#include <YSI\y_iterate>
 #include <YSI\y_commands>
 #include <YSI\y_va>
 #include <utils>
@@ -78,6 +79,7 @@ hook OnGameModeInit()
 #include "../modules/def/dialog.pwn"
 #include "../modules/def/colors.pwn"
 #include "../modules/def/messages.pwn"
+#include "../modules/def/ranks.pwn"
 
 /* Dados */
 #include "../modules/data/player.pwn"
@@ -85,11 +87,15 @@ hook OnGameModeInit()
 /* Jogador */
 #include "../modules/player/commands.pwn"
 
+/* Admin */
+#include "../modules/admin/commands.pwn"
+
 /* Core */
 #include "../modules/core/timers.pwn"
 
 /* Gameplay */
 #include "../modules/gameplay/bank.pwn"
+#include "../modules/gameplay/chat.pwn"
 
 //------------------------------------------------------------------------------
 

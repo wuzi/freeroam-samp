@@ -34,7 +34,10 @@ enum e_player_adata
     e_player_ip[16],
     e_player_money,
     e_player_bank,
+    bool:e_player_muted,
+    e_player_warning,
     e_player_played_time,
+    e_player_admin,
     e_player_lastlogin
 }
 static gPlayerAccountData[MAX_PLAYERS][e_player_adata];
@@ -365,6 +368,36 @@ GetPlayerPlayedTime(playerid)
 SetPlayerPlayedTime(playerid, value)
 {
     gPlayerAccountData[playerid][e_player_played_time] = value;
+}
+
+GetPlayerAdminLevel(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_admin];
+}
+
+SetPlayerAdminLevel(playerid, value)
+{
+    gPlayerAccountData[playerid][e_player_admin] = value;
+}
+
+IsPlayerMuted(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_muted];
+}
+
+TogglePlayerMute(playerid, bool:value)
+{
+    gPlayerAccountData[playerid][e_player_muted] = value;
+}
+
+GetPlayerWarning(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_warning];
+}
+
+SetPlayerWarning(playerid, value)
+{
+    gPlayerAccountData[playerid][e_player_warning] = value;
 }
 
 //------------------------------------------------------------------------------

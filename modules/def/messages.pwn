@@ -50,6 +50,35 @@ stock SendClientLocalMessage(playerid, color, Float:radius, string[])
 
 //------------------------------------------------------------------------------
 
+stock SendAdminMessage(rank, color, const message[], va_args<>)
+{
+	if(numargs() > 3)
+	{
+		new string[145];
+		va_format(string, sizeof(string), message, va_start<3>);
+		foreach(new i: Player)
+		{
+			if(GetPlayerAdminLevel(i) < rank || !IsPlayerLogged(i))
+	            continue;
+
+	        SendClientMessage(i, color, string);
+		}
+	}
+	else
+	{
+		foreach(new i: Player)
+		{
+			if(GetPlayerAdminLevel(i) < rank || !IsPlayerLogged(i))
+	            continue;
+
+	        SendClientMessage(i, color, message);
+		}
+	}
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
 stock SendMultiLineMessage(playerid, color, message[])
 {
     if(strlen(message) > 144)
