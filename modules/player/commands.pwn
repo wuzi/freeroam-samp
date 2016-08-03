@@ -25,6 +25,19 @@ hook OnGameModeInit()
 
 //------------------------------------------------------------------------------
 
+YCMD:reparar(playerid, params[], help)
+{
+	if(!IsPlayerInAnyVehicle(playerid))
+		SendClientMessage(playerid, COLOR_ERROR, "* Você não está em um veículo.");
+	else
+	{
+		RepairVehicle(GetPlayerVehicleID(playerid));
+	}
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
 YCMD:ir(playerid, params[], help)
 {
    new targetid;
