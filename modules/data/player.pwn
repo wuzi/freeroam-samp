@@ -21,6 +21,7 @@
 forward OnAccountLoad(playerid);
 forward OnAccountCheck(playerid);
 forward OnAccountRegister(playerid);
+forward OnBannedAccountCheck(playerid);
 
 //------------------------------------------------------------------------------
 
@@ -34,6 +35,18 @@ enum e_player_adata
     e_player_lastlogin
 }
 static gPlayerAccountData[MAX_PLAYERS][e_player_adata];
+
+//------------------------------------------------------------------------------
+
+enum e_player_bdata
+{
+    bool:e_player_banned,
+    e_player_badmin_name[MAX_PLAYER_NAME],
+    e_player_created_at,
+    e_player_expire,
+    e_player_reason[255]
+}
+static gPlayerBannedData[MAX_PLAYERS][e_player_bdata];
 
 //------------------------------------------------------------------------------
 
@@ -121,8 +134,8 @@ hook OnPlayerRequestClass(playerid, classid)
 {
     new query[57 + MAX_PLAYER_NAME + 1], playerName[MAX_PLAYER_NAME + 1];
     GetPlayerName(playerid, playerName, sizeof(playerName));
-    mysql_format(gMySQL, query, sizeof(query),"SELECT * FROM `users` WHERE `username` = '%e' LIMIT 1", playerName);
-    mysql_tquery(gMySQL, query, "OnAccountCheck", "i", playerid);
+    mysql_format(gMySQL, query, sizeof(query),"SELECT * FROM `bans` WHERE `username` = '%e' LIMIT 1", playerName);
+    mysql_tquery(gMySQL, query, "OnBannedAccountCheck", "i", playerid);
     return 1;
 }
 
@@ -157,13 +170,33 @@ public OnAccountCheck(playerid)
     GetPlayerName(playerid, playerName, sizeof(playerName));
 	if(rows)
 	{
-        cache_get_field_content(0, "password", gPlayerAccountData[playerid][e_player_password], gMySQL, MAX_PLAYER_PASSWORD);
-        gPlayerAccountData[playerid][e_player_database_id] = cache_get_field_content_int(0, "id", gMySQL);
+        if(gPlayerBannedData[playerid][e_player_banned] && (gPlayerBannedData[playerid][e_player_expire] < 0 || gPlayerBannedData[playerid][e_player_expire] > gettime()))
+        {
+            new info[564];
+            format(info, sizeof(info), "{ffffff}%s, esta conta está banida!\n\nData do banimento: {fe9ddd}%s.\n{ffffff}Autor do banimento: {fe9ddd}%s.\n{ffffff}Expiração do banimento: {fe9ddd}%s\n{ffffff}Motivo do banimento:\n{fe9ddd}%s",
+            playerName, convertTimestamp(gPlayerBannedData[playerid][e_player_created_at]), gPlayerBannedData[playerid][e_player_badmin_name],
+            (gPlayerBannedData[playerid][e_player_expire] > 0) ? convertTimestamp(gPlayerBannedData[playerid][e_player_expire]) : "Nunca", gPlayerBannedData[playerid][e_player_reason]);
+            ShowPlayerDialog(playerid, DIALOG_BANNED, DIALOG_STYLE_MSGBOX, "Banido", info, "Sair", "");
+            PlayErrorSound(playerid);
+        }
+        else
+        {
+            cache_get_field_content(0, "password", gPlayerAccountData[playerid][e_player_password], gMySQL, MAX_PLAYER_PASSWORD);
+            gPlayerAccountData[playerid][e_player_database_id] = cache_get_field_content_int(0, "id", gMySQL);
 
-        new info[104];
-        format(info, sizeof(info), "Bem-vindo de volta, %s!\n\nVocê já possui uma conta.\nDigite sua senha para acessar.", playerName);
-        ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Acesso", info, "Accessar", "Sair");
-        PlaySelectSound(playerid);
+            new info[104];
+            format(info, sizeof(info), "Bem-vindo de volta, %s!\n\nVocê já possui uma conta.\nDigite sua senha para acessar.", playerName);
+            ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Acesso", info, "Accessar", "Sair");
+            PlaySelectSound(playerid);
+
+            // Caso o banimento do jogador expirar, deletar da coluna de bans
+            if(gPlayerBannedData[playerid][e_player_banned])
+            {
+                new query[57 + MAX_PLAYER_NAME + 1];
+                mysql_format(gMySQL, query, sizeof(query),"DELETE FROM `bans` WHERE `username` = '%s'", playerName);
+                mysql_tquery(gMySQL, query);
+            }
+        }
 	}
     else
     {
@@ -172,6 +205,33 @@ public OnAccountCheck(playerid)
         ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_INPUT, "Cadastro", info, "Cadastrar", "Sair");
         PlaySelectSound(playerid);
     }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+public OnBannedAccountCheck(playerid)
+{
+	new rows, fields, playerName[MAX_PLAYER_NAME];
+	cache_get_data(rows, fields, gMySQL);
+    GetPlayerName(playerid, playerName, sizeof(playerName));
+	if(rows)
+	{
+        gPlayerBannedData[playerid][e_player_banned]                = true;
+        gPlayerBannedData[playerid][e_player_created_at]            = cache_get_field_content_int(0, "created_at", gMySQL);
+        gPlayerBannedData[playerid][e_player_expire]                = cache_get_field_content_int(0, "expire", gMySQL);
+        cache_get_field_content(0, "admin", gPlayerBannedData[playerid][e_player_badmin_name], gMySQL, MAX_PLAYER_NAME);
+        cache_get_field_content(0, "reason", gPlayerBannedData[playerid][e_player_reason], gMySQL, 255);
+	}
+    else
+    {
+        gPlayerBannedData[playerid][e_player_banned]   = false;
+    }
+
+    // Após checagem se a conta está banida, prosseguir com o carregamento normalmente.
+    new query[57 + MAX_PLAYER_NAME + 1];
+    mysql_format(gMySQL, query, sizeof(query),"SELECT * FROM `users` WHERE `username` = '%e' LIMIT 1", playerName);
+    mysql_tquery(gMySQL, query, "OnAccountCheck", "i", playerid);
     return 1;
 }
 
@@ -259,6 +319,11 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `users` (`username`, `password`, `ip`, `regdate`) VALUES ('%e', '%e', '%s', %d)", playerName, inputtext, playerIP, gettime());
             	mysql_tquery(gMySQL, query, "OnAccountRegister", "i", playerid);
             }
+            return -2;
+        }
+        case DIALOG_BANNED:
+        {
+            SendClientMessage(playerid, -1, "KICK");
             return -2;
         }
     }
