@@ -96,7 +96,7 @@ SavePlayerAccount(playerid)
 
     // Salvar conta
     new query[90];
-	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `ip`='%s', `lastlogin`=%d WHERE `id`=%d", gPlayerAccountData[playerid][e_player_ip], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
+	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `ip`='%s', `last_login`=%d WHERE `id`=%d", gPlayerAccountData[playerid][e_player_ip], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
 	mysql_pquery(gMySQL, query);
     return 1;
 }
@@ -275,7 +275,7 @@ public OnAccountLoad(playerid)
 	{
         GetPlayerIp(playerid, gPlayerAccountData[playerid][e_player_ip], 16);
         gPlayerAccountData[playerid][e_player_database_id]  = cache_get_field_content_int(0, "id", gMySQL);
-        gPlayerAccountData[playerid][e_player_lastlogin]    = cache_get_field_content_int(0, "lastlogin", gMySQL);
+        gPlayerAccountData[playerid][e_player_lastlogin]    = cache_get_field_content_int(0, "last_login", gMySQL);
 
         SetSpawnInfo(playerid, 255, 0, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
         SpawnPlayer(playerid);
