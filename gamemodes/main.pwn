@@ -32,6 +32,12 @@ new gMySQL;
 
 #define MAX_CREATED_VEHICLE_PER_PLAYER					1
 
+// Intervalo entre as mensagens aleatórias do servidor em milisegundos
+#define ADVERTISE_INTERVAL								300000
+
+// Intervalo entre os nome do servidor aleatórios em milisegundos
+#define UPDATE_HOSTNAME_INTERVAL						15000
+
 //------------------------------------------------------------------------------
 
 // Bibliotecas
@@ -92,6 +98,7 @@ hook OnGameModeInit()
 
 /* Core */
 #include "../modules/core/timers.pwn"
+#include "../modules/core/ads.pwn"
 
 /* Gameplay */
 #include "../modules/gameplay/bank.pwn"
