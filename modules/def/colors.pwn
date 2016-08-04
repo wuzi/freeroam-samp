@@ -26,7 +26,7 @@
 #define COLOR_WARNING           0xFFD700FF
 #define COLOR_ERROR             0xFF7373FF
 #define COLOR_TITLE             0xCCFF00FF
-#define COLOR_SUB_TITLE         0xA4A4A4FF
+#define COLOR_SUB_TITLE         0xd6d6d6ff
 
 #define COLOR_PLAYER_COMMAND    0x9CF000FF
 #define COLOR_ADMIN_COMMAND     0xc0df74FF

@@ -13,6 +13,7 @@
 *			SendClientLocalMessage
 *			SendMultiLineMessage
 *			SendMultiLineMessageToAll
+*			SendClientActionMessage
 *
 */
 
@@ -30,6 +31,22 @@ stock SendClientMessageToAllf(color, const message[], va_args<>)
    new string[145];
    va_format(string, sizeof(string), message, va_start<2>);
    return SendClientMessageToAll(color, string);
+}
+
+//------------------------------------------------------------------------------
+
+stock SendClientActionMessage(playerid, Float:radius, action[])
+{
+	new	Float:fDist[3], message[145];
+	GetPlayerPos(playerid, fDist[0], fDist[1], fDist[2]);
+	format(message, sizeof(message), "* %s %s", GetPlayerNamef(playerid), action);
+	foreach(new i: Player)
+	{
+		if(GetPlayerDistanceFromPoint(i, fDist[0], fDist[1], fDist[2]) <= radius && GetPlayerVirtualWorld(i) == GetPlayerVirtualWorld(playerid))
+		{
+			SendClientMessage(i, 0xaa4ad1ff, message);
+		}
+	}
 }
 
 //------------------------------------------------------------------------------

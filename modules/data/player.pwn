@@ -18,6 +18,7 @@
 
 //------------------------------------------------------------------------------
 
+forward OnNameCheck(playerid, name[]);
 forward OnAccountLoad(playerid);
 forward OnAccountCheck(playerid);
 forward OnAccountRegister(playerid);
@@ -29,7 +30,7 @@ enum e_player_adata
 {
     e_player_database_id,
     e_player_password[MAX_PLAYER_PASSWORD],
-    e_player_regdate,
+    e_player_regdate[32],
     e_player_email[64],
     e_player_ip[16],
     e_player_money,
@@ -110,7 +111,7 @@ ResetPlayerData(playerid)
     gPlayerStates[playerid] = E_PLAYER_STATE_NONE;
 
     gPlayerAccountData[playerid][e_player_database_id]  = 0;
-    gPlayerAccountData[playerid][e_player_regdate]      = ct;
+    gPlayerAccountData[playerid][e_player_regdate][0]   = '\0';
     gPlayerAccountData[playerid][e_player_lastlogin]    = ct;
 }
 
@@ -225,6 +226,47 @@ public OnAccountCheck(playerid)
 
 //------------------------------------------------------------------------------
 
+public OnNameCheck(playerid, name[])
+{
+	new rows, fields, playerName[MAX_PLAYER_NAME];
+	cache_get_data(rows, fields, gMySQL);
+    GetPlayerName(playerid, playerName, sizeof(playerName));
+	if(rows)
+	{
+        SendClientMessage(playerid, COLOR_ERROR, "* Este nome já está em uso.");
+        PlayErrorSound(playerid);
+	}
+    else
+    {
+        new tempName[MAX_PLAYER_NAME], oldName[MAX_PLAYER_NAME];
+        valstr(tempName, gettime());
+        GetPlayerName(playerid, oldName, sizeof(oldName));
+        SetPlayerName(playerid, tempName);
+        switch(SetPlayerName(playerid, name))
+        {
+            case -1:
+            {
+                PlayErrorSound(playerid);
+                SendClientMessage(playerid, COLOR_ERROR, "* Nome muito longo ou possui characteres inválidos.");
+                SetPlayerName(playerid, oldName);
+                return 1;
+            }
+            case 1:
+            {
+                SendClientMessage(playerid, COLOR_SUCCESS, "* Nome alterado com sucesso.");
+                PlayConfirmSound(playerid);
+            }
+        }
+
+        new query[128];
+    	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `username`='%s' WHERE `id`=%d", name, gPlayerAccountData[playerid][e_player_database_id]);
+    	mysql_pquery(gMySQL, query);
+    }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
 public OnBannedAccountCheck(playerid)
 {
 	new rows, fields, playerName[MAX_PLAYER_NAME];
@@ -276,6 +318,7 @@ public OnAccountLoad(playerid)
         GetPlayerIp(playerid, gPlayerAccountData[playerid][e_player_ip], 16);
         gPlayerAccountData[playerid][e_player_database_id]  = cache_get_field_content_int(0, "id", gMySQL);
         gPlayerAccountData[playerid][e_player_lastlogin]    = cache_get_field_content_int(0, "last_login", gMySQL);
+        cache_get_field_content(0, "created_at", gPlayerAccountData[playerid][e_player_regdate], gMySQL, 32);
 
         SetSpawnInfo(playerid, 255, 0, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
         SpawnPlayer(playerid);
@@ -407,6 +450,35 @@ GetPlayerWarning(playerid)
 SetPlayerWarning(playerid, value)
 {
     gPlayerAccountData[playerid][e_player_warning] = value;
+}
+
+GetPlayerLastLogin(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_lastlogin];
+}
+
+GetPlayerPassword(playerid)
+{
+    new password[MAX_PLAYER_PASSWORD];
+    strcat(password, gPlayerAccountData[playerid][e_player_password]);
+    return password;
+}
+
+SetPlayerPassword(playerid, password[])
+{
+    format(gPlayerAccountData[playerid][e_player_password], MAX_PLAYER_PASSWORD, password);
+
+    new query[128];
+	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `password`='%s' WHERE `id`=%d", gPlayerAccountData[playerid][e_player_password], gPlayerAccountData[playerid][e_player_database_id]);
+	mysql_pquery(gMySQL, query);
+}
+
+ChangePlayerName(playerid, name[])
+{
+    new query[57 + MAX_PLAYER_NAME + 1];
+    mysql_format(gMySQL, query, sizeof(query),"SELECT * FROM `users` WHERE `username` = '%e' LIMIT 1", name);
+    mysql_tquery(gMySQL, query, "OnNameCheck", "is", playerid, name);
+    return 1;
 }
 
 //------------------------------------------------------------------------------

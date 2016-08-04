@@ -10,11 +10,6 @@
 
 //------------------------------------------------------------------------------
 
-static gplMarkExt[MAX_PLAYERS][2];
-static Float:gplMarkPos[MAX_PLAYERS][3];
-
-//------------------------------------------------------------------------------
-
 // Recomendável manter a lista em até 10 linhas, para melhor visualização
 YCMD:acmds(playerid, params[], help)
 {
@@ -25,8 +20,7 @@ YCMD:acmds(playerid, params[], help)
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
     {
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /puxar - /setskin - /irpos");
-        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /pdist - /mdist - /marcar - /irmarca");
-        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /say");
+        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /pdist - /say");
     }
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_HELPER)
@@ -167,37 +161,6 @@ YCMD:irpos(playerid, params[], help)
 
 //------------------------------------------------------------------------------
 
-YCMD:marcar(playerid, params[], help)
-{
-    if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
-        return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
-
-    gplMarkExt[playerid][0] = GetPlayerInterior(playerid);
-    gplMarkExt[playerid][1] = GetPlayerVirtualWorld(playerid);
-    GetPlayerPos(playerid, gplMarkPos[playerid][0], gplMarkPos[playerid][1], gplMarkPos[playerid][2]);
-	SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* Você marcou sua posição atual. (%.2f, %.2f, %.2f, %d, %d)", gplMarkPos[playerid][0], gplMarkPos[playerid][1], gplMarkPos[playerid][2], gplMarkExt[playerid][0], gplMarkExt[playerid][1]);
-	return 1;
-}
-//------------------------------------------------------------------------------
-
-YCMD:irmarca(playerid, params[], help)
-{
-    if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
-        return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
-
-    SetPlayerInterior(playerid, gplMarkExt[playerid][0]);
-    SetPlayerVirtualWorld(playerid, gplMarkExt[playerid][1]);
-    if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
-        SetPlayerPos(playerid, gplMarkPos[playerid][0], gplMarkPos[playerid][1], gplMarkPos[playerid][2]);
-    else
-        SetVehiclePos(GetPlayerVehicleID(playerid), gplMarkPos[playerid][0], gplMarkPos[playerid][1], gplMarkPos[playerid][2]);
-	SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* Você foi até a posição marcada. (%.2f, %.2f, %.2f, %d, %d)", gplMarkPos[playerid][0], gplMarkPos[playerid][1], gplMarkPos[playerid][2], gplMarkExt[playerid][0], gplMarkExt[playerid][1]);
-	return 1;
-}
-
-
-//------------------------------------------------------------------------------
-
 YCMD:pdist(playerid, params[], help)
 {
     if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
@@ -210,18 +173,6 @@ YCMD:pdist(playerid, params[], help)
         SendClientMessage(playerid, COLOR_ERROR, "* O jogador não está conectado.");
 	else
 		SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* Você está a %.2f units de distância do jogador.", GetPlayerDistanceFromPlayer(playerid, targetid));
-	return 1;
-}
-
-//------------------------------------------------------------------------------
-
-YCMD:mdist(playerid, params[], help)
-{
-    if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
-        return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
-
-	SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* Você está a %.2f units de distância da posição marcada. (%.2f, %.2f, %.2f, %d, %d)",
-    GetPlayerDistanceFromPoint(playerid, gplMarkPos[playerid][0], gplMarkPos[playerid][1], gplMarkPos[playerid][2]), gplMarkPos[playerid][0], gplMarkPos[playerid][1], gplMarkPos[playerid][2], gplMarkExt[playerid][0], gplMarkExt[playerid][1]);
 	return 1;
 }
 
