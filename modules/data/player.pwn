@@ -331,7 +331,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 GetPlayerIp(playerid, playerIP, sizeof(playerIP));
 
                 new query[128];
-                mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `users` (`username`, `password`, `ip`, `regdate`) VALUES ('%e', '%e', '%s', %d)", playerName, inputtext, playerIP, gettime());
+                mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `users` (`username`, `password`, `ip`, `created_at`) VALUES ('%e', '%e', '%s', now())", playerName, inputtext, playerIP);
             	mysql_tquery(gMySQL, query, "OnAccountRegister", "i", playerid);
             }
             return -2;
