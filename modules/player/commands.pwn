@@ -29,7 +29,7 @@ hook OnGameModeInit()
 YCMD:comandos(playerid, params[], help)
 {
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
-    SendClientMessage(playerid, COLOR_SUB_TITLE, "* /car - /reparar - /ir - /pm");
+    SendClientMessage(playerid, COLOR_SUB_TITLE, "* /car - /reparar - /ir - /pm - /tunar");
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
 	return 1;
 }

@@ -97,6 +97,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/bank.pwn"
 #include "../modules/gameplay/chat.pwn"
 #include "../modules/gameplay/colors.pwn"
+#include "../modules/gameplay/tuning.pwn"
 
 //------------------------------------------------------------------------------
 
