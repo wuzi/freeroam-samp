@@ -104,7 +104,7 @@ YCMD:contar(playerid, params[], help)
 
 	gCountDown = timer;
 	CountDown();
-	SendClientMessageToAllf(0xc2d645ff, "* %s iniciou uma contagem regressiva!");
+	SendClientMessageToAllf(0xc2d645ff, "* %s iniciou uma contagem regressiva!", GetPlayerNamef(playerid));
 	return 1;
 }
 
