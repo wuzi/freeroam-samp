@@ -561,7 +561,7 @@ hook OnGameModeInit()
     TextDrawTextSize(registerTextDraw[5], 403.000000, 10.000000);
     TextDrawSetSelectable(registerTextDraw[5], true);
 
-    registerTextDraw[6] = TextDrawCreate(197.000000, 332.000000, "  Cadastrar");
+    registerTextDraw[6] = TextDrawCreate(197.000000, 332.000000, "  Iniciar");
     TextDrawBackgroundColor(registerTextDraw[6], 255);
     TextDrawFont(registerTextDraw[6], 3);
     TextDrawLetterSize(registerTextDraw[6], 0.540000, 1.699998);
