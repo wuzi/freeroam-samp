@@ -12,6 +12,7 @@
 
 //------------------------------------------------------------------------------
 
+static PlayerText:loginTextDraw[MAX_PLAYERS][7];
 static Text:registerTextDraw[9];
 static Text:backgroundTextDraw[7];
 
@@ -27,12 +28,11 @@ ShowPlayerAuthentication(playerid, bool:login)
 
     if(login)
     {
-
+        ShowPlayerLoginTextDraw(playerid);
     }
     else
     {
         ShowPlayerRegisterTextDraw(playerid);
-        SelectTextDraw(playerid, 0xdd770dff);
     }
 }
 
@@ -44,7 +44,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
     {
          if(isTextDrawVisible[playerid])
          {
-             SelectTextDraw(playerid, 0xdd770dff);
+             SelectTextDraw(playerid, 0x74c624ff);
          }
     }
     else if(clickedid == registerTextDraw[2])
@@ -103,10 +103,60 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 
 //------------------------------------------------------------------------------
 
+hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
+{
+    if(playertextid == loginTextDraw[playerid][3])
+    {
+        new info[104];
+        format(info, sizeof(info), "Bem-vindo de volta, %s!\n\nVocê já possui uma conta.\nDigite sua senha para acessar.", GetPlayerNamef(playerid));
+        ShowPlayerDialog(playerid, DIALOG_LOGIN_PASSWORD, DIALOG_STYLE_PASSWORD, "Acesso", info, "Accessar", "Sair");
+    }
+    else if(playertextid == loginTextDraw[playerid][4])
+    {
+        PlaySelectSound(playerid);
+        ShowPlayerDialog(playerid, DIALOG_FORUM, DIALOG_STYLE_MSGBOX, "{ffffff}Nosso fórum",
+    	"{ffffff}www.brothersingame.com.br/forum", "Fechar", "");
+    }
+    else if(playertextid == loginTextDraw[playerid][5])
+    {
+        PlaySelectSound(playerid);
+        ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{ffffff}Pessoas que contruibuiram para que o {67f571}B{ffffff}rothers in {67f571}Game{ffffff} existisse",
+    	"\t\t\t\t{67f571}B{ffffff}rothers in {67f571}Game{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {67f571}B{ffffff}in{67f571}G\n\n{ffffff}Contribuidores:\nY_Less, Incognito, BlueG, SA-MP Team e você", "Fechar", "");
+    }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
     switch (dialogid)
     {
+        case DIALOG_LOGIN_PASSWORD:
+        {
+            if(!response)
+            {
+                PlayCancelSound(playerid);
+                return 1;
+            }
+
+            new password[MAX_PLAYER_PASSWORD];
+            format(password, sizeof(password), GetPlayerPassword(playerid));
+            if(!strcmp(password, inputtext) && !isnull(password) && !isnull(inputtext))
+            {
+                StopAudioStreamForPlayer(playerid);
+                HidePlayerLoginTextDraw(playerid);
+                PlayConfirmSound(playerid);
+                LoadPlayerAccount(playerid);
+                SendClientMessage(playerid, 0x88AA62FF, "Conectado.");
+            }
+            else
+            {
+                ShowPlayerDialog(playerid, DIALOG_LOGIN_PASSWORD, DIALOG_STYLE_INPUT, "Acessar->Senha incorreta", "Senha incorreta!\nTente novamente:", "Acessar", "Sair"),
+                PlayErrorSound(playerid);
+            }
+            return -2;
+        }
         case DIALOG_REGISTER_GENDER:
         {
             if(!response)
@@ -166,7 +216,146 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 mysql_tquery(gMySQL, query, "OnEmailCheck", "is", playerid, inputtext);
             }
         }
+        case DIALOG_CREDITS:
+        {
+            PlayCancelSound(playerid);
+        }
+        case DIALOG_FORUM:
+        {
+            PlayCancelSound(playerid);
+        }
     }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+ShowPlayerLoginTextDraw(playerid)
+{
+    if(isTextDrawVisible[playerid])
+    {
+        for(new i = 0; i < sizeof(loginTextDraw[]); i++)
+        {
+            PlayerTextDrawShow(playerid, loginTextDraw[playerid][i]);
+        }
+        return 1;
+    }
+
+    loginTextDraw[playerid][0] = CreatePlayerTextDraw(playerid, 197.000000, 80.000000, "   Login");
+    PlayerTextDrawBackgroundColor(playerid, loginTextDraw[playerid][0], 255);
+    PlayerTextDrawFont(playerid, loginTextDraw[playerid][0], 3);
+    PlayerTextDrawLetterSize(playerid, loginTextDraw[playerid][0], 0.540000, 1.699998);
+    PlayerTextDrawColor(playerid, loginTextDraw[playerid][0], -1);
+    PlayerTextDrawSetOutline(playerid, loginTextDraw[playerid][0], 1);
+    PlayerTextDrawSetProportional(playerid, loginTextDraw[playerid][0], 1);
+    PlayerTextDrawUseBox(playerid, loginTextDraw[playerid][0], 1);
+    PlayerTextDrawBoxColor(playerid, loginTextDraw[playerid][0], 255);
+    PlayerTextDrawTextSize(playerid, loginTextDraw[playerid][0], 299.000000, 0.000000);
+    PlayerTextDrawSetSelectable(playerid, loginTextDraw[playerid][0], 0);
+
+    new playerName[64];
+    format(playerName, sizeof(playerName), "Nick: ~w~%s", GetPlayerNamef(playerid));
+    loginTextDraw[playerid][1] = CreatePlayerTextDraw(playerid, 220.000000, 138.000000, playerName);
+    PlayerTextDrawBackgroundColor(playerid, loginTextDraw[playerid][1], 255);
+    PlayerTextDrawFont(playerid, loginTextDraw[playerid][1], 2);
+    PlayerTextDrawLetterSize(playerid, loginTextDraw[playerid][1], 0.260000, 1.899999);
+    PlayerTextDrawColor(playerid, loginTextDraw[playerid][1], 0x74c624ff);
+    PlayerTextDrawSetOutline(playerid, loginTextDraw[playerid][1], 0);
+    PlayerTextDrawSetProportional(playerid, loginTextDraw[playerid][1], 1);
+    PlayerTextDrawSetShadow(playerid, loginTextDraw[playerid][1], 1);
+    PlayerTextDrawSetSelectable(playerid, loginTextDraw[playerid][1], 0);
+
+    new playerID[64];
+    format(playerID, sizeof(playerID), "ID: ~w~%d", playerid);
+    loginTextDraw[playerid][2] = CreatePlayerTextDraw(playerid, 220.000000, 170.000000, playerID);
+    PlayerTextDrawBackgroundColor(playerid, loginTextDraw[playerid][2], 255);
+    PlayerTextDrawFont(playerid, loginTextDraw[playerid][2], 2);
+    PlayerTextDrawLetterSize(playerid, loginTextDraw[playerid][2], 0.389999, 1.899999);
+    PlayerTextDrawColor(playerid, loginTextDraw[playerid][2], 0x74c624ff);
+    PlayerTextDrawSetOutline(playerid, loginTextDraw[playerid][2], 0);
+    PlayerTextDrawSetProportional(playerid, loginTextDraw[playerid][2], 1);
+    PlayerTextDrawSetShadow(playerid, loginTextDraw[playerid][2], 1);
+    PlayerTextDrawSetSelectable(playerid, loginTextDraw[playerid][2], 0);
+
+    loginTextDraw[playerid][3] = CreatePlayerTextDraw(playerid, 235.000000, 248.000000, "      JOGAR");
+    PlayerTextDrawBackgroundColor(playerid, loginTextDraw[playerid][3], 255);
+    PlayerTextDrawFont(playerid, loginTextDraw[playerid][3], 1);
+    PlayerTextDrawLetterSize(playerid, loginTextDraw[playerid][3], 0.500000, 1.499999);
+    PlayerTextDrawColor(playerid, loginTextDraw[playerid][3], -1);
+    PlayerTextDrawSetOutline(playerid, loginTextDraw[playerid][3], 1);
+    PlayerTextDrawSetProportional(playerid, loginTextDraw[playerid][3], 1);
+    PlayerTextDrawUseBox(playerid, loginTextDraw[playerid][3], 1);
+    PlayerTextDrawBoxColor(playerid, loginTextDraw[playerid][3], 102);
+    PlayerTextDrawTextSize(playerid, loginTextDraw[playerid][3], 403.000000, 10.000000);
+    PlayerTextDrawSetSelectable(playerid, loginTextDraw[playerid][3], true);
+
+    loginTextDraw[playerid][4] = CreatePlayerTextDraw(playerid, 235.000000, 292.000000, "      FORUM");
+    PlayerTextDrawBackgroundColor(playerid, loginTextDraw[playerid][4], 255);
+    PlayerTextDrawFont(playerid, loginTextDraw[playerid][4], 1);
+    PlayerTextDrawLetterSize(playerid, loginTextDraw[playerid][4], 0.500000, 1.499999);
+    PlayerTextDrawColor(playerid, loginTextDraw[playerid][4], -1);
+    PlayerTextDrawSetOutline(playerid, loginTextDraw[playerid][4], 1);
+    PlayerTextDrawSetProportional(playerid, loginTextDraw[playerid][4], 1);
+    PlayerTextDrawUseBox(playerid, loginTextDraw[playerid][4], 1);
+    PlayerTextDrawBoxColor(playerid, loginTextDraw[playerid][4], 102);
+    PlayerTextDrawTextSize(playerid, loginTextDraw[playerid][4], 403.000000, 10.000000);
+    PlayerTextDrawSetSelectable(playerid, loginTextDraw[playerid][4], true);
+
+    loginTextDraw[playerid][5] = CreatePlayerTextDraw(playerid, 235.000000, 337.000000, "     CREDITOS");
+    PlayerTextDrawBackgroundColor(playerid, loginTextDraw[playerid][5], 255);
+    PlayerTextDrawFont(playerid, loginTextDraw[playerid][5], 1);
+    PlayerTextDrawLetterSize(playerid, loginTextDraw[playerid][5], 0.500000, 1.499999);
+    PlayerTextDrawColor(playerid, loginTextDraw[playerid][5], -1);
+    PlayerTextDrawSetOutline(playerid, loginTextDraw[playerid][5], 1);
+    PlayerTextDrawSetProportional(playerid, loginTextDraw[playerid][5], 1);
+    PlayerTextDrawUseBox(playerid, loginTextDraw[playerid][5], 1);
+    PlayerTextDrawBoxColor(playerid, loginTextDraw[playerid][5], 102);
+    PlayerTextDrawTextSize(playerid, loginTextDraw[playerid][5], 403.000000, 10.000000);
+    PlayerTextDrawSetSelectable(playerid, loginTextDraw[playerid][5], true);
+
+    loginTextDraw[playerid][6] = CreatePlayerTextDraw(playerid, 343.000000, 110.000000, "skin");
+    PlayerTextDrawBackgroundColor(playerid, loginTextDraw[playerid][6], 0);
+    PlayerTextDrawFont(playerid, loginTextDraw[playerid][6], 5);
+    PlayerTextDrawLetterSize(playerid, loginTextDraw[playerid][6], 0.479999, 10.600000);
+    PlayerTextDrawColor(playerid, loginTextDraw[playerid][6], -1);
+    PlayerTextDrawSetOutline(playerid, loginTextDraw[playerid][6], 1);
+    PlayerTextDrawSetProportional(playerid, loginTextDraw[playerid][6], 1);
+    PlayerTextDrawUseBox(playerid, loginTextDraw[playerid][6], 1);
+    PlayerTextDrawBoxColor(playerid, loginTextDraw[playerid][6], 255);
+    PlayerTextDrawTextSize(playerid, loginTextDraw[playerid][6], 99.000000, 120.000000);
+    PlayerTextDrawSetPreviewModel(playerid, loginTextDraw[playerid][6], GetPlayerSaveSkin(playerid));
+    PlayerTextDrawSetPreviewRot(playerid, loginTextDraw[playerid][6], 1.000000, 1.000000, 1.000000, 1.000000);
+    PlayerTextDrawSetSelectable(playerid, loginTextDraw[playerid][6], 0);
+
+    for(new i = 0; i < sizeof(backgroundTextDraw); i++)
+        TextDrawShowForPlayer(playerid, backgroundTextDraw[i]);
+
+    for(new i = 0; i < sizeof(loginTextDraw[]); i++)
+        PlayerTextDrawShow(playerid, loginTextDraw[playerid][i]);
+
+    SelectTextDraw(playerid, 0x74c624ff);
+    isTextDrawVisible[playerid] = true;
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+HidePlayerLoginTextDraw(playerid)
+{
+    if(!isTextDrawVisible[playerid])
+        return 1;
+
+    for(new i = 0; i < sizeof(backgroundTextDraw); i++)
+        TextDrawHideForPlayer(playerid, backgroundTextDraw[i]);
+
+    for(new i = 0; i < sizeof(loginTextDraw[]); i++)
+    {
+        PlayerTextDrawHide(playerid, loginTextDraw[playerid][i]);
+        PlayerTextDrawDestroy(playerid, loginTextDraw[playerid][i]);
+    }
+
+    isTextDrawVisible[playerid] = false;
+    CancelSelectTextDraw(playerid);
     return 1;
 }
 
@@ -179,6 +368,9 @@ ShowPlayerRegisterTextDraw(playerid)
 
     for(new i = 0; i < (sizeof(registerTextDraw) - 1); i++)
         TextDrawShowForPlayer(playerid, registerTextDraw[i]);
+
+    isTextDrawVisible[playerid] = true;
+    SelectTextDraw(playerid, 0x74c624ff);
 }
 
 //------------------------------------------------------------------------------
@@ -191,6 +383,7 @@ HidePlayerRegisterTextDraw(playerid)
     for(new i = 0; i < sizeof(registerTextDraw); i++)
         TextDrawHideForPlayer(playerid, registerTextDraw[i]);
 
+    isTextDrawVisible[playerid] = false;
     CancelSelectTextDraw(playerid);
 }
 

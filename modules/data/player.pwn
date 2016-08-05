@@ -34,6 +34,7 @@ enum e_player_adata
     e_player_bank,
     e_player_gender,
     e_player_age,
+    e_player_skin,
     bool:e_player_muted,
     e_player_warning,
     e_player_played_time,
@@ -95,8 +96,8 @@ SavePlayerAccount(playerid)
         return 0;
 
     // Salvar conta
-    new query[90];
-	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `ip`='%s', `last_login`=%d WHERE `id`=%d", gPlayerAccountData[playerid][e_player_ip], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
+    new query[128];
+	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `ip`='%s', `skin`=%d, `admin`=%d, `last_login`=%d WHERE `id`=%d", gPlayerAccountData[playerid][e_player_ip], GetPlayerSkin(playerid), gPlayerAccountData[playerid][e_player_admin], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
 	mysql_pquery(gMySQL, query);
     return 1;
 }
@@ -197,12 +198,16 @@ public OnAccountCheck(playerid)
         else
         {
             cache_get_field_content(0, "password", gPlayerAccountData[playerid][e_player_password], gMySQL, MAX_PLAYER_PASSWORD);
-            gPlayerAccountData[playerid][e_player_database_id] = cache_get_field_content_int(0, "id", gMySQL);
+            gPlayerAccountData[playerid][e_player_database_id]  = cache_get_field_content_int(0, "id", gMySQL);
+            gPlayerAccountData[playerid][e_player_skin]         = cache_get_field_content_int(0, "skin", gMySQL);
 
+            /*
             new info[104];
             format(info, sizeof(info), "Bem-vindo de volta, %s!\n\nVocê já possui uma conta.\nDigite sua senha para acessar.", playerName);
             ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Acesso", info, "Accessar", "Sair");
             PlaySelectSound(playerid);
+            */
+            ShowPlayerAuthentication(playerid, true);
 
             // Caso o banimento do jogador expirar, deletar da tabela de bans
             if(gPlayerBannedData[playerid][e_player_banned])
@@ -339,10 +344,12 @@ public OnAccountLoad(playerid)
 	{
         GetPlayerIp(playerid, gPlayerAccountData[playerid][e_player_ip], 16);
         gPlayerAccountData[playerid][e_player_database_id]  = cache_get_field_content_int(0, "id", gMySQL);
+        gPlayerAccountData[playerid][e_player_skin]         = cache_get_field_content_int(0, "skin", gMySQL);
+        gPlayerAccountData[playerid][e_player_admin]        = cache_get_field_content_int(0, "admin", gMySQL);
         gPlayerAccountData[playerid][e_player_lastlogin]    = cache_get_field_content_int(0, "last_login", gMySQL);
         cache_get_field_content(0, "created_at", gPlayerAccountData[playerid][e_player_regdate], gMySQL, 32);
 
-        SetSpawnInfo(playerid, 255, 0, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
+        SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
         SpawnPlayer(playerid);
 
         SetPlayerColor(playerid, 0xFFFFFFFF);
@@ -504,6 +511,11 @@ GetPlayerEmail(playerid)
 SetPlayerAge(playerid, age)
 {
     gPlayerAccountData[playerid][e_player_age] = age;
+}
+
+GetPlayerSaveSkin(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_skin];
 }
 
 GetPlayerAge(playerid)

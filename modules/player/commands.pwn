@@ -51,6 +51,8 @@ YCMD:comandos(playerid, params[], help)
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /carcmd - /regras - /creditos");
+	if(IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
+		SendClientMessage(playerid, COLOR_SUB_TITLE, "* /acmds");
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
 	return 1;
 }
@@ -81,11 +83,9 @@ YCMD:regras(playerid, params[], help)
 
 YCMD:creditos(playerid, params[], help)
 {
-	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Creditos ----------------------------------------");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Servidor desenvolvido pela equipe BD-Drift.");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, " ");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Agradecimentos: Y_Less, BlueG, Incognito.");
-	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Creditos ----------------------------------------");
+	PlaySelectSound(playerid);
+	ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{ffffff}Pessoas que contruibuiram para que o {67f571}B{ffffff}rothers in {67f571}Game{ffffff} existisse",
+	"\t\t\t\t{67f571}B{ffffff}rothers in {67f571}Game{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {67f571}B{ffffff}in{67f571}G\n\n{ffffff}Contribuidores:\nY_Less, Incognito, BlueG, SA-MP Team e você", "Fechar", "");
 	return 1;
 }
 

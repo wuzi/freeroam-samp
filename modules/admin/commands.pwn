@@ -32,7 +32,7 @@ YCMD:acmds(playerid, params[], help)
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /setmoney - /setbanco");
 
-	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_OWNER)
+	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_OWNER || IsPlayerAdmin(playerid))
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /setadmin");
 
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Para falar no chat administrativo use @ antes da mensagem.");
