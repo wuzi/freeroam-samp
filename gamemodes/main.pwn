@@ -104,7 +104,7 @@ hook OnGameModeInit()
 
 /* Core */
 #include "../modules/core/timers.pwn"
-#include "../modules/core/ads.pwn"
+#include "../modules/core/advertisements.pwn"
 
 /* Gameplay */
 #include "../modules/gameplay/bank.pwn"
