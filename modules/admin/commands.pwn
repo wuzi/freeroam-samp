@@ -30,7 +30,7 @@ YCMD:acmds(playerid, params[], help)
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /rtc - /ircar - /puxarcar - /dararma - /verip - /mutar - /desmutar - /congelar - /descongelar");
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
-        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /setmoney - /setbanco");
+        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /gmx - /setmoney - /setbanco");
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_OWNER || IsPlayerAdmin(playerid))
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /setadmin");
@@ -601,6 +601,27 @@ SSSSSSSSSSSSSSS         UUUUUUUUU      BBBBBBBBBBBBBBBBB             OOOOOOOOO  
 
 //------------------------------------------------------------------------------
 
+ YCMD:gmx(playerid, params[], help)
+ {
+ 	if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_SUB_OWNER)
+ 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+
+    GameTextForAll("~b~~h~Reiniciando o servidor...", 15000, 3);
+    foreach(new i: Player)
+    {
+        if(IsPlayerLogged(i))
+        {
+            ClearPlayerScreen(i);
+            SavePlayerAccount(i);
+            SetPlayerLogged(i, false);
+        }
+    }
+    defer RestartGameMode();
+ 	return 1;
+ }
+
+//------------------------------------------------------------------------------
+
  YCMD:setmoney(playerid, params[], help)
  {
  	if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_SUB_OWNER)
@@ -694,4 +715,11 @@ YCMD:setadmin(playerid, params[], help)
        SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
    }
    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+timer RestartGameMode[5000]()
+{
+    SendRconCommand("gmx");
 }
