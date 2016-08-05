@@ -79,12 +79,12 @@ SetPlayerLogged(playerid, bool:set)
 IsPlayerLogged(playerid)
 {
     if(!IsPlayerConnected(playerid))
-        return false;
+        return 0;
 
     if(gPlayerStates[playerid] & E_PLAYER_STATE_LOGGED)
-        return true;
+        return 1;
 
-    return false;
+    return 0;
 }
 
 //------------------------------------------------------------------------------
@@ -132,6 +132,12 @@ hook OnPlayerConnect(playerid)
     ClearPlayerScreen(playerid);
     SetPlayerColor(playerid, 0xACACACFF);
     SendClientMessage(playerid, 0xA9C4E4FF, "Conectado ao banco de dados, por favor, aguarde...");
+
+    // Verifica se o jogador está banido e prossegue com a checagem da conta
+    new query[128], playerName[MAX_PLAYER_NAME];
+    GetPlayerName(playerid, playerName, sizeof(playerName));
+    mysql_format(gMySQL, query, 128, "SELECT * FROM `bans` WHERE `username` = '%e' LIMIT 1", playerName);
+    mysql_tquery(gMySQL, query, "OnBannedAccountCheck", "i", playerid);
     return 1;
 }
 
@@ -139,19 +145,14 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerRequestClass(playerid, classid)
 {
-    // Camera sobrevoando cidade enquanto faz login
-    InterpolateCameraPos(playerid, 1080.0939, -1013.4362, 208.6180, 1180.0939, -1113.4362, 203.6180, 30000, CAMERA_MOVE);
-    InterpolateCameraLookAt(playerid, 1333.0903, -1205.6227, 203.4406, 1333.0903, -1205.6227, 197.4406, 30000, CAMERA_MOVE);
-
-    // Apenas fazer checagem se o jogador não estiver logado
-    if(IsPlayerLogged(playerid))
-        return 1;
-
-    // Verifica se o jogador está banido e prossegue com a checagem da conta
-    new query[57 + MAX_PLAYER_NAME + 1], playerName[MAX_PLAYER_NAME + 1];
-    GetPlayerName(playerid, playerName, sizeof(playerName));
-    mysql_format(gMySQL, query, sizeof(query),"SELECT * FROM `bans` WHERE `username` = '%e' LIMIT 1", playerName);
-    mysql_tquery(gMySQL, query, "OnBannedAccountCheck", "i", playerid);
+    if(!IsPlayerLogged(playerid))
+    {
+        // Camera sobrevoando cidade enquanto faz login
+        TogglePlayerSpectating(playerid, true);
+        InterpolateCameraPos(playerid, 1080.0939, -1013.4362, 208.6180, 1180.0939, -1113.4362, 203.6180, 30000, CAMERA_MOVE);
+        InterpolateCameraLookAt(playerid, 1333.0903, -1205.6227, 203.4406, 1333.0903, -1205.6227, 197.4406, 30000, CAMERA_MOVE);
+        return -1;
+    }
     return 1;
 }
 
@@ -161,7 +162,8 @@ hook OnPlayerRequestSpawn(playerid)
 {
     if(!IsPlayerLogged(playerid))
     {
-        SendClientMessage(playerid, 0xb44819ff, "* Você não está logado.");
+        PlayErrorSound(playerid);
+        SendClientMessage(playerid, COLOR_ERROR, "* Você não está logado.");
         return -1;
     }
     return 1;
@@ -326,7 +328,7 @@ public OnAccountRegister(playerid)
     gPlayerAccountData[playerid][e_player_database_id] = cache_insert_id();
 
     SetSpawnInfo(playerid, 255, 0, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
-    SpawnPlayer(playerid);
+    TogglePlayerSpectating(playerid, false);
 
     new playerName[MAX_PLAYER_NAME];
     GetPlayerName(playerid, playerName, sizeof(playerName));
@@ -350,7 +352,7 @@ public OnAccountLoad(playerid)
         cache_get_field_content(0, "created_at", gPlayerAccountData[playerid][e_player_regdate], gMySQL, 32);
 
         SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
-        SpawnPlayer(playerid);
+        TogglePlayerSpectating(playerid, false);
 
         SetPlayerColor(playerid, 0xFFFFFFFF);
         SetPlayerLogged(playerid, true);
