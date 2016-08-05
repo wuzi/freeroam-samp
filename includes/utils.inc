@@ -304,6 +304,18 @@ stock Float:GetPlayerDistanceFromPlayer(playerid, targetid)
 
 //------------------------------------------------------------------------------
 
+stock IsVehicleOccupied(vehicleid)
+{
+	for(new i = 0, j = GetPlayerPoolSize(); i < j; i++)
+	{
+		if(IsPlayerInVehicle(i, vehicleid))
+			return true;
+	}
+	return false;
+}
+
+//------------------------------------------------------------------------------
+
 // Convert UNIX time to human readable time
 stock convertTimestamp( timestamp, _form=0 )
 {
