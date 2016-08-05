@@ -23,7 +23,7 @@ static bool:isPlayerRegistered[MAX_PLAYERS];
 
 ShowPlayerAuthentication(playerid, bool:login)
 {
-    PlayAudioStreamForPlayer(playerid, "http://live.hunterfm.com/live");
+    PlayAudioStreamForPlayer(playerid, "http://servidor30.brlogic.com:8112/live");
     ClearPlayerScreen(playerid);
 
     if(login)
