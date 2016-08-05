@@ -38,6 +38,8 @@ new gMySQL;
 // Intervalo entre os nome do servidor aleatórios em milisegundos
 #define UPDATE_HOSTNAME_INTERVAL						15000
 
+#define MAX_PLAYER_PASSWORD								32
+
 //------------------------------------------------------------------------------
 
 // Bibliotecas
@@ -86,6 +88,9 @@ hook OnGameModeInit()
 #include "../modules/def/colors.pwn"
 #include "../modules/def/messages.pwn"
 #include "../modules/def/ranks.pwn"
+
+/* Visual */
+#include "../modules/visual/authentication.pwn"
 
 /* Dados */
 #include "../modules/data/player.pwn"

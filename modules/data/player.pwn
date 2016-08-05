@@ -14,11 +14,8 @@
 
 //------------------------------------------------------------------------------
 
-#define MAX_PLAYER_PASSWORD 32
-
-//------------------------------------------------------------------------------
-
 forward OnNameCheck(playerid, name[]);
+forward OnEmailCheck(playerid, email[]);
 forward OnAccountLoad(playerid);
 forward OnAccountCheck(playerid);
 forward OnAccountRegister(playerid);
@@ -35,6 +32,8 @@ enum e_player_adata
     e_player_ip[16],
     e_player_money,
     e_player_bank,
+    e_player_gender,
+    e_player_age,
     bool:e_player_muted,
     e_player_warning,
     e_player_played_time,
@@ -216,10 +215,13 @@ public OnAccountCheck(playerid)
 	}
     else
     {
+        /*
         new info[102];
         format(info, sizeof(info), "Bem-vindo, %s!\n\nVocê não possui uma conta.\nDigite uma senha para cadastrar.", playerName);
         ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_INPUT, "Cadastro", info, "Cadastrar", "Sair");
         PlaySelectSound(playerid);
+        */
+        ShowPlayerAuthentication(playerid, false);
     }
     return 1;
 }
@@ -261,6 +263,26 @@ public OnNameCheck(playerid, name[])
         new query[128];
     	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `username`='%s' WHERE `id`=%d", name, gPlayerAccountData[playerid][e_player_database_id]);
     	mysql_pquery(gMySQL, query);
+    }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+public OnEmailCheck(playerid, email[])
+{
+	new rows, fields, playerName[MAX_PLAYER_NAME];
+	cache_get_data(rows, fields, gMySQL);
+    GetPlayerName(playerid, playerName, sizeof(playerName));
+	if(rows)
+	{
+        SendClientMessage(playerid, COLOR_ERROR, "* Este email já está em uso.");
+        PlayErrorSound(playerid);
+	}
+    else
+    {
+        SetPlayerEmail(playerid, email);
+        PlayConfirmSound(playerid);
     }
     return 1;
 }
@@ -452,9 +474,41 @@ SetPlayerWarning(playerid, value)
     gPlayerAccountData[playerid][e_player_warning] = value;
 }
 
+GetPlayerGender(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_gender];
+}
+
+SetPlayerGender(playerid, value)
+{
+    gPlayerAccountData[playerid][e_player_gender] = value;
+}
+
 GetPlayerLastLogin(playerid)
 {
     return gPlayerAccountData[playerid][e_player_lastlogin];
+}
+
+SetPlayerEmail(playerid, email[])
+{
+    format(gPlayerAccountData[playerid][e_player_email], 64, email);
+}
+
+GetPlayerEmail(playerid)
+{
+    new email[MAX_PLAYER_PASSWORD];
+    strcat(email, gPlayerAccountData[playerid][e_player_email]);
+    return email;
+}
+
+SetPlayerAge(playerid, age)
+{
+    gPlayerAccountData[playerid][e_player_age] = age;
+}
+
+GetPlayerAge(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_age];
 }
 
 GetPlayerPassword(playerid)
@@ -464,13 +518,16 @@ GetPlayerPassword(playerid)
     return password;
 }
 
-SetPlayerPassword(playerid, password[])
+SetPlayerPassword(playerid, password[], update=true)
 {
     format(gPlayerAccountData[playerid][e_player_password], MAX_PLAYER_PASSWORD, password);
 
-    new query[128];
-	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `password`='%s' WHERE `id`=%d", gPlayerAccountData[playerid][e_player_password], gPlayerAccountData[playerid][e_player_database_id]);
-	mysql_pquery(gMySQL, query);
+    if(update)
+    {
+        new query[128];
+    	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `password`='%s' WHERE `id`=%d", gPlayerAccountData[playerid][e_player_password], gPlayerAccountData[playerid][e_player_database_id]);
+    	mysql_pquery(gMySQL, query);
+    }
 }
 
 ChangePlayerName(playerid, name[])
