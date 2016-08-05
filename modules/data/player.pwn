@@ -96,8 +96,11 @@ SavePlayerAccount(playerid)
         return 0;
 
     // Salvar conta
-    new query[128];
+    new query[148];
 	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `ip`='%s', `skin`=%d, `admin`=%d, `last_login`=%d WHERE `id`=%d", gPlayerAccountData[playerid][e_player_ip], GetPlayerSkin(playerid), gPlayerAccountData[playerid][e_player_admin], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
+	mysql_pquery(gMySQL, query);
+    mysql_format(gMySQL, query, sizeof(query), "UPDATE user_preferences SET color=%d, fight_style=%d, auto_repair=%d, name_tags=%d, goto=%d WHERE user_id=%d",
+    GetPlayerColor(playerid), GetPlayerFightingStyle(playerid), GetPlayerAutoRepairState(playerid), GetPlayerNameTagsState(playerid), GetPlayerGotoState(playerid), gPlayerAccountData[playerid][e_player_database_id]);
 	mysql_pquery(gMySQL, query);
     return 1;
 }
@@ -119,9 +122,9 @@ ResetPlayerData(playerid)
 
 LoadPlayerAccount(playerid)
 {
-    new query[57 + MAX_PLAYER_NAME + 1], playerName[MAX_PLAYER_NAME + 1];
+    new query[106 + MAX_PLAYER_NAME], playerName[MAX_PLAYER_NAME];
     GetPlayerName(playerid, playerName, sizeof(playerName));
-    mysql_format(gMySQL, query, sizeof(query),"SELECT * FROM `users` WHERE `username` = '%e' LIMIT 1", playerName);
+    mysql_format(gMySQL, query, sizeof(query),"SELECT * FROM users LEFT JOIN user_preferences ON users.id=user_preferences.user_id WHERE username = '%e'", playerName);
     mysql_tquery(gMySQL, query, "OnAccountLoad", "i", playerid);
 }
 
@@ -327,6 +330,10 @@ public OnAccountRegister(playerid)
 {
     gPlayerAccountData[playerid][e_player_database_id] = cache_insert_id();
 
+    new query[64];
+    mysql_format(gMySQL, query, sizeof(query), "INSERT INTO user_preferences (user_id) VALUES (%d)", gPlayerAccountData[playerid][e_player_database_id]);
+    mysql_tquery(gMySQL, query);
+
     SetSpawnInfo(playerid, 255, 0, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
     TogglePlayerSpectating(playerid, false);
 
@@ -354,7 +361,12 @@ public OnAccountLoad(playerid)
         SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
         TogglePlayerSpectating(playerid, false);
 
-        SetPlayerColor(playerid, 0xFFFFFFFF);
+        // Load player preferences
+        SetPlayerColor(playerid,            cache_get_field_content_int(0, "color", gMySQL));
+        TogglePlayerAutoRepair(playerid,    cache_get_field_content_int(0, "auto_repair", gMySQL));
+        TogglePlayerGoto(playerid,          cache_get_field_content_int(0, "goto", gMySQL));
+        TogglePlayerNameTags(playerid,      cache_get_field_content_int(0, "name_tags", gMySQL));
+        SetPlayerFightingStyle(playerid,    cache_get_field_content_int(0, "fight_style", gMySQL));
         SetPlayerLogged(playerid, true);
     }
     return 1;

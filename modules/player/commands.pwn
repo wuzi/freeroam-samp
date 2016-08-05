@@ -15,11 +15,11 @@
 static gplMarkExt[MAX_PLAYERS][2];
 static Float:gplMarkPos[MAX_PLAYERS][3];
 
-static bool:gplAutoRepair[MAX_PLAYERS];
+static gplAutoRepair[MAX_PLAYERS];
 
-static bool:gplHideNameTags[MAX_PLAYERS];
+static gplHideNameTags[MAX_PLAYERS];
 
-static bool:gplGotoBlocked[MAX_PLAYERS];
+static gplGotoBlocked[MAX_PLAYERS];
 
 static gCountDown;
 
@@ -948,4 +948,36 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	    }
 	}
     return 1;
+}
+
+//------------------------------------------------------------------------------
+
+TogglePlayerAutoRepair(playerid, toggle)
+{
+	gplAutoRepair[playerid] = toggle;
+}
+
+GetPlayerAutoRepairState(playerid)
+{
+	return gplAutoRepair[playerid];
+}
+
+TogglePlayerNameTags(playerid, toggle)
+{
+	gplHideNameTags[playerid] = toggle;
+}
+
+GetPlayerNameTagsState(playerid)
+{
+	return gplHideNameTags[playerid];
+}
+
+TogglePlayerGoto(playerid, toggle)
+{
+	gplGotoBlocked[playerid] = toggle;
+}
+
+GetPlayerGotoState(playerid)
+{
+	return gplGotoBlocked[playerid];
 }
