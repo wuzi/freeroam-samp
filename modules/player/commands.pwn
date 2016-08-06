@@ -886,6 +886,15 @@ ptask OnPlayerAutoRepair[1000](playerid)
 	}
 }
 
+public OnVehicleDamageStatusUpdate(vehicleid, playerid)
+{
+	if(gplAutoRepair[playerid] && IsPlayerInVehicle(playerid, vehicleid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
+	{
+		RepairVehicle(GetPlayerVehicleID(playerid));
+	}
+	return 1;
+}
+
 timer CountDown[1000]()
 {
 	if(gCountDown == 0)
