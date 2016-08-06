@@ -880,7 +880,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 ptask OnPlayerAutoRepair[1000](playerid)
 {
-	if(gplAutoRepair[playerid] && IsPlayerInAnyVehicle(playerid))
+	if(gplAutoRepair[playerid] && IsPlayerInAnyVehicle(playerid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
 	{
 		RepairVehicle(GetPlayerVehicleID(playerid));
 	}
