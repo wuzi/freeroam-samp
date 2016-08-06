@@ -83,7 +83,7 @@ RRRRRRRR     RRRRRRREEEEEEEEEEEEEEEEEEEEEE       CCCCCCCCCCCCCRRRRRRRR     RRRRR
     if(playerid != targetid)
         SendClientMessagef(targetid, COLOR_ADMIN_COMMAND, "* %s alterou sua skin para %d.", GetPlayerNamef(playerid), skinid);
     SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* Você alterou a skin de %s para %d.", GetPlayerNamef(targetid), skinid);
-    SetSpawnInfo(targetid, 255, skinid, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+    SetSpawnInfo(targetid, 255, skinid, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
  	return 1;
  }
 
