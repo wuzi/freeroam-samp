@@ -17,6 +17,7 @@ static Text:registerTextDraw[9];
 static Text:backgroundTextDraw[7];
 
 static bool:isTextDrawVisible[MAX_PLAYERS];
+static bool:isDialogVisible[MAX_PLAYERS];
 static bool:isPlayerRegistered[MAX_PLAYERS];
 
 //------------------------------------------------------------------------------
@@ -42,18 +43,22 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
     if(clickedid == Text:INVALID_TEXT_DRAW)
     {
-         if(isTextDrawVisible[playerid])
+         if(isTextDrawVisible[playerid] && !isDialogVisible[playerid])
          {
              SelectTextDraw(playerid, 0x74c624ff);
          }
     }
     else if(clickedid == registerTextDraw[2])
     {
-         ShowPlayerDialog(playerid, DIALOG_REGISTER_GENDER, DIALOG_STYLE_MSGBOX, "Cadastro: Sexo", "Informe seu sexo", "Masculino", "Feminino");
+        isDialogVisible[playerid] = true;
+        ShowPlayerDialog(playerid, DIALOG_REGISTER_GENDER, DIALOG_STYLE_MSGBOX, "Cadastro: Sexo", "Informe seu sexo", "Masculino", "Feminino");
+        CancelSelectTextDraw(playerid);
     }
     else if(clickedid == registerTextDraw[3])
     {
-         ShowPlayerDialog(playerid, DIALOG_REGISTER_PASSWORD, DIALOG_STYLE_PASSWORD, "Cadastro: Senha", "Informe sua senha", "Salvar", "Voltar");
+        isDialogVisible[playerid] = true;
+        ShowPlayerDialog(playerid, DIALOG_REGISTER_PASSWORD, DIALOG_STYLE_PASSWORD, "Cadastro: Senha", "Informe sua senha", "Salvar", "Voltar");
+        CancelSelectTextDraw(playerid);
     }
     else if(clickedid == registerTextDraw[4])
     {
@@ -64,11 +69,15 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
             format(string, sizeof(string), "%i\n", i);
             strcat(output, string);
         }
+        isDialogVisible[playerid] = true;
         ShowPlayerDialog(playerid, DIALOG_REGISTER_AGE, DIALOG_STYLE_LIST, "Cadastro: Idade", output, "Salvar", "Voltar");
+        CancelSelectTextDraw(playerid);
     }
     else if(clickedid == registerTextDraw[5])
     {
-         ShowPlayerDialog(playerid, DIALOG_REGISTER_EMAIL, DIALOG_STYLE_INPUT, "Cadastro: Email", "Insira seu e-mail", "Salvar", "Voltar");
+        isDialogVisible[playerid] = true;
+        ShowPlayerDialog(playerid, DIALOG_REGISTER_EMAIL, DIALOG_STYLE_INPUT, "Cadastro: Email", "Insira seu e-mail", "Salvar", "Voltar");
+        CancelSelectTextDraw(playerid);
     }
     else if(clickedid == registerTextDraw[6])
     {
@@ -169,6 +178,8 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 SetPlayerGender(playerid, 0);
                 PlayConfirmSound(playerid);
             }
+            isDialogVisible[playerid] = false;
+            SelectTextDraw(playerid, 0x74c624ff);
         }
         case DIALOG_REGISTER_PASSWORD:
         {
@@ -189,6 +200,8 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 SetPlayerPassword(playerid, inputtext, false);
                 PlayConfirmSound(playerid);
             }
+            isDialogVisible[playerid] = false;
+            SelectTextDraw(playerid, 0x74c624ff);
         }
         case DIALOG_REGISTER_AGE:
         {
@@ -199,6 +212,8 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 SetPlayerAge(playerid, (listitem + 10));
                 PlayConfirmSound(playerid);
             }
+            isDialogVisible[playerid] = false;
+            SelectTextDraw(playerid, 0x74c624ff);
         }
         case DIALOG_REGISTER_EMAIL:
         {
@@ -215,6 +230,8 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 mysql_format(gMySQL, query, sizeof(query),"SELECT * FROM `users` WHERE `email` = '%e' LIMIT 1", inputtext);
                 mysql_tquery(gMySQL, query, "OnEmailCheck", "is", playerid, inputtext);
             }
+            isDialogVisible[playerid] = false;
+            SelectTextDraw(playerid, 0x74c624ff);
         }
         case DIALOG_CREDITS:
         {
@@ -398,8 +415,9 @@ ShowPlayerRegisterTextDrawErr(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-    isTextDrawVisible[playerid] = false;
-    isPlayerRegistered[playerid] = false;
+    isDialogVisible[playerid]       = false;
+    isTextDrawVisible[playerid]     = false;
+    isPlayerRegistered[playerid]    = false;
     return 1;
 }
 
