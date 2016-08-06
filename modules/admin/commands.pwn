@@ -570,7 +570,7 @@ YCMD:dararma(playerid, params[], help)
  		return SendClientMessage(playerid, COLOR_ERROR, "* O jogador não está conectado.");
 
     new ip[16];
-    GetPlayerIp(playerid, ip, 16);
+    GetPlayerIp(targetid, ip, 16);
     SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* (ID: %i)%s - %s.", targetid, GetPlayerNamef(targetid), ip);
  	return 1;
  }
