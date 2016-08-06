@@ -156,6 +156,7 @@ hook OnPlayerRequestClass(playerid, classid)
         InterpolateCameraLookAt(playerid, 1333.0903, -1205.6227, 203.4406, 1333.0903, -1205.6227, 197.4406, 30000, CAMERA_MOVE);
         return -1;
     }
+    SpawnPlayer(playerid);
     return 1;
 }
 
