@@ -949,7 +949,7 @@ hook OnPlayerStreamIn(playerid, forplayerid)
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(IsPlayerInAnyVehicle(playerid))
+	if(IsPlayerInAnyVehicle(playerid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
 	{
 		if(newkeys & KEY_FIRE)
 	    {
