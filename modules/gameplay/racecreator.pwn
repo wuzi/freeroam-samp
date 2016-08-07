@@ -336,6 +336,7 @@ public OnRaceExport(playerid)
 	}
 
 	PlayBuySound(playerid);
+	SendClientMessage(playerid, COLOR_SUCCESS, "* Corrida criada com sucesso.");
 
 	// Limpando dados temporários
 	for(new i = 0; i < MAX_RACE_PLAYERS; i++)
