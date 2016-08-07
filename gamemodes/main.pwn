@@ -50,6 +50,7 @@ new gMySQL;
 #include <YSI\y_iterate>
 #include <YSI\y_commands>
 #include <YSI\y_va>
+#include <drift>
 #include <utils>
 
 //------------------------------------------------------------------------------
@@ -112,6 +113,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/colors.pwn"
 #include "../modules/gameplay/tuning.pwn"
 #include "../modules/gameplay/racecreator.pwn"
+#include "../modules/gameplay/drift.pwn"
 
 //------------------------------------------------------------------------------
 
