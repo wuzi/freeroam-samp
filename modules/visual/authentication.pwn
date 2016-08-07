@@ -158,8 +158,6 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 PlayConfirmSound(playerid);
                 LoadPlayerAccount(playerid);
                 SendClientMessage(playerid, 0x88AA62FF, "Conectado.");
-
-                SendClientMessageToAllf(0xb5ff00ff, "* %s conectou-se ao servidor.", GetPlayerNamef(playerid));
             }
             else
             {
@@ -411,6 +409,14 @@ HidePlayerRegisterTextDraw(playerid)
 ShowPlayerRegisterTextDrawErr(playerid)
 {
     TextDrawShowForPlayer(playerid, registerTextDraw[8]);
+}
+
+//------------------------------------------------------------------------------
+
+hook OnPlayerConnect(playerid)
+{
+    SendClientMessageToAllf(0xb5ff00ff, "* %s conectou-se ao servidor.", GetPlayerNamef(playerid));
+    return 1;
 }
 
 //------------------------------------------------------------------------------
