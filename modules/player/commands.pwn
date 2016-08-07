@@ -240,11 +240,14 @@ YCMD:pagar(playerid, params[], help)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem essa quantia de dinheiro.");
 
 	SendClientMessagef(playerid, 0xa5f413ff, "* Você deu $%d para %s.", value, GetPlayerNamef(targetid));
-	SendClientMessagef(playerid, 0xa5f413ff, "* %s deu $%d para você.", GetPlayerNamef(playerid), value);
+	SendClientMessagef(targetid, 0xa5f413ff, "* %s deu $%d para você.", GetPlayerNamef(playerid), value);
 
 	new message[38 + MAX_PLAYER_NAME];
 	format(message, sizeof(message), "deu uma quantia de dinheiro para %s.", GetPlayerNamef(targetid));
 	SendClientActionMessage(playerid, 20.0, message);
+
+	SetPlayerCash(playerid, GetPlayerCash(playerid) - value);
+	SetPlayerCash(targetid, GetPlayerCash(targetid) + value);
 	return 1;
 }
 
