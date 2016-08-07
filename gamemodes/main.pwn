@@ -111,6 +111,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/chat.pwn"
 #include "../modules/gameplay/colors.pwn"
 #include "../modules/gameplay/tuning.pwn"
+#include "../modules/gameplay/racecreator.pwn"
 
 //------------------------------------------------------------------------------
 

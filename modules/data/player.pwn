@@ -435,6 +435,11 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 //------------------------------------------------------------------------------
 
+GetPlayerDatabaseID(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_database_id];
+}
+
 GetPlayerBankCash(playerid)
 {
     return gPlayerAccountData[playerid][e_player_bank];

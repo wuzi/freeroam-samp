@@ -46,7 +46,14 @@ hook OnGameModeInit()
 // Recomendável manter a lista em até 10 linhas, para melhor visualização
 YCMD:comandos(playerid, params[], help)
 {
-	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
+	PlaySelectSound(playerid);
+	ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_MSGBOX, "Lista de Comandos",
+	"* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite\n\
+	* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id\n\
+	* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome\n\
+	* /contar\n\
+	* /carcmd - /regras - /creditos - /acmds", "Fechar", "");
+	/*SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome");
@@ -54,7 +61,7 @@ YCMD:comandos(playerid, params[], help)
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /carcmd - /regras - /creditos");
 	if(IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
 		SendClientMessage(playerid, COLOR_SUB_TITLE, "* /acmds");
-	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
+	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");*/
 	return 1;
 }
 
