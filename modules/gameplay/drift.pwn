@@ -19,6 +19,9 @@ static Timer:gPlayerTimer[MAX_PLAYERS] = {Timer:-1, ...};
 
 public OnDriftStart(playerid)
 {
+    if(!GetPlayerDriftState(playerid))
+        return true;
+
     HideTotalDriftTextDraw(playerid);
 	ShowPlayerDriftTextdraw(playerid);
 	return true;
@@ -28,6 +31,9 @@ public OnDriftStart(playerid)
 
 public OnDriftUpdate(playerid, Float: drift_angle, Float: speed)
 {
+    if(!GetPlayerDriftState(playerid))
+        return true;
+
     gPlayerPoints[playerid] += floatround(drift_angle);
 
     new points[16];
@@ -40,6 +46,9 @@ public OnDriftUpdate(playerid, Float: drift_angle, Float: speed)
 
 public OnDriftEnd(playerid, reason, Float: distance, time)
 {
+    if(!GetPlayerDriftState(playerid))
+        return true;
+    
     HidePlayerDriftTextdraw(playerid);
 
     new tmpstr[32];

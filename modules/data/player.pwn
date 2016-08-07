@@ -99,8 +99,8 @@ SavePlayerAccount(playerid)
     new query[148];
 	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `ip`='%s', `skin`=%d, `admin`=%d, `last_login`=%d WHERE `id`=%d", gPlayerAccountData[playerid][e_player_ip], GetPlayerSkin(playerid), gPlayerAccountData[playerid][e_player_admin], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
 	mysql_pquery(gMySQL, query);
-    mysql_format(gMySQL, query, sizeof(query), "UPDATE user_preferences SET color=%d, fight_style=%d, auto_repair=%d, name_tags=%d, goto=%d WHERE user_id=%d",
-    GetPlayerColor(playerid), GetPlayerFightingStyle(playerid), GetPlayerAutoRepairState(playerid), GetPlayerNameTagsState(playerid), GetPlayerGotoState(playerid), gPlayerAccountData[playerid][e_player_database_id]);
+    mysql_format(gMySQL, query, sizeof(query), "UPDATE user_preferences SET color=%d, fight_style=%d, auto_repair=%d, name_tags=%d, goto=%d, drift=%d WHERE user_id=%d",
+    GetPlayerColor(playerid), GetPlayerFightingStyle(playerid), GetPlayerAutoRepairState(playerid), GetPlayerNameTagsState(playerid), GetPlayerGotoState(playerid), GetPlayerDriftState(playerid), gPlayerAccountData[playerid][e_player_database_id]);
 	mysql_pquery(gMySQL, query);
     return 1;
 }
@@ -368,6 +368,7 @@ public OnAccountLoad(playerid)
         TogglePlayerAutoRepair(playerid,    cache_get_field_content_int(0, "auto_repair", gMySQL));
         TogglePlayerGoto(playerid,          cache_get_field_content_int(0, "goto", gMySQL));
         TogglePlayerNameTags(playerid,      cache_get_field_content_int(0, "name_tags", gMySQL));
+        TogglePlayerDrift(playerid,         cache_get_field_content_int(0, "drift", gMySQL));
         SetPlayerFightingStyle(playerid,    cache_get_field_content_int(0, "fight_style", gMySQL));
         SetPlayerLogged(playerid, true);
     }

@@ -33,7 +33,8 @@ CREATE TABLE `user_preferences` (
   `auto_repair` tinyint(1) NOT NULL,
   `fight_style` int(11) NOT NULL,
   `goto` tinyint(1) NOT NULL,
-  `name_tags` tinyint(1) NOT NULL
+  `name_tags` tinyint(1) NOT NULL,
+  `drift` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

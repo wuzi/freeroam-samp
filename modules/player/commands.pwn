@@ -16,10 +16,9 @@ static gplMarkExt[MAX_PLAYERS][2];
 static Float:gplMarkPos[MAX_PLAYERS][3];
 
 static gplAutoRepair[MAX_PLAYERS];
-
 static gplHideNameTags[MAX_PLAYERS];
-
 static gplGotoBlocked[MAX_PLAYERS];
+static gplDriftActive[MAX_PLAYERS] = {true, ...};
 
 static gCountDown;
 
@@ -51,13 +50,13 @@ YCMD:comandos(playerid, params[], help)
 	"* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite\n\
 	* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id\n\
 	* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome\n\
-	* /contar\n\
+	* /contar - /drift\n\
 	* /carcmd - /regras - /creditos - /acmds", "Fechar", "");
 	/*SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar - /drift");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /carcmd - /regras - /creditos");
 	if(IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
 		SendClientMessage(playerid, COLOR_SUB_TITLE, "* /acmds");
@@ -134,6 +133,25 @@ YCMD:myacc(playerid, params[], help)
 YCMD:kill(playerid, params[], help)
 {
 	SetPlayerHealth(playerid, 0.0);
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
+YCMD:drift(playerid, params[], help)
+{
+	if(!gplDriftActive[playerid])
+	{
+		PlayConfirmSound(playerid);
+		SendClientMessage(playerid, COLOR_SUCCESS, "* Você ativou o contador de drift.");
+		gplDriftActive[playerid] = true;
+	}
+	else
+	{
+		PlayCancelSound(playerid);
+		SendClientMessage(playerid, COLOR_SUCCESS, "* Você desativou o contador de drift.");
+		gplDriftActive[playerid] = false;
+	}
 	return 1;
 }
 
@@ -938,6 +956,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	gplAutoRepair[playerid]		= false;
 	gplHideNameTags[playerid]	= false;
 	gplGotoBlocked[playerid]	= false;
+	gplDriftActive[playerid]	= true;
 	return 1;
 }
 
@@ -996,4 +1015,14 @@ TogglePlayerGoto(playerid, toggle)
 GetPlayerGotoState(playerid)
 {
 	return gplGotoBlocked[playerid];
+}
+
+TogglePlayerDrift(playerid, toggle)
+{
+	gplDriftActive[playerid] = toggle;
+}
+
+GetPlayerDriftState(playerid)
+{
+	return gplDriftActive[playerid];
 }
