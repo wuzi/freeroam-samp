@@ -158,6 +158,8 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 PlayConfirmSound(playerid);
                 LoadPlayerAccount(playerid);
                 SendClientMessage(playerid, 0x88AA62FF, "Conectado.");
+
+                SendClientMessageToAllf(0xb5ff00ff, "* %s conectou-se ao servidor.", GetPlayerNamef(playerid));
             }
             else
             {
@@ -418,6 +420,14 @@ hook OnPlayerDisconnect(playerid, reason)
     isDialogVisible[playerid]       = false;
     isTextDrawVisible[playerid]     = false;
     isPlayerRegistered[playerid]    = false;
+
+    new szDisconnectReason[3][] =
+    {
+        "Timeout/Crash",
+        "Conta própria",
+        "Kick/Ban"
+    };
+    SendClientMessageToAllf(0xb5ff00ff, "* %s desconectou-se do servidor. (%s)", GetPlayerNamef(playerid), szDisconnectReason[reason]);
     return 1;
 }
 
