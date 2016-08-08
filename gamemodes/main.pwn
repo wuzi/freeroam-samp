@@ -93,6 +93,7 @@ hook OnGameModeInit()
 
 /* Visual */
 #include "../modules/visual/authentication.pwn"
+#include "../modules/visual/lobby.pwn"
 
 /* Dados */
 #include "../modules/data/player.pwn"

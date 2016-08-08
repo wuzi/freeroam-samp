@@ -338,6 +338,7 @@ public OnAccountRegister(playerid)
 
     SetSpawnInfo(playerid, 255, 0, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
     TogglePlayerSpectating(playerid, false);
+    ShowPlayerLobby(playerid);
 
     new playerName[MAX_PLAYER_NAME];
     GetPlayerName(playerid, playerName, sizeof(playerName));
@@ -362,6 +363,7 @@ public OnAccountLoad(playerid)
 
         SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
         TogglePlayerSpectating(playerid, false);
+        ShowPlayerLobby(playerid);
 
         // Load player preferences
         SetPlayerColor(playerid,            cache_get_field_content_int(0, "color", gMySQL));
