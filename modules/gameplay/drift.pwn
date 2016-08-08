@@ -12,7 +12,11 @@
 
 static Text:gDriftTextDraw[3];
 static PlayerText:gDriftPointsPlayerTextDraw[MAX_PLAYERS][4];
+static PlayerText:gPlTextDrift[MAX_PLAYERS][3];
+static gPlayerCombo[MAX_PLAYERS] = {1, ...};
 static gPlayerPoints[MAX_PLAYERS];
+static gPlayerBestScore[MAX_PLAYERS];
+static gPlayerTotalScore[MAX_PLAYERS];
 static Timer:gPlayerTimer[MAX_PLAYERS] = {Timer:-1, ...};
 
 //------------------------------------------------------------------------------
@@ -23,7 +27,7 @@ public OnDriftStart(playerid)
         return true;
 
     HideTotalDriftTextDraw(playerid);
-	ShowPlayerDriftTextdraw(playerid);
+	ShowPlayerDriftTextdraw(playerid, GetPlayerDriftCounter(playerid));
 	return true;
 }
 
@@ -34,11 +38,36 @@ public OnDriftUpdate(playerid, Float: drift_angle, Float: speed)
     if(!GetPlayerDriftState(playerid))
         return true;
 
-    gPlayerPoints[playerid] += floatround(drift_angle);
+    gPlayerPoints[playerid] += (floatround(drift_angle) * gPlayerCombo[playerid]);
 
-    new points[16];
-    valstr(points, gPlayerPoints[playerid]);
-    PlayerTextDrawSetString(playerid, gDriftPointsPlayerTextDraw[playerid][0], points);
+    if(gPlayerPoints[playerid] > 500)
+    {
+        gPlayerCombo[playerid] = 4;
+        PlayerTextDrawSetString(playerid, gPlTextDrift[playerid][2], "COMBO~n~x4");
+    }
+    else if(gPlayerPoints[playerid] > 350)
+    {
+        gPlayerCombo[playerid] = 3;
+        PlayerTextDrawSetString(playerid, gPlTextDrift[playerid][2], "COMBO~n~x3");
+    }
+    else if(gPlayerPoints[playerid] > 150)
+    {
+        gPlayerCombo[playerid] = 2;
+        PlayerTextDrawSetString(playerid, gPlTextDrift[playerid][2], "COMBO~n~x2");
+    }
+
+    if(GetPlayerDriftCounter(playerid) == 1)
+    {
+        new points[16];
+        valstr(points, gPlayerPoints[playerid]);
+        PlayerTextDrawSetString(playerid, gDriftPointsPlayerTextDraw[playerid][0], points);
+    }
+    else
+    {
+        new points[32];
+        format(points, sizeof(points), "PONTOS:~n~%d", gPlayerPoints[playerid]);
+        PlayerTextDrawSetString(playerid, gPlTextDrift[playerid][0], points);
+    }
 	return true;
 }
 
@@ -48,46 +77,87 @@ public OnDriftEnd(playerid, reason, Float: distance, time)
 {
     if(!GetPlayerDriftState(playerid))
         return true;
-    
+
     HidePlayerDriftTextdraw(playerid);
 
-    new tmpstr[32];
-    format(tmpstr, sizeof(tmpstr), "tempo: %02d segundos", time / 1000);
-    PlayerTextDrawSetString(playerid, gDriftPointsPlayerTextDraw[playerid][1], tmpstr);
-    format(tmpstr, sizeof(tmpstr), "pontos: %02d", gPlayerPoints[playerid]);
-    PlayerTextDrawSetString(playerid, gDriftPointsPlayerTextDraw[playerid][2], tmpstr);
-    format(tmpstr, sizeof(tmpstr), "distancia: %.2f", distance);
-    PlayerTextDrawSetString(playerid, gDriftPointsPlayerTextDraw[playerid][3], tmpstr);
+    gPlayerCombo[playerid] = 1;
+    PlayerTextDrawSetString(playerid, gPlTextDrift[playerid][2], "COMBO~n~x1");
 
-    TextDrawShowForPlayer(playerid, gDriftTextDraw[0]);
-    TextDrawShowForPlayer(playerid, gDriftTextDraw[2]);
-    PlayerTextDrawShow(playerid, gDriftPointsPlayerTextDraw[playerid][1]);
-    PlayerTextDrawShow(playerid, gDriftPointsPlayerTextDraw[playerid][2]);
-    PlayerTextDrawShow(playerid, gDriftPointsPlayerTextDraw[playerid][3]);
+    if(reason == DRIFT_END_REASON_CRASH)
+    {
+        gPlayerPoints[playerid] = 0;
+        GameTextForPlayer(playerid, "~r~bateu", 1500, 3);
+    }
 
-    gPlayerTimer[playerid] = defer HideTotalDriftTextDraw(playerid);
+    if(gPlayerPoints[playerid] > gPlayerBestScore[playerid])
+    {
+        gPlayerBestScore[playerid] = gPlayerPoints[playerid];
+    }
 
+    if(GetPlayerDriftCounter(playerid))
+    {
+        new tmpstr[32];
+        format(tmpstr, sizeof(tmpstr), "tempo: %02d segundos", time / 1000);
+        PlayerTextDrawSetString(playerid, gDriftPointsPlayerTextDraw[playerid][1], tmpstr);
+        format(tmpstr, sizeof(tmpstr), "pontos: %02d", gPlayerPoints[playerid]);
+        PlayerTextDrawSetString(playerid, gDriftPointsPlayerTextDraw[playerid][2], tmpstr);
+        format(tmpstr, sizeof(tmpstr), "distancia: %.2f", distance);
+        PlayerTextDrawSetString(playerid, gDriftPointsPlayerTextDraw[playerid][3], tmpstr);
+
+        TextDrawShowForPlayer(playerid, gDriftTextDraw[0]);
+        TextDrawShowForPlayer(playerid, gDriftTextDraw[2]);
+        PlayerTextDrawShow(playerid, gDriftPointsPlayerTextDraw[playerid][1]);
+        PlayerTextDrawShow(playerid, gDriftPointsPlayerTextDraw[playerid][2]);
+        PlayerTextDrawShow(playerid, gDriftPointsPlayerTextDraw[playerid][3]);
+
+        gPlayerTimer[playerid] = defer HideTotalDriftTextDraw(playerid);
+    }
+    else
+    {
+        new tmpstr[32];
+        format(tmpstr, sizeof(tmpstr), "best score: %d", gPlayerBestScore[playerid]);
+        PlayerTextDrawSetString(playerid, gPlTextDrift[playerid][1], tmpstr);
+    }
+
+    gPlayerTotalScore[playerid] += gPlayerPoints[playerid];
     gPlayerPoints[playerid] = 0;
+
+    SetPlayerScore(playerid, gPlayerTotalScore[playerid] / 1000);
 	return true;
 }
 
 //------------------------------------------------------------------------------
 
-ShowPlayerDriftTextdraw(playerid)
+ShowPlayerDriftTextdraw(playerid, toggle)
 {
-    TextDrawShowForPlayer(playerid, gDriftTextDraw[0]);
-    TextDrawShowForPlayer(playerid, gDriftTextDraw[1]);
-    PlayerTextDrawShow(playerid, gDriftPointsPlayerTextDraw[playerid][0]);
+    if(toggle == 0)
+    {
+        PlayerTextDrawShow(playerid, gPlTextDrift[playerid][0]);
+        PlayerTextDrawShow(playerid, gPlTextDrift[playerid][1]);
+        PlayerTextDrawShow(playerid, gPlTextDrift[playerid][2]);
+    }
+    else
+    {
+        TextDrawShowForPlayer(playerid, gDriftTextDraw[0]);
+        TextDrawShowForPlayer(playerid, gDriftTextDraw[1]);
+        PlayerTextDrawShow(playerid, gDriftPointsPlayerTextDraw[playerid][0]);
+    }
 }
 
 //------------------------------------------------------------------------------
 
-HidePlayerDriftTextdraw(playerid)
+HidePlayerDriftTextdraw(playerid, bool:hide_best_score = false)
 {
     TextDrawHideForPlayer(playerid, gDriftTextDraw[0]);
     TextDrawHideForPlayer(playerid, gDriftTextDraw[1]);
     PlayerTextDrawHide(playerid, gDriftPointsPlayerTextDraw[playerid][0]);
     PlayerTextDrawSetString(playerid, gDriftPointsPlayerTextDraw[playerid][0], "0");
+
+    // 2nd version
+    PlayerTextDrawHide(playerid, gPlTextDrift[playerid][0]);
+    PlayerTextDrawSetString(playerid, gPlTextDrift[playerid][0], "pontos:~n~0");
+    if(hide_best_score) PlayerTextDrawHide(playerid, gPlTextDrift[playerid][1]);
+    PlayerTextDrawHide(playerid, gPlTextDrift[playerid][2]);
 }
 
 //------------------------------------------------------------------------------
@@ -153,6 +223,40 @@ hook OnPlayerConnect(playerid)
     PlayerTextDrawFont(playerid, gDriftPointsPlayerTextDraw[playerid][3], 2);
     PlayerTextDrawSetProportional(playerid, gDriftPointsPlayerTextDraw[playerid][3], 1);
     PlayerTextDrawSetShadow(playerid, gDriftPointsPlayerTextDraw[playerid][3], 0);
+
+    // 2nd drift hud
+    gPlTextDrift[playerid][0] = CreatePlayerTextDraw(playerid, 316.000213, 111.599952, "PONTOS:~n~0");
+    PlayerTextDrawLetterSize(playerid, gPlTextDrift[playerid][0], 0.533330, 2.219999);
+    PlayerTextDrawAlignment(playerid, gPlTextDrift[playerid][0], 2);
+    PlayerTextDrawColor(playerid, gPlTextDrift[playerid][0], -1);
+    PlayerTextDrawSetShadow(playerid, gPlTextDrift[playerid][0], 0);
+    PlayerTextDrawSetOutline(playerid, gPlTextDrift[playerid][0], 1);
+    PlayerTextDrawBackgroundColor(playerid, gPlTextDrift[playerid][0], 255);
+    PlayerTextDrawFont(playerid, gPlTextDrift[playerid][0], 2);
+    PlayerTextDrawSetProportional(playerid, gPlTextDrift[playerid][0], 1);
+    PlayerTextDrawSetShadow(playerid, gPlTextDrift[playerid][0], 0);
+
+    gPlTextDrift[playerid][1] = CreatePlayerTextDraw(playerid, 603.499938, 0.055507, "BEST_SCORE:_1");
+    PlayerTextDrawLetterSize(playerid, gPlTextDrift[playerid][1], 0.287997, 1.854961);
+    PlayerTextDrawAlignment(playerid, gPlTextDrift[playerid][1], 3);
+    PlayerTextDrawColor(playerid, gPlTextDrift[playerid][1], -1);
+    PlayerTextDrawSetShadow(playerid, gPlTextDrift[playerid][1], 0);
+    PlayerTextDrawSetOutline(playerid, gPlTextDrift[playerid][1], 1);
+    PlayerTextDrawBackgroundColor(playerid, gPlTextDrift[playerid][1], 255);
+    PlayerTextDrawFont(playerid, gPlTextDrift[playerid][1], 2);
+    PlayerTextDrawSetProportional(playerid, gPlTextDrift[playerid][1], 1);
+    PlayerTextDrawSetShadow(playerid, gPlTextDrift[playerid][1], 0);
+
+    gPlTextDrift[playerid][2] = CreatePlayerTextDraw(playerid, 610.501770, 93.817070, "COMBO~n~x1");
+    PlayerTextDrawLetterSize(playerid, gPlTextDrift[playerid][2], 0.533330, 2.219999);
+    PlayerTextDrawAlignment(playerid, gPlTextDrift[playerid][2], 3);
+    PlayerTextDrawColor(playerid, gPlTextDrift[playerid][2], -1);
+    PlayerTextDrawSetShadow(playerid, gPlTextDrift[playerid][2], 0);
+    PlayerTextDrawSetOutline(playerid, gPlTextDrift[playerid][2], 1);
+    PlayerTextDrawBackgroundColor(playerid, gPlTextDrift[playerid][2], 255);
+    PlayerTextDrawFont(playerid, gPlTextDrift[playerid][2], 2);
+    PlayerTextDrawSetProportional(playerid, gPlTextDrift[playerid][2], 1);
+    PlayerTextDrawSetShadow(playerid, gPlTextDrift[playerid][2], 0);
     return 1;
 }
 
@@ -160,7 +264,10 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
+    gPlayerCombo[playerid] = 1;
     gPlayerPoints[playerid] = 0;
+    gPlayerBestScore[playerid] = 0;
+    gPlayerTotalScore[playerid] = 0;
     TextDrawHideForPlayer(playerid, gDriftTextDraw[0]);
     TextDrawHideForPlayer(playerid, gDriftTextDraw[1]);
     TextDrawHideForPlayer(playerid, gDriftTextDraw[2]);

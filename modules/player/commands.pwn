@@ -19,6 +19,7 @@ static gplAutoRepair[MAX_PLAYERS];
 static gplHideNameTags[MAX_PLAYERS];
 static gplGotoBlocked[MAX_PLAYERS];
 static gplDriftActive[MAX_PLAYERS] = {true, ...};
+static gplDriftCounter[MAX_PLAYERS];
 
 static gCountDown;
 
@@ -50,13 +51,13 @@ YCMD:comandos(playerid, params[], help)
 	"* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite\n\
 	* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id\n\
 	* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome\n\
-	* /contar - /drift - /lobby\n\
+	* /contar - /drift - /contador - /lobby\n\
 	* /carcmd - /regras - /creditos - /acmds", "Fechar", "");
 	/*SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar - /drift - /lobby");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar - /drift - /contador - /lobby");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /carcmd - /regras - /creditos");
 	if(IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
 		SendClientMessage(playerid, COLOR_SUB_TITLE, "* /acmds");
@@ -151,6 +152,31 @@ YCMD:drift(playerid, params[], help)
 		PlayCancelSound(playerid);
 		SendClientMessage(playerid, COLOR_SUCCESS, "* Você desativou o contador de drift.");
 		gplDriftActive[playerid] = false;
+
+		if(gplDriftCounter[playerid] == 0)
+		{
+			HidePlayerDriftTextdraw(playerid, true);
+		}
+	}
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
+YCMD:contador(playerid, params[], help)
+{
+	if(!gplDriftCounter[playerid])
+	{
+		PlayConfirmSound(playerid);
+		SendClientMessage(playerid, COLOR_SUCCESS, "* Você alterou o contador de drift para o estilo #2.");
+		gplDriftCounter[playerid] = true;
+		HidePlayerDriftTextdraw(playerid, true);
+	}
+	else
+	{
+		PlayConfirmSound(playerid);
+		SendClientMessage(playerid, COLOR_SUCCESS, "* Você alterou o contador de drift para o estilo #1.");
+		gplDriftCounter[playerid] = false;
 	}
 	return 1;
 }
@@ -906,7 +932,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 //------------------------------------------------------------------------------
 
-ptask OnPlayerAutoRepair[1000](playerid)
+ptask OnPlayerAutoRepair[1250](playerid)
 {
 	if(gplAutoRepair[playerid] && IsPlayerInAnyVehicle(playerid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
 	{
@@ -916,7 +942,7 @@ ptask OnPlayerAutoRepair[1000](playerid)
 
 public OnVehicleDamageStatusUpdate(vehicleid, playerid)
 {
-	if(gplAutoRepair[playerid] && IsPlayerInVehicle(playerid, vehicleid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
+	if(gplAutoRepair[playerid] && IsPlayerInVehicle(playerid, vehicleid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !gplDriftActive[playerid])
 	{
 		RepairVehicle(GetPlayerVehicleID(playerid));
 	}
@@ -960,6 +986,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	gplHideNameTags[playerid]	= false;
 	gplGotoBlocked[playerid]	= false;
 	gplDriftActive[playerid]	= true;
+	gplDriftCounter[playerid]	= 0;
 	return 1;
 }
 
@@ -1028,4 +1055,14 @@ TogglePlayerDrift(playerid, toggle)
 GetPlayerDriftState(playerid)
 {
 	return gplDriftActive[playerid];
+}
+
+TogglePlayerDriftCounter(playerid, toggle)
+{
+	gplDriftCounter[playerid] = toggle;
+}
+
+GetPlayerDriftCounter(playerid)
+{
+	return gplDriftCounter[playerid];
 }

@@ -34,7 +34,8 @@ CREATE TABLE `user_preferences` (
   `fight_style` int(11) NOT NULL,
   `goto` tinyint(1) NOT NULL,
   `name_tags` tinyint(1) NOT NULL,
-  `drift` tinyint(1) NOT NULL
+  `drift` tinyint(1) NOT NULL,
+  `drift_counter` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
