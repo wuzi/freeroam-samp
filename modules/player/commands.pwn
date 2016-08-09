@@ -823,8 +823,8 @@ YCMD:car(playerid, params[], help)
 		new vehicleid = random(MAX_CREATED_VEHICLE_PER_PLAYER);
 		DestroyVehicle(gplCreatedVehicle[playerid][vehicleid]);
 		gplCreatedVehicle[playerid][vehicleid] = CreateVehicle(idx, x, y, z, a, color1, color2, -1);
-		SetVehicleVirtualWorld(gplCreatedVehicle[playerid][i], GetPlayerVirtualWorld(playerid));
-		LinkVehicleToInterior(gplCreatedVehicle[playerid][i], GetPlayerInterior(playerid));
+		SetVehicleVirtualWorld(gplCreatedVehicle[playerid][vehicleid], GetPlayerVirtualWorld(playerid));
+		LinkVehicleToInterior(gplCreatedVehicle[playerid][vehicleid], GetPlayerInterior(playerid));
 		PutPlayerInVehicle(playerid, gplCreatedVehicle[playerid][vehicleid], 0);
 		SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você criou um %s.", GetVehicleName(gplCreatedVehicle[playerid][vehicleid]));
 		SendClientMessage(playerid, COLOR_WARNING, "* Você atingiu o limite de veículos por jogador, um de seus antigos veículos foi destruído.");
