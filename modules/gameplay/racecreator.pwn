@@ -451,24 +451,32 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		{
 			case E_PLAYER_CREATING_CHECKPOINT:
 			{
-				new Float:x, Float:y, Float:z;
-				if(IsPlayerInAnyVehicle(playerid))
+				if(gPlayerCurrentCheckpoint[playerid] < MAX_RACE_CHECKPOINTS)
 				{
-					GetVehiclePos(GetPlayerVehicleID(playerid), x, y, z);
+					new Float:x, Float:y, Float:z;
+					if(IsPlayerInAnyVehicle(playerid))
+					{
+						GetVehiclePos(GetPlayerVehicleID(playerid), x, y, z);
+					}
+					else
+					{
+						GetPlayerPos(playerid, x, y, z);
+					}
+
+					gPlayerCheckpoints[playerid][gPlayerCurrentCheckpoint[playerid]][e_checkpoint_x] = x;
+					gPlayerCheckpoints[playerid][gPlayerCurrentCheckpoint[playerid]][e_checkpoint_y] = y;
+					gPlayerCheckpoints[playerid][gPlayerCurrentCheckpoint[playerid]][e_checkpoint_z] = z;
+					gPlayerCurrentCheckpoint[playerid]++;
+
+					PlaySelectSound(playerid);
+					GenerateCheckpoint(playerid);
+					SendClientMessagef(playerid, 0x35CEFBFF, "* Você criou o %dº checkpoint nas coordenadas %f, %f, %f.", gPlayerCurrentCheckpoint[playerid], x, y, z);
 				}
 				else
 				{
-					GetPlayerPos(playerid, x, y, z);
+					PlayErrorSound(playerid);
+					SendClientMessage(playerid, COLOR_ERROR, "* Você atingiu o limite máximo de checkpoints por corrida.");
 				}
-
-				gPlayerCheckpoints[playerid][gPlayerCurrentCheckpoint[playerid]][e_checkpoint_x] = x;
-				gPlayerCheckpoints[playerid][gPlayerCurrentCheckpoint[playerid]][e_checkpoint_y] = y;
-				gPlayerCheckpoints[playerid][gPlayerCurrentCheckpoint[playerid]][e_checkpoint_z] = z;
-				gPlayerCurrentCheckpoint[playerid]++;
-
-				PlaySelectSound(playerid);
-				GenerateCheckpoint(playerid);
-				SendClientMessagef(playerid, 0x35CEFBFF, "* Você criou o %dº checkpoint nas coordenadas %f, %f, %f.", gPlayerCurrentCheckpoint[playerid], x, y, z);
 			}
 			case E_PLAYER_CREATING_GRID:
 			{
