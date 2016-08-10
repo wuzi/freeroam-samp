@@ -193,6 +193,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						gPlayerCheckpointType[playerid]		= 1;
 						gPlayerCheckpointSize[playerid]		= 3.5;
 						gIsPlayerCreatingRace[playerid]		= E_PLAYER_RACE_STATE_NONE;
+						gPlayerCurrentVehicle[playerid]		= 0;
 						gPlayerCurrentCheckpoint[playerid]	= 0;
 						gPlayerRaceVehicleModel[playerid]	= 0;
 						DisablePlayerRaceCheckpoint(playerid);
@@ -427,6 +428,7 @@ public OnRaceExport(playerid)
 	gPlayerCheckpointType[playerid]		= 1;
 	gPlayerCheckpointSize[playerid]		= 3.5;
 	gIsPlayerCreatingRace[playerid]		= E_PLAYER_RACE_STATE_NONE;
+	gPlayerCurrentVehicle[playerid]		= 0;
 	gPlayerCurrentCheckpoint[playerid]	= 0;
 	gPlayerRaceName[playerid][0]		= '\0';
 	gPlayerRaceVehicleModel[playerid]	= 0;
@@ -558,6 +560,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	gIsPlayerCreatingRace[playerid]		= E_PLAYER_RACE_STATE_NONE;
 	gPlayerCheckpointType[playerid]		= 1;
 	gPlayerCheckpointSize[playerid]		= 3.5;
+	gPlayerCurrentVehicle[playerid]		= 0;
 	gPlayerCurrentCheckpoint[playerid]	= 0;
 	gPlayerRaceVehicleModel[playerid]	= 0;
 	gPlayerRaceName[playerid][0]		= '\0';
