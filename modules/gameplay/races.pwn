@@ -211,7 +211,7 @@ public OnPlayerEnterRace(playerid, raceid)
     SetPlayerInterior(playerid, 10);
     SetPlayerPos(playerid, gLobbySpawns[rand][0], gLobbySpawns[rand][1], gLobbySpawns[rand][2]);
     SetPlayerFacingAngle(playerid, gLobbySpawns[rand][3]);
-    SetPlayerVirtualWorld(playerid, raceid);
+    SetPlayerVirtualWorld(playerid, (raceid + 2000));
     SetPlayerGamemode(playerid, GAMEMODE_RACE);
     SetPlayerRace(playerid, raceid);
     SendClientMessagef(playerid, COLOR_SUCCESS, "* Você entrou na corrida %s!", gRaceData[raceid][e_race_name]);
@@ -300,7 +300,7 @@ task OnRaceUpdate[1000]()
                         gPlayerData[i][e_checkpoint_id] = 0;
                         gVehicleData[raceid][racer_id][e_vehicle_id] = CreateVehicle(gRaceData[raceid][e_race_vmodel], gVehicleData[raceid][racer_id][e_vehicle_x], gVehicleData[raceid][racer_id][e_vehicle_y], gVehicleData[raceid][racer_id][e_vehicle_z], gVehicleData[raceid][racer_id][e_vehicle_a], -1, -1, -1);
                         LinkVehicleToInterior(gVehicleData[raceid][racer_id][e_vehicle_id], gRaceData[raceid][e_race_interior]);
-                        SetVehicleVirtualWorld(gVehicleData[raceid][racer_id][e_vehicle_id], raceid);
+                        SetVehicleVirtualWorld(gVehicleData[raceid][racer_id][e_vehicle_id], (raceid + 2000));
                         SetPlayerInterior(i, gRaceData[raceid][e_race_interior]);
                         PutPlayerInVehicle(i, gVehicleData[raceid][racer_id][e_vehicle_id], 0);
                         SetCameraBehindPlayer(i);
