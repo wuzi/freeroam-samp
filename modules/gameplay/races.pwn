@@ -83,7 +83,8 @@ enum e_player_race_data
     e_grid_id,
     e_checkpoint_id,
     e_start_time,
-    e_end_time
+    e_end_time,
+    e_spec_targetid
 }
 static gPlayerData[MAX_PLAYERS][e_player_race_data];
 
@@ -203,18 +204,20 @@ public OnPlayerEnterRace(playerid, raceid)
 {
     HidePlayerLobby(playerid);
     SetPlayerHealth(playerid, 100.0);
+
+    new rand = random(sizeof(gLobbySpawns));
+    SetPlayerInterior(playerid, 10);
+    SetPlayerPos(playerid, gLobbySpawns[rand][0], gLobbySpawns[rand][1], gLobbySpawns[rand][2]);
+    SetPlayerFacingAngle(playerid, gLobbySpawns[rand][3]);
+    SetPlayerVirtualWorld(playerid, raceid);
+    SetPlayerGamemode(playerid, GAMEMODE_RACE);
+    SetPlayerRace(playerid, raceid);
+    SendClientMessagef(playerid, COLOR_SUCCESS, "* Você entrou na corrida %s!", gRaceData[raceid][e_race_name]);
+
     if(gRaceData[raceid][e_race_state] == RACE_STATE_WAITING_PLAYERS)
     {
-        new rand = random(sizeof(gLobbySpawns));
-        SetPlayerInterior(playerid, 10);
-        SetPlayerPos(playerid, gLobbySpawns[rand][0], gLobbySpawns[rand][1], gLobbySpawns[rand][2]);
-        SetPlayerFacingAngle(playerid, gLobbySpawns[rand][3]);
-        SetPlayerVirtualWorld(playerid, raceid);
-        SetPlayerGamemode(playerid, GAMEMODE_RACE);
-        SetPlayerRace(playerid, raceid);
-
         GameTextForPlayer(playerid, "~y~Aguardando jogadores...", 1250, 3);
-        SendClientMessagef(playerid, COLOR_SUCCESS, "* Você entrou na corrida %s, aguardando mais jogadores para iniciar.", gRaceData[raceid][e_race_name]);
+        SendClientMessage(playerid, COLOR_SUCCESS, "* Aguardando mais jogadores para iniciar...");
 
         new count = 0;
         foreach(new i: Player)
@@ -270,10 +273,13 @@ task OnRaceUpdate[1000]()
             {
                 foreach(new i: Player)
                 {
-                    new countstr[38];
-                    format(countstr, sizeof(countstr), "~g~Iniciando corrida~n~%02d", gRaceCountdown[raceid]);
-                    GameTextForPlayer(i, countstr, 1250, 3);
-                    PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
+                    if(GetPlayerRace(i) == raceid)
+                    {
+                        new countstr[38];
+                        format(countstr, sizeof(countstr), "~g~Iniciando corrida~n~%02d", gRaceCountdown[raceid]);
+                        GameTextForPlayer(i, countstr, 1250, 3);
+                        PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
+                    }
                 }
                 gRaceCountdown[raceid]--;
             }
@@ -339,6 +345,74 @@ task OnRaceUpdate[1000]()
 
 //------------------------------------------------------------------------------
 
+hook OnPlayerUpdate(playerid)
+{
+    if(GetPlayerRace(playerid) != INVALID_RACE_ID && GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+    {
+        new raceid = GetPlayerRace(playerid);
+        new Keys,ud,lr;
+        GetPlayerKeys(playerid,Keys,ud,lr);
+
+        new count;
+        new players[MAX_RACE_PLAYERS] = {INVALID_PLAYER_ID, ...};
+        if(lr == KEY_LEFT)
+        {
+            foreach(new i: Player)
+            {
+                if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING)
+                {
+                    players[count] = i;
+                }
+            }
+
+            for(new i = 0; i < MAX_RACE_PLAYERS; i++)
+            {
+                if(gPlayerData[playerid][e_spec_targetid] < players[i] && players[i] > 0)
+                {
+                    SetPlayerSpecatateTarget(playerid, players[i]);
+                    break;
+                }
+                else if(i == (MAX_RACE_PLAYERS - 1))
+                {
+                    SetPlayerSpecatateTarget(playerid, players[0]);
+                }
+            }
+        }
+        else if(lr == KEY_RIGHT)
+        {
+            foreach(new i: Player)
+            {
+                if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING)
+                {
+                    players[count] = i;
+                }
+            }
+
+            for(new i = 0; i < MAX_RACE_PLAYERS; i++)
+            {
+                if(gPlayerData[playerid][e_spec_targetid] > players[i] && players[i] > 0)
+                {
+                    SetPlayerSpecatateTarget(playerid, players[i]);
+                    break;
+                }
+                else if(i == (MAX_RACE_PLAYERS - 1))
+                {
+                    new targetid = -1;
+                    for(new j = 0; j < MAX_RACE_PLAYERS; j++)
+                    {
+                        if(players[j] > targetid)
+                            targetid = players[j];
+                    }
+                    SetPlayerSpecatateTarget(playerid, targetid);
+                }
+            }
+        }
+    }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
 hook OnPlayerEnterRaceCP(playerid)
 {
     new raceid = GetPlayerRace(playerid);
@@ -399,13 +473,30 @@ hook OnPlayerEnterRaceCP(playerid)
                     format(string, sizeof(string), "%d\t%s\t%02d:%02d:%03d\n", i + 1, GetPlayerNamef(j), j_minutes, j_seconds, j_milliseconds);
                     strcat(output, string);
                 }
-                ShowPlayerDialog(playerid, DIALOG_RACE_LEADERBOARD, DIALOG_STYLE_TABLIST_HEADERS, "Resultados finais", output, "Fechar", "");
 
+                foreach(new i: Player)
+                {
+                    if(GetPlayerRace(i) == raceid)
+                    {
+                        ShowPlayerDialog(i, DIALOG_RACE_LEADERBOARD, DIALOG_STYLE_TABLIST_HEADERS, "Resultados finais", output, "Fechar", "");
+                    }
+                }
                 defer EndRace(raceid);
             }
             else
             {
-
+                TogglePlayerSpectating(playerid, true);
+                new grid = gPlayerData[playerid][e_grid_id];
+                DestroyVehicle(gVehicleData[raceid][grid][e_vehicle_id]);
+                gVehicleData[raceid][grid][e_vehicle_id] = INVALID_VEHICLE_ID;
+                foreach(new i: Player)
+                {
+                    if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING && i != playerid)
+                    {
+                        SetPlayerSpecatateTarget(playerid, i);
+                        break;
+                    }
+                }
             }
         }
         else
@@ -440,12 +531,19 @@ timer EndRace[7500](raceid)
     for(new i = 0; i < MAX_RACE_PLAYERS; i++)
     {
         DestroyVehicle(gVehicleData[raceid][i][e_vehicle_id]);
+        gVehicleData[raceid][i][e_vehicle_id] = INVALID_VEHICLE_ID;
     }
 
     foreach(new i: Player)
     {
         if(GetPlayerRace(i) == raceid)
         {
+            if(GetPlayerState(i) == PLAYER_STATE_SPECTATING)
+            {
+                TogglePlayerSpectating(i, false);
+                gPlayerData[i][e_spec_targetid] = INVALID_PLAYER_ID;
+            }
+
             gPlayerData[i][e_grid_id] = 0;
             gPlayerData[i][e_checkpoint_id] = 0;
             gPlayerData[i][e_start_time] = 0;
@@ -464,11 +562,12 @@ ShowPlayerRaceCheckpoint(playerid)
     new Float:x = gCheckpointData[raceid][cid][e_checkpoint_x];
     new Float:y = gCheckpointData[raceid][cid][e_checkpoint_y];
     new Float:z = gCheckpointData[raceid][cid][e_checkpoint_z];
+    new ctype = gRaceData[raceid][e_race_cp_type];
     new Float:size = gRaceData[raceid][e_race_cp_size];
 
     if(cid >= (MAX_RACE_CHECKPOINTS - 1))
     {
-        SetPlayerRaceCheckpoint(playerid, 1, x, y, z, 0.0, 0.0, 0.0, size);
+        SetPlayerRaceCheckpoint(playerid, ctype, x, y, z, 0.0, 0.0, 0.0, size);
     }
     else
     {
@@ -477,11 +576,11 @@ ShowPlayerRaceCheckpoint(playerid)
         new Float:nextz = gCheckpointData[raceid][cid + 1][e_checkpoint_z];
         if(nextx == 0.0 && nexty == 0.0 && nextz == 0.0)
         {
-            SetPlayerRaceCheckpoint(playerid, 1, x, y, z, 0.0, 0.0, 0.0, size);
+            SetPlayerRaceCheckpoint(playerid, ctype, x, y, z, 0.0, 0.0, 0.0, size);
         }
         else
         {
-            SetPlayerRaceCheckpoint(playerid, 0, x, y, z, nextx, nexty, nextz, size);
+            SetPlayerRaceCheckpoint(playerid, (ctype == 4) ? 3 : 0, x, y, z, nextx, nexty, nextz, size);
         }
     }
 }
@@ -497,6 +596,7 @@ ResetPlayerRaceData(playerid)
         {
             new grid = gPlayerData[playerid][e_grid_id];
             DestroyVehicle(gVehicleData[raceid][grid][e_vehicle_id]);
+            gVehicleData[raceid][grid][e_vehicle_id] = INVALID_VEHICLE_ID;
             DisablePlayerRaceCheckpoint(playerid);
         }
         gPlayerData[playerid][e_grid_id] = 0;
@@ -511,6 +611,21 @@ ResetPlayerRaceData(playerid)
             EndRace(raceid);
         }
     }
+}
+
+//------------------------------------------------------------------------------
+
+SetPlayerSpecatateTarget(playerid, targetid)
+{
+    if(IsPlayerInAnyVehicle(targetid))
+    {
+        PlayerSpectateVehicle(playerid, GetPlayerVehicleID(targetid));
+    }
+    else
+    {
+        PlayerSpectatePlayer(playerid, targetid);
+    }
+    gPlayerData[playerid][e_spec_targetid] = targetid;
 }
 
 //------------------------------------------------------------------------------
