@@ -31,6 +31,7 @@ hook OnGameModeInit()
 {
 	Command_AddAltNamed("comandos",		"cmds");
 	Command_AddAltNamed("janela",		"j");
+	Command_AddAltNamed("lobby",		"m");
 	Command_AddAltNamed("car",			"v");
 	Command_AddAltNamed("myacc",		"stats");
 	Command_AddAltNamed("myacc",		"rg");

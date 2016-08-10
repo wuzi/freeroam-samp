@@ -29,8 +29,11 @@ SET time_zone = "+00:00";
 CREATE TABLE `races` (
   `id` int(11) NOT NULL,
   `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `cp_type` int(11) NOT NULL,
   `cp_size` float NOT NULL,
+  `interior` int(11) NOT NULL,
+  `vehicleid` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

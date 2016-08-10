@@ -40,6 +40,22 @@ new gMySQL;
 
 #define MAX_PLAYER_PASSWORD								32
 
+// Quantidade maxima de corridas que o servidor pode carregar
+#define MAX_RACES										64
+
+// Quantidade maxima de checkpoints que a corrida pode ter
+#define MAX_RACE_CHECKPOINTS							32
+
+// Quantidade máxima de corredores em corridas
+#define MAX_RACE_PLAYERS								10
+
+// Quantos segundos a corrida irá levar para iniciar após o limite minimo de jogadores ser atingido
+#define RACE_COUNT_DOWN									30
+
+#define MAX_RACE_NAME									64
+#define MINIMUM_PLAYERS_TO_START_RACE					1
+#define INVALID_RACE_ID                                -1
+
 //------------------------------------------------------------------------------
 
 // Bibliotecas
@@ -114,6 +130,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/colors.pwn"
 #include "../modules/gameplay/tuning.pwn"
 #include "../modules/gameplay/racecreator.pwn"
+#include "../modules/gameplay/races.pwn"
 #include "../modules/gameplay/drift.pwn"
 
 //------------------------------------------------------------------------------

@@ -22,14 +22,17 @@ enum
 }
 static gPlayerCurrentMode[MAX_PLAYERS];
 static Text:lobbyTextdraw[13];
+static bool:gIsLobbyShown[MAX_PLAYERS];
 
 //------------------------------------------------------------------------------
 
 ShowPlayerLobby(playerid)
 {
     new tempstr[32];
-    format(tempstr, sizeof(tempstr), "Freeroam~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_FREEROAM), MAX_PLAYERS);
+    format(tempstr, sizeof(tempstr), "Freeroam~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_FREEROAM), (MAX_PLAYERS / 2));
     TextDrawSetString(lobbyTextdraw[9], tempstr);
+    format(tempstr, sizeof(tempstr), "Corrida~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_RACE), (MAX_PLAYERS / 2));
+    TextDrawSetString(lobbyTextdraw[11], tempstr);
     ClearPlayerScreen(playerid, 20);
 
     for(new i = 0; i < sizeof(lobbyTextdraw); i++)
@@ -37,6 +40,7 @@ ShowPlayerLobby(playerid)
         TextDrawShowForPlayer(playerid, lobbyTextdraw[i]);
     }
     SelectTextDraw(playerid, 0x0e8893ff);
+    gIsLobbyShown[playerid] = true;
 }
 
 //------------------------------------------------------------------------------
@@ -48,6 +52,7 @@ HidePlayerLobby(playerid)
         TextDrawHideForPlayer(playerid, lobbyTextdraw[i]);
     }
     CancelSelectTextDraw(playerid);
+    gIsLobbyShown[playerid] = false;
 }
 
 //------------------------------------------------------------------------------
@@ -92,11 +97,17 @@ YCMD:lobby(playerid, params[], help)
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-    if(clickedid == Text:INVALID_TEXT_DRAW && gPlayerCurrentMode[playerid] == GAMEMODE_LOBBY)
+    if(clickedid == Text:INVALID_TEXT_DRAW && gIsLobbyShown[playerid])
     {
-        SelectTextDraw(playerid, 0x0e8893ff);
+        if(gPlayerCurrentMode[playerid] == GAMEMODE_LOBBY)
+            SelectTextDraw(playerid, 0x0e8893ff);
+        else
+        {
+            PlayCancelSound(playerid);
+            HidePlayerLobby(playerid);
+        }
     }
-    else if(clickedid == lobbyTextdraw[3] || clickedid == lobbyTextdraw[5] || clickedid == lobbyTextdraw[7])
+    else if(clickedid == lobbyTextdraw[3] || clickedid == lobbyTextdraw[7])
     {
         PlayErrorSound(playerid);
         SendClientMessage(playerid, COLOR_ERROR, "* Este modo de jogo ainda está em desenvolvimento.");
@@ -110,13 +121,25 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
         }
         else
         {
+            if(GetPlayerGamemode(playerid) == GAMEMODE_RACE)
+            {
+                ResetPlayerRaceData(playerid);
+            }
+
             PlayConfirmSound(playerid);
             gPlayerCurrentMode[playerid] = GAMEMODE_FREEROAM;
             SetPlayerPos(playerid, 2234.6855, -1260.9462, 23.9329);
             SetPlayerFacingAngle(playerid, 270.0490);
+            SetPlayerInterior(playerid, 0);
+            SetPlayerVirtualWorld(playerid, 0);
             SetPlayerHealth(playerid, 100.0);
             HidePlayerLobby(playerid);
         }
+    }
+    else if(clickedid == lobbyTextdraw[5])
+    {
+        PlayConfirmSound(playerid);
+        ShowPlayerRaceList(playerid);
     }
     return 1;
 }
@@ -125,7 +148,8 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-    gPlayerCurrentMode[playerid] = GAMEMODE_LOBBY;
+    gIsLobbyShown[playerid]         = false;
+    gPlayerCurrentMode[playerid]    = GAMEMODE_LOBBY;
     return 1;
 }
 
@@ -257,7 +281,7 @@ hook OnGameModeInit()
     TextDrawSetPreviewRot(lobbyTextdraw[8], 0.000000, 0.000000, 0.000000, 1.000000);
 
     new tempstr[32];
-    format(tempstr, sizeof(tempstr), "Freeroam~n~0 / %d", MAX_PLAYERS);
+    format(tempstr, sizeof(tempstr), "Freeroam~n~0 / %d", (MAX_PLAYERS / 2));
     lobbyTextdraw[9] = TextDrawCreate(120.0, 242.0, tempstr);
     TextDrawLetterSize(lobbyTextdraw[9], 0.229332, 0.878220);
     TextDrawAlignment(lobbyTextdraw[9], 2);
@@ -280,7 +304,8 @@ hook OnGameModeInit()
     TextDrawSetProportional(lobbyTextdraw[10], 1);
     TextDrawSetShadow(lobbyTextdraw[10], 0);
 
-    lobbyTextdraw[11] = TextDrawCreate(375.0, 242.0, "corrida");
+    format(tempstr, sizeof(tempstr), "Corrida~n~0 / %d", (MAX_PLAYERS / 2));
+    lobbyTextdraw[11] = TextDrawCreate(375.0, 242.0, tempstr);
     TextDrawLetterSize(lobbyTextdraw[11], 0.229332, 0.878220);
     TextDrawAlignment(lobbyTextdraw[11], 2);
     TextDrawColor(lobbyTextdraw[11], -1);

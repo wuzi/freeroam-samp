@@ -12,11 +12,6 @@
 
 //------------------------------------------------------------------------------
 
-#define MAX_RACE_CHECKPOINTS												64
-#define MAX_RACE_PLAYERS													10
-
-//------------------------------------------------------------------------------
-
 enum
 {
 	E_PLAYER_RACE_STATE_NONE,
@@ -53,6 +48,8 @@ static gPlayerRacePrize[MAX_PLAYERS][MAX_RACE_PLAYERS];
 static gPlayerCurrentPrize[MAX_PLAYERS];
 static Float:gPlayerCheckpointSize[MAX_PLAYERS] = {3.5, ...};
 static gPlayerCheckpointType[MAX_PLAYERS] = {1, ...};
+static gPlayerRaceName[MAX_PLAYERS][MAX_RACE_NAME];
+static gPlayerRaceVehicleModel[MAX_PLAYERS];
 
 //------------------------------------------------------------------------------
 
@@ -145,7 +142,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					case 3:
 					{
 						PlaySelectSound(playerid);
-						ShowPlayerDialog(playerid, DIALOG_RACE_CREATOR_CONFIG, DIALOG_STYLE_LIST, "Configurações", "Tipo do checkpoint\nTamanho do checkpoint", "Selecionar", "Voltar");
+						ShowPlayerDialog(playerid, DIALOG_RACE_CREATOR_CONFIG, DIALOG_STYLE_LIST, "Configurações", "Nome da corrida\nModelo do Veículo\nTipo do checkpoint\nTamanho do checkpoint", "Selecionar", "Voltar");
 					}
 					case 4:
 					{
@@ -161,10 +158,22 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							ShowPlayerRaceDialog(playerid);
 							SendClientMessage(playerid, COLOR_ERROR, "* Você precisa criar pelo menos 1 checkpoint para exportar.");
 						}
+						else if(strlen(gPlayerRaceName[playerid]) < 1)
+						{
+							PlayErrorSound(playerid);
+							ShowPlayerRaceDialog(playerid);
+							SendClientMessage(playerid, COLOR_ERROR, "* Você não definiu o nome da corrida.");
+						}
+						else if(gPlayerRaceVehicleModel[playerid] == 0)
+						{
+							PlayErrorSound(playerid);
+							ShowPlayerRaceDialog(playerid);
+							SendClientMessage(playerid, COLOR_ERROR, "* Você não definiu o veículo da corrida.");
+						}
 						else
 						{
-							new query[128];
-			                mysql_format(gMySQL, query, sizeof(query), "INSERT INTO races (user_id, cp_type, cp_size, created_at) VALUES (%d, %d, %.2f, now())", GetPlayerDatabaseID(playerid), gPlayerCheckpointType[playerid], gPlayerCheckpointSize[playerid]);
+							new query[200];
+			                mysql_format(gMySQL, query, sizeof(query), "INSERT INTO races (user_id, name, cp_type, cp_size, interior, vehicleid, created_at) VALUES (%d, '%e', %d, %.2f, %d, %d, now())", GetPlayerDatabaseID(playerid), gPlayerRaceName[playerid], gPlayerCheckpointType[playerid], gPlayerCheckpointSize[playerid], GetPlayerInterior(playerid), gPlayerRaceVehicleModel[playerid]);
 			            	mysql_tquery(gMySQL, query, "OnRaceExport", "i", playerid);
 						}
 					}
@@ -179,10 +188,13 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							}
 						}
 						PlayCancelSound(playerid);
-						gPlayerCurrentCheckpoint[playerid] = 0;
-						gPlayerCheckpointType[playerid] = 1;
-						gPlayerCheckpointSize[playerid] = 3.5;
-						gIsPlayerCreatingRace[playerid] = E_PLAYER_RACE_STATE_NONE;
+						gPlayerRaceName[playerid][0]		= '\0';
+						gPlayerRaceVehicleModel[playerid]	= 0;
+						gPlayerCheckpointType[playerid]		= 1;
+						gPlayerCheckpointSize[playerid]		= 3.5;
+						gIsPlayerCreatingRace[playerid]		= E_PLAYER_RACE_STATE_NONE;
+						gPlayerCurrentCheckpoint[playerid]	= 0;
+						gPlayerRaceVehicleModel[playerid]	= 0;
 						DisablePlayerRaceCheckpoint(playerid);
 						SendClientMessage(playerid, 0x35CEFBFF, "* Você cancelou a criação da corrida.");
 					}
@@ -255,9 +267,17 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					case 0:
 					{
-						ShowPlayerDialog(playerid, DIALOG_RACE_CONFIG_CP_TYPE, DIALOG_STYLE_LIST, "Tipo do checkpoint", "Terrestre\nAerero", "Confirmar", "Voltar");
+						ShowPlayerDialog(playerid, DIALOG_RACE_CONFIG_CP_NAME, DIALOG_STYLE_INPUT, "Nome da corrida", "Insira o nome da corrida", "Confirmar", "Voltar");
 					}
 					case 1:
+					{
+						ShowPlayerDialog(playerid, DIALOG_RACE_CONFIG_VMODEL, DIALOG_STYLE_INPUT, "Modelo do Veículo", "Insira o ID do modelo do veículo da corrida", "Confirmar", "Voltar");
+					}
+					case 2:
+					{
+						ShowPlayerDialog(playerid, DIALOG_RACE_CONFIG_CP_TYPE, DIALOG_STYLE_LIST, "Tipo do checkpoint", "Terrestre\nAerero", "Confirmar", "Voltar");
+					}
+					case 3:
 					{
 						ShowPlayerDialog(playerid, DIALOG_RACE_CONFIG_CP_SIZE, DIALOG_STYLE_INPUT, "Tamanho do checkpoint", "Insira o tamanho do checkpoint\nRecomendado: 3.5", "Confirmar", "Voltar");
 					}
@@ -282,7 +302,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				PlaySelectSound(playerid);
 				GenerateCheckpoint(playerid);
 			}
-			ShowPlayerDialog(playerid, DIALOG_RACE_CREATOR_CONFIG, DIALOG_STYLE_LIST, "Configurações", "Tipo do checkpoint\nTamanho do checkpoint", "Selecionar", "Voltar");
+			ShowPlayerDialog(playerid, DIALOG_RACE_CREATOR_CONFIG, DIALOG_STYLE_LIST, "Configurações", "Nome da corrida\nModelo do Veículo\nTipo do checkpoint\nTamanho do checkpoint", "Selecionar", "Voltar");
 		}
 		case DIALOG_RACE_CONFIG_CP_SIZE:
 		{
@@ -308,7 +328,64 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					GenerateCheckpoint(playerid);
 				}
 			}
-			ShowPlayerDialog(playerid, DIALOG_RACE_CREATOR_CONFIG, DIALOG_STYLE_LIST, "Configurações", "Tipo do checkpoint\nTamanho do checkpoint", "Selecionar", "Voltar");
+			ShowPlayerDialog(playerid, DIALOG_RACE_CREATOR_CONFIG, DIALOG_STYLE_LIST, "Configurações", "Nome da corrida\nModelo do Veículo\nTipo do checkpoint\nTamanho do checkpoint", "Selecionar", "Voltar");
+		}
+		case DIALOG_RACE_CONFIG_CP_NAME:
+		{
+			if(!response)
+			{
+				PlayCancelSound(playerid);
+			}
+			else
+			{
+				new name[MAX_RACE_NAME];
+				if(sscanf(inputtext, "s[" #MAX_RACE_NAME "]", name))
+				{
+					PlayErrorSound(playerid);
+					SendClientMessage(playerid, COLOR_ERROR, "* Nome inválido inválido.");
+					ShowPlayerDialog(playerid, DIALOG_RACE_CONFIG_CP_NAME, DIALOG_STYLE_INPUT, "Tamanho do checkpoint", "Insira o nome da corrida", "Confirmar", "Voltar");
+					return 1;
+				}
+				else
+				{
+					PlaySelectSound(playerid);
+					SendClientMessagef(playerid, 0x35CEFBFF, "* Você definiu o nome da corrida: %s.", name);
+					format(gPlayerRaceName[playerid], MAX_RACE_NAME, "%s", name);
+				}
+			}
+			ShowPlayerDialog(playerid, DIALOG_RACE_CREATOR_CONFIG, DIALOG_STYLE_LIST, "Configurações", "Nome da corrida\nModelo do Veículo\nTipo do checkpoint\nTamanho do checkpoint", "Selecionar", "Voltar");
+		}
+		case DIALOG_RACE_CONFIG_VMODEL:
+		{
+			if(!response)
+			{
+				PlayCancelSound(playerid);
+			}
+			else
+			{
+				new vehicle_model;
+				if(sscanf(inputtext, "i", vehicle_model))
+				{
+					PlayErrorSound(playerid);
+					SendClientMessage(playerid, COLOR_ERROR, "* Veículo inválido.");
+					ShowPlayerDialog(playerid, DIALOG_RACE_CONFIG_VMODEL, DIALOG_STYLE_INPUT, "Modelo do Veículo", "Insira o ID do modelo do veículo da corrida", "Confirmar", "Voltar");
+					return 1;
+				}
+				else if(vehicle_model < 400 || vehicle_model > 611)
+				{
+					PlayErrorSound(playerid);
+					SendClientMessage(playerid, COLOR_ERROR, "* Veículo inválido.");
+					ShowPlayerDialog(playerid, DIALOG_RACE_CONFIG_VMODEL, DIALOG_STYLE_INPUT, "Modelo do Veículo", "Insira o ID do modelo do veículo da corrida", "Confirmar", "Voltar");
+					return 1;
+				}
+				else
+				{
+					PlaySelectSound(playerid);
+					gPlayerRaceVehicleModel[playerid] = vehicle_model;
+					SendClientMessagef(playerid, 0x35CEFBFF, "* Você definiu o veículo da corrida: %d.", vehicle_model);
+				}
+			}
+			ShowPlayerDialog(playerid, DIALOG_RACE_CREATOR_CONFIG, DIALOG_STYLE_LIST, "Configurações", "Nome da corrida\nModelo do Veículo\nTipo do checkpoint\nTamanho do checkpoint", "Selecionar", "Voltar");
 		}
 	}
 	return 1;
@@ -351,6 +428,8 @@ public OnRaceExport(playerid)
 	gPlayerCheckpointSize[playerid]		= 3.5;
 	gIsPlayerCreatingRace[playerid]		= E_PLAYER_RACE_STATE_NONE;
 	gPlayerCurrentCheckpoint[playerid]	= 0;
+	gPlayerRaceName[playerid][0]		= '\0';
+	gPlayerRaceVehicleModel[playerid]	= 0;
 	DisablePlayerRaceCheckpoint(playerid);
 
 	// Escrevendo no server_log
@@ -480,6 +559,8 @@ hook OnPlayerDisconnect(playerid, reason)
 	gPlayerCheckpointType[playerid]		= 1;
 	gPlayerCheckpointSize[playerid]		= 3.5;
 	gPlayerCurrentCheckpoint[playerid]	= 0;
+	gPlayerRaceVehicleModel[playerid]	= 0;
+	gPlayerRaceName[playerid][0]		= '\0';
 	return 1;
 }
 
@@ -528,6 +609,8 @@ static GenerateVehicle(playerid, bool:delete)
 				DestroyVehicle(gPlayerVehicles[playerid][gPlayerCurrentVehicle[playerid]][e_vehicle_id]);
 			}
 			gPlayerVehicles[playerid][gPlayerCurrentVehicle[playerid]][e_vehicle_id] = CreateVehicle((IsPlayerInAnyVehicle(playerid)) ? GetVehicleModel(GetPlayerVehicleID(playerid)) : 494, x, y, z + 5.0, a, -1, -1, -1);
+			LinkVehicleToInterior(gPlayerVehicles[playerid][gPlayerCurrentVehicle[playerid]][e_vehicle_id], GetPlayerInterior(playerid));
+			SetVehicleVirtualWorld(gPlayerVehicles[playerid][gPlayerCurrentVehicle[playerid]][e_vehicle_id], GetPlayerVirtualWorld(playerid));
 		}
 	}
 }
