@@ -87,6 +87,7 @@ enum e_player_race_data
     e_spec_targetid
 }
 static gPlayerData[MAX_PLAYERS][e_player_race_data];
+static bool:gIsDialogShown[MAX_PLAYERS];
 
 //------------------------------------------------------------------------------
 
@@ -189,6 +190,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 ResetPlayerRaceData(playerid);
                 OnPlayerEnterRace(playerid, listitem);
             }
+            gIsDialogShown[playerid] = false;
         }
         case DIALOG_RACE_LEADERBOARD:
         {
@@ -511,6 +513,7 @@ hook OnPlayerEnterRaceCP(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
+    gIsDialogShown[playerid] = false;
     ResetPlayerRaceData(playerid);
     return 1;
 }
@@ -666,6 +669,11 @@ GetRaceMaxPlayers(raceid)
     return count;
 }
 
+IsRaceDialogVisible(playerid)
+{
+    return gIsDialogShown[playerid];
+}
+
 //------------------------------------------------------------------------------
 
 ShowPlayerRaceList(playerid)
@@ -689,5 +697,6 @@ ShowPlayerRaceList(playerid)
         format(string, sizeof(string), "%s\t%d / %d\t%s\n", gRaceData[i][e_race_name], GetRacePlayerPoolSize(i), GetRaceMaxPlayers(i), status);
         strcat(output, string);
     }
+    gIsDialogShown[playerid] = true;
     ShowPlayerDialog(playerid, DIALOG_RACE, DIALOG_STYLE_TABLIST_HEADERS, "Corridas", output, "Selecionar", "Voltar");
 }

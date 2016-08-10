@@ -97,49 +97,52 @@ YCMD:lobby(playerid, params[], help)
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-    if(clickedid == Text:INVALID_TEXT_DRAW && gIsLobbyShown[playerid])
+    if(gIsLobbyShown[playerid] && !IsRaceDialogVisible(playerid))
     {
-        if(gPlayerCurrentMode[playerid] == GAMEMODE_LOBBY)
-            SelectTextDraw(playerid, 0x0e8893ff);
-        else
+        if(clickedid == Text:INVALID_TEXT_DRAW)
         {
-            PlayCancelSound(playerid);
-            HidePlayerLobby(playerid);
-        }
-    }
-    else if(clickedid == lobbyTextdraw[3] || clickedid == lobbyTextdraw[7])
-    {
-        PlayErrorSound(playerid);
-        SendClientMessage(playerid, COLOR_ERROR, "* Este modo de jogo ainda está em desenvolvimento.");
-    }
-    else if(clickedid == lobbyTextdraw[1])
-    {
-        if(gPlayerCurrentMode[playerid] == GAMEMODE_FREEROAM)
-        {
-            PlayCancelSound(playerid);
-            HidePlayerLobby(playerid);
-        }
-        else
-        {
-            if(GetPlayerGamemode(playerid) == GAMEMODE_RACE)
+            if(gPlayerCurrentMode[playerid] == GAMEMODE_LOBBY)
+                SelectTextDraw(playerid, 0x0e8893ff);
+            else
             {
-                ResetPlayerRaceData(playerid);
+                PlayCancelSound(playerid);
+                HidePlayerLobby(playerid);
             }
-
-            PlayConfirmSound(playerid);
-            gPlayerCurrentMode[playerid] = GAMEMODE_FREEROAM;
-            SetPlayerPos(playerid, 2234.6855, -1260.9462, 23.9329);
-            SetPlayerFacingAngle(playerid, 270.0490);
-            SetPlayerInterior(playerid, 0);
-            SetPlayerVirtualWorld(playerid, 0);
-            SetPlayerHealth(playerid, 100.0);
-            HidePlayerLobby(playerid);
         }
-    }
-    else if(clickedid == lobbyTextdraw[5])
-    {
-        PlayConfirmSound(playerid);
-        ShowPlayerRaceList(playerid);
+        else if(clickedid == lobbyTextdraw[3] || clickedid == lobbyTextdraw[7])
+        {
+            PlayErrorSound(playerid);
+            SendClientMessage(playerid, COLOR_ERROR, "* Este modo de jogo ainda está em desenvolvimento.");
+        }
+        else if(clickedid == lobbyTextdraw[1])
+        {
+            if(gPlayerCurrentMode[playerid] == GAMEMODE_FREEROAM)
+            {
+                PlayCancelSound(playerid);
+                HidePlayerLobby(playerid);
+            }
+            else
+            {
+                if(GetPlayerGamemode(playerid) == GAMEMODE_RACE)
+                {
+                    ResetPlayerRaceData(playerid);
+                }
+
+                PlayConfirmSound(playerid);
+                gPlayerCurrentMode[playerid] = GAMEMODE_FREEROAM;
+                SetPlayerPos(playerid, 2234.6855, -1260.9462, 23.9329);
+                SetPlayerFacingAngle(playerid, 270.0490);
+                SetPlayerInterior(playerid, 0);
+                SetPlayerVirtualWorld(playerid, 0);
+                SetPlayerHealth(playerid, 100.0);
+                HidePlayerLobby(playerid);
+            }
+        }
+        else if(clickedid == lobbyTextdraw[5])
+        {
+            PlayConfirmSound(playerid);
+            ShowPlayerRaceList(playerid);
+        }
     }
     return 1;
 }
