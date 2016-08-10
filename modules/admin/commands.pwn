@@ -19,7 +19,7 @@ YCMD:acmds(playerid, params[], help)
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos Administrativos ----------------------------------------");
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
     {
-        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /puxar - /setskin - /irpos");
+        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /puxar - /setskin - /irpos - /setint - /setvw");
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /pdist - /say");
     }
 
@@ -61,6 +61,54 @@ R::::::R     R:::::RE::::::::::::::::::::E    CCC::::::::::::CR::::::R     R::::
 RRRRRRRR     RRRRRRREEEEEEEEEEEEEEEEEEEEEE       CCCCCCCCCCCCCRRRRRRRR     RRRRRRR      UUUUUUUUU      IIIIIIIIII      TTTTTTTTTTT
 
 */
+
+//------------------------------------------------------------------------------
+
+ YCMD:setint(playerid, params[], help)
+ {
+ 	if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
+ 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+
+ 	new targetid, interior;
+ 	if(sscanf(params, "ui", targetid, interior))
+ 		return SendClientMessage(playerid, COLOR_INFO, "* /setint [playerid] [interior]");
+
+ 	else if(!IsPlayerLogged(targetid))
+ 		return SendClientMessage(playerid, COLOR_ERROR, "* O jogador não está conectado.");
+
+    else if(interior < 0)
+ 		return SendClientMessage(playerid, COLOR_ERROR, "* Interior inválido.");
+
+ 	SetPlayerInterior(targetid, interior);
+    if(playerid != targetid)
+        SendClientMessagef(targetid, COLOR_ADMIN_COMMAND, "* %s alterou seu interior para %d.", GetPlayerNamef(playerid), interior);
+    SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* Você alterou o interior de %s para %d.", GetPlayerNamef(targetid), interior);
+ 	return 1;
+ }
+
+//------------------------------------------------------------------------------
+
+ YCMD:setvw(playerid, params[], help)
+ {
+ 	if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
+ 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+
+ 	new targetid, virtualworld;
+ 	if(sscanf(params, "ui", targetid, virtualworld))
+ 		return SendClientMessage(playerid, COLOR_INFO, "* /setvw [playerid] [interior]");
+
+ 	else if(!IsPlayerLogged(targetid))
+ 		return SendClientMessage(playerid, COLOR_ERROR, "* O jogador não está conectado.");
+
+    else if(virtualworld < 0)
+ 		return SendClientMessage(playerid, COLOR_ERROR, "* Virtual World inválido.");
+
+ 	SetPlayerVirtualWorld(targetid, virtualworld);
+    if(playerid != targetid)
+        SendClientMessagef(targetid, COLOR_ADMIN_COMMAND, "* %s alterou seu virtual world para %d.", GetPlayerNamef(playerid), virtualworld);
+    SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* Você alterou o virtual world de %s para %d.", GetPlayerNamef(targetid), virtualworld);
+ 	return 1;
+ }
 
 //------------------------------------------------------------------------------
 
