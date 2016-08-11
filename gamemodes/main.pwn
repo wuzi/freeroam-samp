@@ -139,6 +139,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/drift.pwn"
 #include "../modules/gameplay/events.pwn"
 #include "../modules/gameplay/anticheat.pwn"
+#include "../modules/gameplay/animations.pwn"
 
 //------------------------------------------------------------------------------
 
