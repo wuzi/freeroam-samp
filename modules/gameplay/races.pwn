@@ -282,7 +282,9 @@ task OnRaceUpdate[1000]()
                         new countstr[38];
                         format(countstr, sizeof(countstr), "~g~Iniciando corrida~n~%02d", gRaceCountdown[raceid]);
                         GameTextForPlayer(i, countstr, 1250, 3);
-                        PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
+
+                        if(gRaceCountdown[raceid] < 6)
+                            PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
                     }
                 }
                 gRaceCountdown[raceid]--;
@@ -436,7 +438,7 @@ hook OnPlayerUpdate(playerid)
 
                 for(new i = 0; i < MAX_RACE_PLAYERS; i++)
                 {
-                    if(gPlayerData[playerid][e_spec_targetid] < players[i] && players[i] > 0)
+                    if(gPlayerData[playerid][e_spec_targetid] < players[i] && players[i] > 0 && players[i] != INVALID_PLAYER_ID)
                     {
                         SetPlayerSpecatateTarget(playerid, players[i]);
                         break;
@@ -460,7 +462,7 @@ hook OnPlayerUpdate(playerid)
 
                 for(new i = 0; i < MAX_RACE_PLAYERS; i++)
                 {
-                    if(gPlayerData[playerid][e_spec_targetid] > players[i] && players[i] > 0)
+                    if(gPlayerData[playerid][e_spec_targetid] > players[i] && players[i] > 0 && players[i] != INVALID_PLAYER_ID)
                     {
                         SetPlayerSpecatateTarget(playerid, players[i]);
                         break;

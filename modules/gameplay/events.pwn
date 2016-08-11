@@ -752,7 +752,9 @@ timer OnEventUpdate[1000]()
                     new countstr[38];
                     format(countstr, sizeof(countstr), "~b~Iniciando evento~n~%02d", gEventCountdown);
                     GameTextForPlayer(i, countstr, 1250, 3);
-                    PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
+
+                    if(gEventCountdown < 6)
+                        PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
                 }
                 else
                 {
