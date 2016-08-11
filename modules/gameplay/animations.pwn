@@ -133,7 +133,7 @@ YCMD:animes(playerid, params[], help)
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /renderse - /bebado - /bomba - /mirar - /rir - /roubar - /cruzarbracos - /verhoras - /medo - /crack - /fumar");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /lavarmaos - /sentar - /sentarcadeira - /falar - /tapanabunda - /deitar - /levantar - /abrirportao - /pegarbebida");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /chamargarcom - /lembrar - /mostrar - /graffiti - /chorar - /triste - /beber - /comer - /preparar - /vomitar - /dancar");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /masturbar - /apontar - /acenar - /taichi - /mijar - /raiva - /tedio - /mecherboca - /pensar");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /masturbar - /apontar - /acenar - /taichi - /mijar - /mecherboca - /pensar");
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Animações ----------------------------------------");
 	return 1;
 }
@@ -512,22 +512,6 @@ YCMD:vomitar(playerid, params[], help)
 YCMD:masturbar(playerid, params[], help)
 {
     LoopingAnim(playerid,"MISC", "Scratchballs_01", 4.0, 1, 1, 1, 1, 0);
-    return 1;
-}
-
-//------------------------------------------------------------------------------
-
-YCMD:raiva(playerid, params[], help)
-{
-    LoopingAnim(playerid,"PED", "facanger", 4.0, 0, 1, 1, 0, 0);
-    return 1;
-}
-
-//------------------------------------------------------------------------------
-
-YCMD:tedio(playerid, params[], help)
-{
-    LoopingAnim(playerid,"PED", "facsurpin", 4.0, 0, 1, 1, 0, 0);
     return 1;
 }
 
