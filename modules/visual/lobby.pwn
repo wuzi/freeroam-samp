@@ -126,6 +126,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
                 if(GetPlayerGamemode(playerid) == GAMEMODE_RACE)
                 {
                     ResetPlayerRaceData(playerid);
+                    DisableRemoteVehicleCollisions(playerid, false);
                 }
 
                 PlayConfirmSound(playerid);

@@ -206,6 +206,7 @@ public OnPlayerEnterRace(playerid, raceid)
 {
     HidePlayerLobby(playerid);
     SetPlayerHealth(playerid, 9999.0);
+    DisableRemoteVehicleCollisions(playerid, true);
 
     new rand = random(sizeof(gLobbySpawns));
     SetPlayerInterior(playerid, 10);
