@@ -905,7 +905,7 @@ hook OnPlayerUpdate(playerid)
                     goto again;
 
                 PlayerSpectatePlayer(playerid, gEventPlayersID[gPlayerSpectateTargetID[playerid]]);
-                gPlayerSpecTick[playerid] = GetTickCount() + 200;
+                gPlayerSpecTick[playerid] = GetTickCount() + 50;
             }
         }
     }
