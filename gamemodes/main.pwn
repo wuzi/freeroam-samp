@@ -113,6 +113,7 @@ hook OnGameModeInit()
 #include "../modules/def/ranks.pwn"
 
 /* Visual */
+#include "../modules/visual/logo.pwn"
 #include "../modules/visual/authentication.pwn"
 #include "../modules/visual/lobby.pwn"
 
