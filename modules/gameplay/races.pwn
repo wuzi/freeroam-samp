@@ -88,6 +88,7 @@ enum e_player_race_data
 }
 static gPlayerData[MAX_PLAYERS][e_player_race_data];
 static bool:gIsDialogShown[MAX_PLAYERS];
+static gPlayerSpecTick[MAX_PLAYERS];
 
 //------------------------------------------------------------------------------
 
@@ -383,37 +384,11 @@ hook OnPlayerUpdate(playerid)
 {
     if(GetPlayerRace(playerid) != INVALID_RACE_ID && GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
     {
-        new raceid = GetPlayerRace(playerid);
-        new Keys,ud,lr;
-        GetPlayerKeys(playerid,Keys,ud,lr);
-
-        new count;
-        new players[MAX_RACE_PLAYERS] = {INVALID_PLAYER_ID, ...};
-        if(lr == KEY_LEFT)
+        if(GetPlayerState(playerid) != PLAYER_STATE_SPECTATING)
         {
-            foreach(new i: Player)
-            {
-                if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING)
-                {
-                    players[count] = i;
-                }
-            }
-
-            for(new i = 0; i < MAX_RACE_PLAYERS; i++)
-            {
-                if(gPlayerData[playerid][e_spec_targetid] < players[i] && players[i] > 0)
-                {
-                    SetPlayerSpecatateTarget(playerid, players[i]);
-                    break;
-                }
-                else if(i == (MAX_RACE_PLAYERS - 1))
-                {
-                    SetPlayerSpecatateTarget(playerid, players[0]);
-                }
-            }
-        }
-        else if(lr == KEY_RIGHT)
-        {
+            new count;
+            new raceid = GetPlayerRace(playerid);
+            new players[MAX_RACE_PLAYERS] = {INVALID_PLAYER_ID, ...};
             foreach(new i: Player)
             {
                 if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING)
@@ -439,6 +414,69 @@ hook OnPlayerUpdate(playerid)
                     }
                     SetPlayerSpecatateTarget(playerid, targetid);
                 }
+            }
+        }
+        else if(gPlayerSpecTick[playerid] < GetTickCount())
+        {
+            new raceid = GetPlayerRace(playerid);
+            new Keys,ud,lr;
+            GetPlayerKeys(playerid,Keys,ud,lr);
+
+            new count;
+            new players[MAX_RACE_PLAYERS] = {INVALID_PLAYER_ID, ...};
+            if(lr == KEY_LEFT)
+            {
+                foreach(new i: Player)
+                {
+                    if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING)
+                    {
+                        players[count] = i;
+                    }
+                }
+
+                for(new i = 0; i < MAX_RACE_PLAYERS; i++)
+                {
+                    if(gPlayerData[playerid][e_spec_targetid] < players[i] && players[i] > 0)
+                    {
+                        SetPlayerSpecatateTarget(playerid, players[i]);
+                        break;
+                    }
+                    else if(i == (MAX_RACE_PLAYERS - 1))
+                    {
+                        SetPlayerSpecatateTarget(playerid, players[0]);
+                    }
+                }
+                gPlayerSpecTick[playerid] = GetTickCount() + 200;
+            }
+            else if(lr == KEY_RIGHT)
+            {
+                foreach(new i: Player)
+                {
+                    if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING)
+                    {
+                        players[count] = i;
+                    }
+                }
+
+                for(new i = 0; i < MAX_RACE_PLAYERS; i++)
+                {
+                    if(gPlayerData[playerid][e_spec_targetid] > players[i] && players[i] > 0)
+                    {
+                        SetPlayerSpecatateTarget(playerid, players[i]);
+                        break;
+                    }
+                    else if(i == (MAX_RACE_PLAYERS - 1))
+                    {
+                        new targetid = -1;
+                        for(new j = 0; j < MAX_RACE_PLAYERS; j++)
+                        {
+                            if(players[j] > targetid)
+                                targetid = players[j];
+                        }
+                        SetPlayerSpecatateTarget(playerid, targetid);
+                    }
+                }
+                gPlayerSpecTick[playerid] = GetTickCount() + 200;
             }
         }
     }
@@ -710,7 +748,7 @@ IsRaceDialogVisible(playerid)
 
 ShowPlayerRaceList(playerid)
 {
-    new output[256], string[64], status[24];
+    new output[512], string[64], status[24];
     strcat(output, "Nome\tJogadores\tStatus\n");
     for(new i = 0; i < MAX_RACES; i++)
     {
