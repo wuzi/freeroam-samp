@@ -53,7 +53,7 @@ new gMySQL;
 #define RACE_COUNT_DOWN									30
 
 // Quantos segundos o evento irá levar para iniciar após ser criado
-#define EVENT_COUNT_DOWN								60
+#define EVENT_COUNT_DOWN								10
 
 #define MAX_RACE_NAME									64
 #define MINIMUM_PLAYERS_TO_START_RACE					1
@@ -63,7 +63,7 @@ new gMySQL;
 
 // Bibliotecas
 #include <streamer>
-#include <next-ac>
+// #include <next-ac>
 #include <sscanf2>
 #include <a_mysql>
 #include <YSI\y_hooks>
@@ -138,7 +138,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/races.pwn"
 #include "../modules/gameplay/drift.pwn"
 #include "../modules/gameplay/events.pwn"
-#include "../modules/gameplay/anticheat.pwn"
+// #include "../modules/gameplay/anticheat.pwn"
 #include "../modules/gameplay/animations.pwn"
 
 //------------------------------------------------------------------------------

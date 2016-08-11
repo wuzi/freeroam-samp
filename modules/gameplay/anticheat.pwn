@@ -74,23 +74,7 @@ static const g_anticheat_names[][] =
 forward OnCheatDetected(playerid, ip_address[], type, code);
 public OnCheatDetected(playerid, ip_address[], type, code)
 {
-    switch (code)
-    {
-        case 0, 1:
-        {
-            SendClientMessageToAllf(COLOR_LIGHT_RED, "* %s foi kickado do servidor. Motivo: Suspeitas de air-breaking.", GetPlayerNamef(playerid));
-            Kick(playerid);
-        }
-        case 9, 10:
-        {
-            SendClientMessageToAllf(COLOR_LIGHT_RED, "* %s foi kickado do servidor. Motivo: Suspeitas de speed-hacking.", GetPlayerNamef(playerid));
-            Kick(playerid);
-        }
-        default:
-        {
-            SendAdminMessage(PLAYER_RANK_RECRUIT, COLOR_LIGHT_RED, "[ANTICHEAT] O jogador %s foi acusado de suspeitas de %s.", GetPlayerNamef(playerid), g_anticheat_names[code]);
-        }
-    }
+    SendAdminMessage(PLAYER_RANK_RECRUIT, COLOR_LIGHT_RED, "[ANTICHEAT] O jogador %s foi acusado de suspeitas de %s.", GetPlayerNamef(playerid), g_anticheat_names[code]);
     return 1;
 }
 
@@ -98,6 +82,13 @@ public OnCheatDetected(playerid, ip_address[], type, code)
 
 hook OnGameModeInit()
 {
+    EnableAntiCheat(2, false);
+    EnableAntiCheat(3, false);
+    EnableAntiCheat(4, false);
+    EnableAntiCheat(5, false);
+    EnableAntiCheat(6, false);
+    EnableAntiCheat(21, false);
+    EnableAntiCheat(27, false);
     EnableAntiCheat(39, false);
     EnableAntiCheat(38, false);
     EnableAntiCheat(37, false);
