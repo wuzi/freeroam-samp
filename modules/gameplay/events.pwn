@@ -933,6 +933,8 @@ YCMD:irevento(playerid, params[], help)
         }
         gEventPlayersID[gEventPlayersCount++] = playerid;
         gIsPlayerInEvent[playerid] = true;
+        SetPlayerHealth(playerid, 100.0);
+        SetPlayerArmour(playerid, 100.0);
         TogglePlayerControllable(playerid, false);
     }
     else if(gEventState == EVENT_STATE_STARTED)
