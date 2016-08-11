@@ -53,7 +53,7 @@ new gMySQL;
 #define RACE_COUNT_DOWN									30
 
 // Quantos segundos o evento irá levar para iniciar após ser criado
-#define EVENT_COUNT_DOWN								10
+#define EVENT_COUNT_DOWN								60
 
 #define MAX_RACE_NAME									64
 #define MINIMUM_PLAYERS_TO_START_RACE					1
