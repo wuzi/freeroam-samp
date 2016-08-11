@@ -348,6 +348,37 @@ task OnRaceUpdate[1000]()
 
 //------------------------------------------------------------------------------
 
+hook OnPlayerSpawn(playerid)
+{
+    if(GetPlayerRace(playerid) != INVALID_RACE_ID)
+    {
+        new raceid = GetPlayerRace(playerid);
+        new racer_id = gPlayerData[playerid][e_grid_id];
+        new vehicleid = gVehicleData[raceid][racer_id][e_vehicle_id];
+        SetVehicleToRespawn(vehicleid);
+
+        new cid = gPlayerData[playerid][e_checkpoint_id];
+        new Float:x, Float:y, Float:z;
+        if(cid > 0)
+        {
+            x = gCheckpointData[raceid][cid - 1][e_checkpoint_x];
+            y = gCheckpointData[raceid][cid - 1][e_checkpoint_y];
+            z = gCheckpointData[raceid][cid - 1][e_checkpoint_z];
+        }
+        else
+        {
+            x = gVehicleData[raceid][racer_id][e_vehicle_x];
+            y = gVehicleData[raceid][racer_id][e_vehicle_y];
+            z = gVehicleData[raceid][racer_id][e_vehicle_z];
+        }
+        SetVehiclePos(vehicleid, x, y, z);
+        PutPlayerInVehicle(playerid, vehicleid, 0);
+    }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
 hook OnPlayerUpdate(playerid)
 {
     if(GetPlayerRace(playerid) != INVALID_RACE_ID && GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
