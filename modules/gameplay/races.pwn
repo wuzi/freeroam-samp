@@ -384,101 +384,56 @@ hook OnPlayerSpawn(playerid)
 
 hook OnPlayerUpdate(playerid)
 {
-    if(GetPlayerRace(playerid) != INVALID_RACE_ID && GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+    if(GetPlayerRace(playerid) != INVALID_RACE_ID && gPlayerData[playerid][e_end_time] != 0)
     {
         if(GetPlayerState(playerid) != PLAYER_STATE_SPECTATING)
         {
-            new count;
             new raceid = GetPlayerRace(playerid);
-            new players[MAX_RACE_PLAYERS] = {INVALID_PLAYER_ID, ...};
+            TogglePlayerSpectating(playerid, true);
             foreach(new i: Player)
             {
-                if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING)
+                if(GetPlayerRace(i) == raceid && gPlayerData[i][e_end_time] == 0)
                 {
-                    players[count] = i;
-                }
-            }
-
-            for(new i = 0; i < MAX_RACE_PLAYERS; i++)
-            {
-                if(gPlayerData[playerid][e_spec_targetid] > players[i] && players[i] > 0)
-                {
-                    SetPlayerSpecatateTarget(playerid, players[i]);
+                    SetPlayerSpecatateTarget(playerid, i);
                     break;
-                }
-                else if(i == (MAX_RACE_PLAYERS - 1))
-                {
-                    new targetid = -1;
-                    for(new j = 0; j < MAX_RACE_PLAYERS; j++)
-                    {
-                        if(players[j] > targetid)
-                            targetid = players[j];
-                    }
-                    SetPlayerSpecatateTarget(playerid, targetid);
                 }
             }
         }
         else if(gPlayerSpecTick[playerid] < GetTickCount())
         {
-            new raceid = GetPlayerRace(playerid);
-            new Keys,ud,lr;
-            GetPlayerKeys(playerid,Keys,ud,lr);
-
-            new count;
-            new players[MAX_RACE_PLAYERS] = {INVALID_PLAYER_ID, ...};
+            new
+                raceid = GetPlayerRace(playerid),
+                Keys,
+                ud,
+                lr
+            ;
+            GetPlayerKeys(playerid, Keys, ud, lr);
+            gPlayerSpecTick[playerid] = GetTickCount() + 50;
             if(lr == KEY_LEFT)
             {
-                foreach(new i: Player)
+                for(new i = GetPlayerPoolSize(), j = 0; i > j; i--)
                 {
-                    if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING)
+                    if(GetPlayerRace(i) == raceid && gPlayerData[i][e_end_time] == 0)
                     {
-                        players[count] = i;
+                        if(gPlayerData[playerid][e_spec_targetid] > i)
+                        {
+                            SetPlayerSpecatateTarget(playerid, i);
+                        }
                     }
                 }
-
-                for(new i = 0; i < MAX_RACE_PLAYERS; i++)
-                {
-                    if(gPlayerData[playerid][e_spec_targetid] < players[i] && players[i] > 0 && players[i] != INVALID_PLAYER_ID)
-                    {
-                        SetPlayerSpecatateTarget(playerid, players[i]);
-                        break;
-                    }
-                    else if(i == (MAX_RACE_PLAYERS - 1))
-                    {
-                        SetPlayerSpecatateTarget(playerid, players[0]);
-                    }
-                }
-                gPlayerSpecTick[playerid] = GetTickCount() + 200;
             }
             else if(lr == KEY_RIGHT)
             {
                 foreach(new i: Player)
                 {
-                    if(GetPlayerRace(i) == raceid && GetPlayerState(i) != PLAYER_STATE_SPECTATING)
+                    if(GetPlayerRace(i) == raceid && gPlayerData[i][e_end_time] == 0)
                     {
-                        players[count] = i;
-                    }
-                }
-
-                for(new i = 0; i < MAX_RACE_PLAYERS; i++)
-                {
-                    if(gPlayerData[playerid][e_spec_targetid] > players[i] && players[i] > 0 && players[i] != INVALID_PLAYER_ID)
-                    {
-                        SetPlayerSpecatateTarget(playerid, players[i]);
-                        break;
-                    }
-                    else if(i == (MAX_RACE_PLAYERS - 1))
-                    {
-                        new targetid = -1;
-                        for(new j = 0; j < MAX_RACE_PLAYERS; j++)
+                        if(gPlayerData[playerid][e_spec_targetid] < i)
                         {
-                            if(players[j] > targetid)
-                                targetid = players[j];
+                            SetPlayerSpecatateTarget(playerid, i);
                         }
-                        SetPlayerSpecatateTarget(playerid, targetid);
                     }
                 }
-                gPlayerSpecTick[playerid] = GetTickCount() + 200;
             }
         }
     }
