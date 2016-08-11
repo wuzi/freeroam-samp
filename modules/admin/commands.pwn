@@ -19,7 +19,7 @@ YCMD:acmds(playerid, params[], help)
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos Administrativos ----------------------------------------");
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
     {
-        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /puxar - /setskin - /irpos - /setint - /setvw");
+        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /puxar - /setskin - /irpos - /setint - /setvw - /jetpack");
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /pdist - /say");
     }
 
@@ -170,6 +170,17 @@ RRRRRRRR     RRRRRRREEEEEEEEEEEEEEEEEEEEEE       CCCCCCCCCCCCCRRRRRRRR     RRRRR
     SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* Você puxou %s.", GetPlayerNamef(targetid));
  	return 1;
  }
+
+//------------------------------------------------------------------------------
+
+YCMD:jetpack(playerid, params[], help)
+{
+   if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
+       return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+
+   SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
+   return 1;
+}
 
 //------------------------------------------------------------------------------
 
