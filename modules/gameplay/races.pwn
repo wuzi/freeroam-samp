@@ -205,7 +205,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 public OnPlayerEnterRace(playerid, raceid)
 {
     HidePlayerLobby(playerid);
-    SetPlayerHealth(playerid, 100.0);
+    SetPlayerHealth(playerid, 9999.0);
 
     new rand = random(sizeof(gLobbySpawns));
     SetPlayerInterior(playerid, 10);
