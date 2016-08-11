@@ -28,15 +28,15 @@ task SendGlobalAdvertise[ADVERTISE_INTERVAL]()
 //------------------------------------------------------------------------------
 
 static hostnames[][] = {
-    "BD Drift Hostname 1",
-    "BD Drift Hostname 2",
-    "BD Drift Hostname 3",
-    "BD Drift Hostname 4",
-    "BD Drift Hostname 5",
-    "BD Drift Hostname 6",
-    "BD Drift Hostname 7",
-    "BD Drift Hostname 8",
-    "BD Drift Hostname 9"
+    "Liberty Freeroam Hostname 1",
+    "Liberty Freeroam Hostname 2",
+    "Liberty Freeroam Hostname 3",
+    "Liberty Freeroam Hostname 4",
+    "Liberty Freeroam Hostname 5",
+    "Liberty Freeroam Hostname 6",
+    "Liberty Freeroam Hostname 7",
+    "Liberty Freeroam Hostname 8",
+    "Liberty Freeroam Hostname 9"
 };
 
 task UpdateHostName[UPDATE_HOSTNAME_INTERVAL]()

@@ -1030,8 +1030,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 ShowPlayerCredits(playerid)
 {
-	ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{ffffff}Pessoas que contruibuiram para que o {67f571}B{ffffff}rothers in {67f571}Game{ffffff} existisse",
-	"\t\t\t\t{67f571}B{ffffff}rothers in {67f571}Game{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {67f571}B{ffffff}in{67f571}G\n\n{ffffff}Contribuidores:\nY_Less, Incognito, BlueG, PawnHunter, NexiusTailer, SA-MP Team e você", "Fechar", "");
+	ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{ffffff}Pessoas que contruibuiram para que o {67f571}L{ffffff}iberty {67f571}Freeroam{ffffff} existisse",
+	"\t\t\t\t{67f571}L{ffffff}iberty {67f571}Freeroam{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {67f571}B{ffffff}in{67f571}G\n\n{ffffff}Contribuidores:\nY_Less, Incognito, BlueG, PawnHunter, NexiusTailer, SA-MP Team e você", "Fechar", "");
 }
 
 //------------------------------------------------------------------------------

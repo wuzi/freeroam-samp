@@ -124,7 +124,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
     {
         PlaySelectSound(playerid);
         ShowPlayerDialog(playerid, DIALOG_FORUM, DIALOG_STYLE_MSGBOX, "{ffffff}Nosso fórum",
-    	"{ffffff}www.brothersingame.com.br/forum", "Fechar", "");
+    	"{ffffff}www.libertyfreeroam.com.br/forum", "Fechar", "");
     }
     else if(playertextid == loginTextDraw[playerid][5])
     {
@@ -452,7 +452,7 @@ hook OnGameModeInit()
     TextDrawTextSize(backgroundTextDraw[0], 442.000000, -21.000000);
     TextDrawSetSelectable(backgroundTextDraw[0], 0);
 
-    backgroundTextDraw[1] = TextDrawCreate(230.000000, 13.000000, "~b~~h~B~w~rothers ~r~in ~g~~h~G~w~ame"); // logo
+    backgroundTextDraw[1] = TextDrawCreate(230.000000, 13.000000, "~b~~h~L~w~iberty ~b~~h~F~w~reeroam"); // logo
     TextDrawBackgroundColor(backgroundTextDraw[1], 255);
     TextDrawFont(backgroundTextDraw[1], 1);
     TextDrawLetterSize(backgroundTextDraw[1], 0.600000, 2.900000);
