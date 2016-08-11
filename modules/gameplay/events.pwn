@@ -172,6 +172,7 @@ enum
 // Player data
 static bool:gIsPlayerInEvent[MAX_PLAYERS];
 static bool:gIsPlayerCreatingEvent[MAX_PLAYERS];
+static gPlayerSpectateTargetID[MAX_PLAYERS];
 
 // Event data
 static gEventState;
@@ -829,6 +830,48 @@ hook OnPlayerDeath(playerid, killerid, reason)
             }
             GivePlayerCash(winnerid, gEventPrize);
             defer EndEvent();
+        }
+    }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+hook OnPlayerUpdate(playerid)
+{
+    if(gIsPlayerInEvent[playerid] && GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+    {
+        new Keys, ud, lr;
+        GetPlayerKeys(playerid, Keys, ud, lr);
+        if(lr == KEY_LEFT)
+        {
+            again:
+            gPlayerSpectateTargetID[playerid]--;
+            if(gPlayerSpectateTargetID[playerid] < 0)
+            {
+                gPlayerSpectateTargetID[playerid] = (gEventPlayersCount - 1);
+            }
+
+            if(GetPlayerState(gEventPlayersID[gPlayerSpectateTargetID[playerid]]) != PLAYER_STATE_ONFOOT)
+            {
+                goto again;
+            }
+            PlayerSpectatePlayer(playerid, gEventPlayersID[gPlayerSpectateTargetID[playerid]]);
+        }
+        else if(lr == KEY_RIGHT)
+        {
+            again:
+            gPlayerSpectateTargetID[playerid]++;
+            if(gPlayerSpectateTargetID[playerid] == gEventPlayersCount)
+            {
+                gPlayerSpectateTargetID[playerid] = 0;
+            }
+
+            if(GetPlayerState(gEventPlayersID[gPlayerSpectateTargetID[playerid]]) != PLAYER_STATE_ONFOOT)
+            {
+                goto again;
+            }
+            PlayerSpectatePlayer(playerid, gEventPlayersID[gPlayerSpectateTargetID[playerid]]);
         }
     }
     return 1;
