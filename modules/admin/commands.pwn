@@ -30,7 +30,7 @@ YCMD:acmds(playerid, params[], help)
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /rtc - /ircar - /puxarcar - /dararma - /verip - /mutar - /desmutar - /congelar - /descongelar");
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
-        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /gmx - /criarcorrida - /setmoney - /setbanco");
+        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /gmx - /criarcorrida - /criarevento - /setmoney - /setbanco");
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_OWNER || IsPlayerAdmin(playerid))
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /setadmin");

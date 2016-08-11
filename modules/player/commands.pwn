@@ -52,13 +52,13 @@ YCMD:comandos(playerid, params[], help)
 	"* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite\n\
 	* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id\n\
 	* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome\n\
-	* /contar - /drift - /contador - /lobby\n\
+	* /contar - /drift - /contador - /irevento - /lobby\n\
 	* /carcmd - /regras - /creditos - /acmds", "Fechar", "");
 	/*SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar - /drift - /contador - /lobby");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar - /drift - /contador - /irevento - /lobby");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /carcmd - /regras - /creditos");
 	if(IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
 		SendClientMessage(playerid, COLOR_SUB_TITLE, "* /acmds");
@@ -710,13 +710,13 @@ YCMD:reparar(playerid, params[], help)
 
 YCMD:clima(playerid, params[], help)
 {
-   new weatherid;
-   if(sscanf(params, "i", weatherid))
+	new weatherid;
+	if(sscanf(params, "i", weatherid))
 	   return SendClientMessage(playerid, COLOR_INFO, "* /clima [id]");
 
-   SetPlayerWeather(playerid, weatherid);
-   SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você alterou o ID de seu clima para %i.", weatherid);
-   return 1;
+	SetPlayerWeather(playerid, weatherid);
+	SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você alterou o ID de seu clima para %i.", weatherid);
+	return 1;
 }
 
 //------------------------------------------------------------------------------
@@ -726,36 +726,36 @@ YCMD:ir(playerid, params[], help)
 	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando em uma corrida.");
 
-   new targetid;
-   if(sscanf(params, "u", targetid))
-	   return SendClientMessage(playerid, COLOR_INFO, "* /ir [playerid]");
+	new targetid;
+	if(sscanf(params, "u", targetid))
+		return SendClientMessage(playerid, COLOR_INFO, "* /ir [playerid]");
 
-   else if(!IsPlayerLogged(targetid))
-	   return SendClientMessage(playerid, COLOR_ERROR, "* O jogador não está conectado.");
+	else if(!IsPlayerLogged(targetid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* O jogador não está conectado.");
 
-   else if(targetid == playerid)
-	   return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode ir até você mesmo.");
+	else if(targetid == playerid)
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode ir até você mesmo.");
 
-   else if(gplGotoBlocked[targetid])
-	   return SendClientMessage(playerid, COLOR_ERROR, "* Este jogador bloqueou os teleportes até ele.");
+	else if(gplGotoBlocked[targetid])
+		return SendClientMessage(playerid, COLOR_ERROR, "* Este jogador bloqueou os teleportes até ele.");
 
-   new Float:x, Float:y, Float:z;
-   GetPlayerPos(targetid, x, y, z);
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(targetid, x, y, z);
 
-   SetPlayerInterior(playerid, GetPlayerInterior(targetid));
-   SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(targetid));
-   if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) { SetPlayerPos(playerid, x, y, z); }
-   else
-   {
-	   new vehicleid = GetPlayerVehicleID(playerid);
-	   SetVehiclePos(vehicleid, x, y, z);
-	   LinkVehicleToInterior(vehicleid, GetPlayerInterior(targetid));
-	   SetVehicleVirtualWorld(vehicleid, GetPlayerVirtualWorld(targetid));
-   }
+	SetPlayerInterior(playerid, GetPlayerInterior(targetid));
+	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(targetid));
+	if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) { SetPlayerPos(playerid, x, y, z); }
+	else
+	{
+		new vehicleid = GetPlayerVehicleID(playerid);
+		SetVehiclePos(vehicleid, x, y, z);
+		LinkVehicleToInterior(vehicleid, GetPlayerInterior(targetid));
+		SetVehicleVirtualWorld(vehicleid, GetPlayerVirtualWorld(targetid));
+	}
 
-   SendClientMessagef(targetid, COLOR_PLAYER_COMMAND, "* %s veio até você.", GetPlayerNamef(playerid));
-   SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você foi até %s.", GetPlayerNamef(targetid));
-   return 1;
+	SendClientMessagef(targetid, COLOR_PLAYER_COMMAND, "* %s veio até você.", GetPlayerNamef(playerid));
+	SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você foi até %s.", GetPlayerNamef(targetid));
+	return 1;
 }
 
 //------------------------------------------------------------------------------
