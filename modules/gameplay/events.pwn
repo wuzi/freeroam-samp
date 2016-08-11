@@ -24,7 +24,9 @@ static const gPlayerSpawnsData[][][] =
     // K.A.C.C
     { 0, "K.A.C.C" },
     // RC Battlefield
-    { 10, "Campo de Batalha R.C" }
+    { 10, "Campo de Batalha R.C" },
+    // San fierro SHIP
+    { 0, "Navio de San Fierro" }
 };
 
 // Locais onde os jogadores irão dar spawn em cada mapa
@@ -59,6 +61,21 @@ static const Float:gPlayerSpawns[][][] =
         {   -1005.3085,   1078.5878,  1343.1176,  80.8140     },
         {   -1005.3085,   1078.5878,  1343.1176,  80.8140     },
         {   -1005.3085,   1078.5878,  1343.1176,  80.8140     }
+    },
+    // San fierro SHIP
+    {
+        {   -2438.4280, 1538.8979,  11.7656,    341.1123    },
+        {   -2425.3489, 1534.6957,  2.11720,    18.08600    },
+        {   -2402.7271, 1550.9099,  2.11720,    4.275900    },
+        {   -2391.2837, 1539.8258,  2.11720,    177.5273    },
+        {   -2370.6228, 1533.5748,  10.8209,    41.53940    },
+        {   -2366.5286, 1534.2919,  2.11720,    6.109000    },
+        {   -2379.7495, 1542.1860,  2.11720,    264.5880    },
+        {   -2403.1509, 1540.5975,  2.11720,    103.8465    },
+        {   -2391.2615, 1554.8647,  2.11720,    81.26290    },
+        {   -2440.7769, 1555.1104,  2.12310,    263.9146    },
+        {   -2416.0430, 1557.1355,  10.8281,    173.6503    },
+        {   -2379.5281, 1554.7286,  2.11720,    234.4609    }
     }
 };
 
@@ -191,6 +208,9 @@ hook OnGameModeInit()
     // Portões do mapa K.A.C.C
     CreateDynamicObject(971, 2539.19995117, 2823.00000000, 13.19999981, 0.00000000, 0.00000000, 90.00000000, VIRTUAL_WORLD);
     CreateDynamicObject(971, 2616.60009766, 2830.69995117, 13.39999962, 0.00000000, 0.00000000, 270.0000000, VIRTUAL_WORLD);
+    // Portões do mapa Navio de San Fierro
+    CreateDynamicObject(19912, -2439.26000, 1550.32000000, 16.21000000, 90.00000000, 90.000000, 0.000000000, VIRTUAL_WORLD);
+    CreateDynamicObject(19912, -2439.26000, 1538.83000000, 16.21000000, 90.00000000, 90.000000, 0.000000000, VIRTUAL_WORLD);
     return 1;
 }
 
@@ -924,6 +944,7 @@ YCMD:irevento(playerid, params[], help)
     {
         new rand = random(4);
         PlaySelectSound(playerid);
+        SetPlayerVirtualWorld(playerid, VIRTUAL_WORLD);
         SetPlayerInterior(playerid, gPlayerSpawnsData[gEventSpawn][0][0]);
         SetPlayerPos(playerid, gPlayerSpawns[gEventSpawn][rand][0], gPlayerSpawns[gEventSpawn][rand][1], gPlayerSpawns[gEventSpawn][rand][2]);
         SetPlayerFacingAngle(playerid, gPlayerSpawns[gEventSpawn][rand][3]);
