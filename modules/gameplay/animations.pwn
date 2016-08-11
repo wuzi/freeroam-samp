@@ -503,7 +503,7 @@ YCMD:preparar(playerid, params[], help)
 
 YCMD:vomitar(playerid, params[], help)
 {
-    OnePlayAnim(playerid, "FOOD", "EAT_Vomit_P", 3.5, 0, 1, 1, 1, 0);
+    OnePlayAnim(playerid, "FOOD", "EAT_Vomit_P", 4.1, 0, 1, 1, 0, 0);
     return 1;
 }
 
@@ -553,11 +553,11 @@ YCMD:comer(playerid, params[], help)
         switch (id)
         {
             case 1:
-                OnePlayAnim(playerid, "FOOD", "EAT_Burger", 4.0, 0, 1, 1, 1, 0);
+                OnePlayAnim(playerid, "FOOD", "EAT_Burger", 4.0, 0, 1, 1, 0, 0);
             case 2:
-                OnePlayAnim(playerid, "FOOD", "EAT_Chicken", 4.0, 0, 1, 1, 1, 0);
+                OnePlayAnim(playerid, "FOOD", "EAT_Chicken", 4.0, 0, 1, 1, 0, 0);
             case 3:
-                OnePlayAnim(playerid, "FOOD", "EAT_Pizza", 4.0, 0, 1, 1, 1, 0);
+                OnePlayAnim(playerid, "FOOD", "EAT_Pizza", 4.0, 0, 1, 1, 0, 0);
             default:
                 SendClientMessage(playerid, COLOR_ERROR, "* Número inválido.");
         }
