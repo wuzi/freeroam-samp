@@ -92,9 +92,7 @@ YCMD:regras(playerid, params[], help)
 
 YCMD:creditos(playerid, params[], help)
 {
-	PlaySelectSound(playerid);
-	ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{ffffff}Pessoas que contruibuiram para que o {67f571}B{ffffff}rothers in {67f571}Game{ffffff} existisse",
-	"\t\t\t\t{67f571}B{ffffff}rothers in {67f571}Game{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {67f571}B{ffffff}in{67f571}G\n\n{ffffff}Contribuidores:\nY_Less, Incognito, BlueG, SA-MP Team e você", "Fechar", "");
+	ShowPlayerCredits(playerid);
 	return 1;
 }
 
@@ -1026,6 +1024,14 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	    }
 	}
     return 1;
+}
+
+//------------------------------------------------------------------------------
+
+ShowPlayerCredits(playerid)
+{
+	ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{ffffff}Pessoas que contruibuiram para que o {67f571}B{ffffff}rothers in {67f571}Game{ffffff} existisse",
+	"\t\t\t\t{67f571}B{ffffff}rothers in {67f571}Game{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {67f571}B{ffffff}in{67f571}G\n\n{ffffff}Contribuidores:\nY_Less, Incognito, BlueG, PawnHunter, NexiusTailer, SA-MP Team e você", "Fechar", "");
 }
 
 //------------------------------------------------------------------------------
