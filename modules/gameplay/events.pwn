@@ -778,6 +778,7 @@ timer EndEvent[7500]()
             SetPlayerVirtualWorld(i, 0);
             SetPlayerHealth(i, 100.0);
             ResetPlayerWeapons(i);
+            PlayerPlaySound(i, 1063, 0.0, 0.0, 0.0);
         }
     }
 
