@@ -814,8 +814,8 @@ hook OnPlayerDeath(playerid, killerid, reason)
             {
                 winnerid = j;
                 remaining_players++;
-                PlayerSpectatePlayer(playerid, j);
             }
+            PlayerSpectatePlayer(playerid, killerid);
         }
 
         if(remaining_players < 2)
