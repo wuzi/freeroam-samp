@@ -452,7 +452,7 @@ hook OnGameModeInit()
     TextDrawTextSize(backgroundTextDraw[0], 442.000000, -21.000000);
     TextDrawSetSelectable(backgroundTextDraw[0], 0);
 
-    backgroundTextDraw[1] = TextDrawCreate(230.000000, 13.000000, "~b~~h~L~w~iberty ~b~~h~F~w~reeroam"); // logo
+    backgroundTextDraw[1] = TextDrawCreate(230.000000, 13.000000, "~g~~h~L~w~iberty ~g~~h~F~w~reeroam"); // logo
     TextDrawBackgroundColor(backgroundTextDraw[1], 255);
     TextDrawFont(backgroundTextDraw[1], 1);
     TextDrawLetterSize(backgroundTextDraw[1], 0.600000, 2.900000);
