@@ -62,9 +62,10 @@ new gMySQL;
 //------------------------------------------------------------------------------
 
 // Bibliotecas
+#include <streamer>
+#include <next-ac>
 #include <sscanf2>
 #include <a_mysql>
-#include <streamer>
 #include <YSI\y_hooks>
 #include <YSI\y_timers>
 #include <YSI\y_iterate>
@@ -137,6 +138,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/races.pwn"
 #include "../modules/gameplay/drift.pwn"
 #include "../modules/gameplay/events.pwn"
+#include "../modules/gameplay/anticheat.pwn"
 
 //------------------------------------------------------------------------------
 
