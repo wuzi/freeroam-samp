@@ -142,6 +142,9 @@ YCMD:animes(playerid, params[], help)
 
 YCMD:handsup(playerid, params[], help)
 {
+	if(IsPlayerInEvent(playerid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode usar este comando no evento.");
+
     SetPlayerSpecialAction(playerid,SPECIAL_ACTION_HANDSUP);
     return 1;
 }
@@ -253,6 +256,9 @@ YCMD:crack(playerid, params[], help)
 
 YCMD:fumar(playerid, params[], help)
 {
+	if(IsPlayerInEvent(playerid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode usar este comando no evento.");
+
     new id;
     if(sscanf(params, "d", id))
     {
@@ -465,6 +471,9 @@ YCMD:triste(playerid, params[], help)
 
 YCMD:beber(playerid, params[], help)
 {
+	if(IsPlayerInEvent(playerid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode usar este comando no evento.");
+
     new id;
     if(sscanf(params, "i", id))
     {
@@ -553,6 +562,9 @@ YCMD:comer(playerid, params[], help)
 
 YCMD:dancar(playerid, params[], help)
 {
+	if(IsPlayerInEvent(playerid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode usar este comando no evento.");
+
     new id;
     if(sscanf(params, "i", id))
     {
@@ -675,6 +687,9 @@ YCMD:taichi(playerid, params[], help)
 
 YCMD:mijar(playerid, params[], help)
 {
+	if(IsPlayerInEvent(playerid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode usar este comando no evento.");
+
     new id;
     if(sscanf(params, "i", id))
     {

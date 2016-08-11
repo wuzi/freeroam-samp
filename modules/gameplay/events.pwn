@@ -179,6 +179,7 @@ static const weaponOtherNames[][][] =
 };
 
 //------------------------------------------------------------------------------
+
 enum
 {
     EVENT_STATE_NONE,
@@ -186,10 +187,19 @@ enum
     EVENT_STATE_STARTED
 }
 
+enum
+{
+    EVENT_PLAYER_STATE_NONE,
+    EVENT_PLAYER_STATE_ALIVE,
+    EVENT_PLAYER_STATE_DEAD
+}
+
 // Player data
 static bool:gIsPlayerInEvent[MAX_PLAYERS];
 static bool:gIsPlayerCreatingEvent[MAX_PLAYERS];
 static gPlayerSpectateTargetID[MAX_PLAYERS];
+static gPlayerState[MAX_PLAYERS];
+static gPlayerSpecTick[MAX_PLAYERS];
 
 // Event data
 static gEventState;
@@ -218,6 +228,7 @@ hook OnGameModeInit()
 
 hook OnPlayerDisconnect(playerid, reason)
 {
+    gPlayerState[playerid] = EVENT_PLAYER_STATE_NONE;
     gIsPlayerInEvent[playerid] = false;
     ResetPlayerEventCreatorData(playerid);
     return 1;
@@ -790,6 +801,7 @@ timer EndEvent[7500]()
     {
         if(gIsPlayerInEvent[i])
         {
+            TogglePlayerSpectating(i, false);
             gIsPlayerInEvent[i] = false;
             SetPlayerGamemode(i, GAMEMODE_FREEROAM);
             SetPlayerPos(i, 2234.6855, -1260.9462, 23.9329);
@@ -837,8 +849,10 @@ hook OnPlayerDeath(playerid, killerid, reason)
                 winnerid = j;
                 remaining_players++;
             }
-            PlayerSpectatePlayer(playerid, killerid);
         }
+        gPlayerState[playerid] = EVENT_PLAYER_STATE_DEAD;
+        TogglePlayerSpectating(playerid, true);
+        PlayerSpectatePlayer(playerid, killerid);
 
         if(remaining_players < 2)
         {
@@ -860,39 +874,37 @@ hook OnPlayerDeath(playerid, killerid, reason)
 
 hook OnPlayerUpdate(playerid)
 {
-    if(gIsPlayerInEvent[playerid] && GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+    if(gIsPlayerInEvent[playerid] && gPlayerState[playerid] == EVENT_PLAYER_STATE_DEAD)
     {
-        new Keys, ud, lr;
-        GetPlayerKeys(playerid, Keys, ud, lr);
-        if(lr == KEY_LEFT)
-        {
-            again:
-            gPlayerSpectateTargetID[playerid]--;
-            if(gPlayerSpectateTargetID[playerid] < 0)
-            {
-                gPlayerSpectateTargetID[playerid] = (gEventPlayersCount - 1);
-            }
-
-            if(GetPlayerState(gEventPlayersID[gPlayerSpectateTargetID[playerid]]) != PLAYER_STATE_ONFOOT)
-            {
-                goto again;
-            }
-            PlayerSpectatePlayer(playerid, gEventPlayersID[gPlayerSpectateTargetID[playerid]]);
-        }
-        else if(lr == KEY_RIGHT)
+        if(GetPlayerState(playerid) != PLAYER_STATE_SPECTATING)
         {
             again:
             gPlayerSpectateTargetID[playerid]++;
             if(gPlayerSpectateTargetID[playerid] == gEventPlayersCount)
-            {
                 gPlayerSpectateTargetID[playerid] = 0;
-            }
 
-            if(GetPlayerState(gEventPlayersID[gPlayerSpectateTargetID[playerid]]) != PLAYER_STATE_ONFOOT)
-            {
+            if(gPlayerState[gEventPlayersID[gPlayerSpectateTargetID[playerid]]] == EVENT_PLAYER_STATE_DEAD || gPlayerState[gEventPlayersID[gPlayerSpectateTargetID[playerid]]] == EVENT_PLAYER_STATE_NONE)
                 goto again;
-            }
+
             PlayerSpectatePlayer(playerid, gEventPlayersID[gPlayerSpectateTargetID[playerid]]);
+        }
+        else if(gPlayerSpecTick[playerid] < GetTickCount())
+        {
+            new Keys, ud, lr;
+            GetPlayerKeys(playerid, Keys, ud, lr);
+            if(lr == KEY_RIGHT || lr == KEY_LEFT)
+            {
+                again:
+                gPlayerSpectateTargetID[playerid]++;
+                if(gPlayerSpectateTargetID[playerid] == gEventPlayersCount)
+                    gPlayerSpectateTargetID[playerid] = 0;
+
+                if(gPlayerState[gEventPlayersID[gPlayerSpectateTargetID[playerid]]] == EVENT_PLAYER_STATE_DEAD || gPlayerState[gEventPlayersID[gPlayerSpectateTargetID[playerid]]] == EVENT_PLAYER_STATE_NONE)
+                    goto again;
+
+                PlayerSpectatePlayer(playerid, gEventPlayersID[gPlayerSpectateTargetID[playerid]]);
+                gPlayerSpecTick[playerid] = GetTickCount() + 200;
+            }
         }
     }
     return 1;
@@ -940,32 +952,41 @@ YCMD:criarevento(playerid, params[], help)
 
 YCMD:irevento(playerid, params[], help)
 {
-    if(gEventState == EVENT_STATE_STARTING)
+    if(!gIsPlayerInEvent[playerid])
     {
-        new rand = random(4);
-        PlaySelectSound(playerid);
-        SetPlayerVirtualWorld(playerid, VIRTUAL_WORLD);
-        SetPlayerInterior(playerid, gPlayerSpawnsData[gEventSpawn][0][0]);
-        SetPlayerPos(playerid, gPlayerSpawns[gEventSpawn][rand][0], gPlayerSpawns[gEventSpawn][rand][1], gPlayerSpawns[gEventSpawn][rand][2]);
-        SetPlayerFacingAngle(playerid, gPlayerSpawns[gEventSpawn][rand][3]);
-        for(new i = 0; i < sizeof(gEventWeapons); i++)
+        if(gEventState == EVENT_STATE_STARTING)
         {
-            GivePlayerWeapon(playerid, gEventWeapons[i], 99999);
+            new rand = random(4);
+            PlaySelectSound(playerid);
+            SetPlayerVirtualWorld(playerid, VIRTUAL_WORLD);
+            SetPlayerInterior(playerid, gPlayerSpawnsData[gEventSpawn][0][0]);
+            SetPlayerPos(playerid, gPlayerSpawns[gEventSpawn][rand][0], gPlayerSpawns[gEventSpawn][rand][1], gPlayerSpawns[gEventSpawn][rand][2]);
+            SetPlayerFacingAngle(playerid, gPlayerSpawns[gEventSpawn][rand][3]);
+            for(new i = 0; i < sizeof(gEventWeapons); i++)
+            {
+                GivePlayerWeapon(playerid, gEventWeapons[i], 99999);
+            }
+            gPlayerState[playerid] = EVENT_PLAYER_STATE_ALIVE;
+            gEventPlayersID[gEventPlayersCount] = playerid;
+            gEventPlayersCount++;
+            gIsPlayerInEvent[playerid] = true;
+            SetPlayerHealth(playerid, 100.0);
+            SetPlayerArmour(playerid, 100.0);
+            TogglePlayerControllable(playerid, false);
         }
-        gEventPlayersID[gEventPlayersCount++] = playerid;
-        gIsPlayerInEvent[playerid] = true;
-        SetPlayerHealth(playerid, 100.0);
-        SetPlayerArmour(playerid, 100.0);
-        TogglePlayerControllable(playerid, false);
+        else if(gEventState == EVENT_STATE_STARTED)
+        {
+            SendClientMessage(playerid, COLOR_ERROR, "* O evento já foi iniciado, você não pode mais participar.");
+        }
+        else
+        {
+            SendClientMessage(playerid, COLOR_ERROR, "* Não há nenhum evento ativo no momento.");
+        }
     }
-    else if(gEventState == EVENT_STATE_STARTED)
-	{
-		SendClientMessage(playerid, COLOR_ERROR, "* O evento já foi iniciado, você não pode mais participar.");
-	}
     else
-	{
-		SendClientMessage(playerid, COLOR_ERROR, "* Não há nenhum evento ativo no momento.");
-	}
+    {
+        SendClientMessage(playerid, COLOR_ERROR, "* Você já está no evento.");
+    }
 	return 1;
 }
 
@@ -988,6 +1009,13 @@ IsSomeoneCreatingEvent()
         }
     }
     return false;
+}
+
+//------------------------------------------------------------------------------
+
+IsPlayerInEvent(playerid)
+{
+    return gIsPlayerInEvent[playerid];
 }
 
 //------------------------------------------------------------------------------
