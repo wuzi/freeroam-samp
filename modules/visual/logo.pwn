@@ -12,20 +12,12 @@
 
 //------------------------------------------------------------------------------
 
-static Text:logo[4];
-static bool:isTextdrawVisible[MAX_PLAYERS];
-static currentLogoText;
-static logoText[][] =
-{
-    "www.libertyfreeroam.com.br",
-    "O_RESPEITO_QUE_IMPOMOS_DEFINE_OQUE_SOMOS"
-};
+static Text:logo[6];
 
 //------------------------------------------------------------------------------
 
 ShowPlayerLogo(playerid)
 {
-    isTextdrawVisible[playerid] = true;
     for(new i = 0; i < sizeof(logo); i++)
     {
         TextDrawShowForPlayer(playerid, logo[i]);
@@ -36,7 +28,6 @@ ShowPlayerLogo(playerid)
 
 HidePlayerLogo(playerid)
 {
-    isTextdrawVisible[playerid] = false;
     for(new i = 0; i < sizeof(logo); i++)
     {
         TextDrawHideForPlayer(playerid, logo[i]);
@@ -60,32 +51,21 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
 //------------------------------------------------------------------------------
 
-task OnLogoUpdate[15000]()
-{
-    if(currentLogoText == sizeof(logoText))
-        currentLogoText = 0;
-
-    TextDrawSetString(logo[2], logoText[currentLogoText]);
-    currentLogoText++;
-}
-
-//------------------------------------------------------------------------------
-
 hook OnGameModeInit()
 {
-    logo[0] = TextDrawCreate(554.716125, 386.749816, "LIBERTY_FREEROAM");
-    TextDrawLetterSize(logo[0], 0.360175, 2.299999);
-    TextDrawAlignment(logo[0], 2);
-    TextDrawColor(logo[0], 2110249193);
-    TextDrawSetShadow(logo[0], -22);
+    logo[0] = TextDrawCreate(479.686767, 388.433898, "L~n~");
+    TextDrawLetterSize(logo[0], 0.501200, 2.340832);
+    TextDrawAlignment(logo[0], 3);
+    TextDrawColor(logo[0], 245170431);
+    TextDrawSetShadow(logo[0], 0);
     TextDrawSetOutline(logo[0], 1);
     TextDrawBackgroundColor(logo[0], 255);
     TextDrawFont(logo[0], 1);
-    TextDrawSetProportional(logo[0], 1);
-    TextDrawSetShadow(logo[0], -22);
+    TextDrawSetProportional(logo[0], 0);
+    TextDrawSetShadow(logo[0], 0);
 
-    logo[1] = TextDrawCreate(585.168090, 403.666656, ".");
-    TextDrawLetterSize(logo[1], 9.103252, 0.625832);
+    logo[1] = TextDrawCreate(517.232849, 388.650299, "IBERTY");
+    TextDrawLetterSize(logo[1], 0.501200, 2.340832);
     TextDrawAlignment(logo[1], 2);
     TextDrawColor(logo[1], -1);
     TextDrawSetShadow(logo[1], 0);
@@ -95,20 +75,20 @@ hook OnGameModeInit()
     TextDrawSetProportional(logo[1], 1);
     TextDrawSetShadow(logo[1], 0);
 
-    logo[2] = TextDrawCreate(520.512451, 406.000213, "O_RESPEITO_QUE_IMPOMOS_DEFINE_OQUE_SOMOS~n~");
-    TextDrawLetterSize(logo[2], 0.112327, 2.136665);
-    TextDrawAlignment(logo[2], 1);
-    TextDrawColor(logo[2], -10497);
-    TextDrawSetShadow(logo[2], 101);
+    logo[2] = TextDrawCreate(556.320190, 388.550323, "F");
+    TextDrawLetterSize(logo[2], 0.501200, 2.340832);
+    TextDrawAlignment(logo[2], 3);
+    TextDrawColor(logo[2], 245170431);
+    TextDrawSetShadow(logo[2], 0);
     TextDrawSetOutline(logo[2], 1);
-    TextDrawBackgroundColor(logo[2], 11007);
-    TextDrawFont(logo[2], 2);
+    TextDrawBackgroundColor(logo[2], 255);
+    TextDrawFont(logo[2], 1);
     TextDrawSetProportional(logo[2], 1);
-    TextDrawSetShadow(logo[2], 101);
+    TextDrawSetShadow(logo[2], 0);
 
-    logo[3] = TextDrawCreate(563.615905, 421.750000, ".");
-    TextDrawLetterSize(logo[3], 9.103252, 0.625832);
-    TextDrawAlignment(logo[3], 2);
+    logo[3] = TextDrawCreate(558.194213, 388.550231, "REEROAM");
+    TextDrawLetterSize(logo[3], 0.501200, 2.340832);
+    TextDrawAlignment(logo[3], 1);
     TextDrawColor(logo[3], -1);
     TextDrawSetShadow(logo[3], 0);
     TextDrawSetOutline(logo[3], 1);
@@ -116,5 +96,28 @@ hook OnGameModeInit()
     TextDrawFont(logo[3], 1);
     TextDrawSetProportional(logo[3], 1);
     TextDrawSetShadow(logo[3], 0);
+
+    logo[4] = TextDrawCreate(672.045349, 415.966949, ".");
+    TextDrawLetterSize(logo[4], 15.529273, -0.774167);
+    TextDrawAlignment(logo[4], 3);
+    TextDrawColor(logo[4], -1);
+    TextDrawSetShadow(logo[4], 0);
+    TextDrawSetOutline(logo[4], 1);
+    TextDrawBackgroundColor(logo[4], 255);
+    TextDrawFont(logo[4], 1);
+    TextDrawSetProportional(logo[4], 1);
+    TextDrawSetShadow(logo[4], 0);
+    TextDrawSetSelectable(logo[4], true);
+
+    logo[5] = TextDrawCreate(559.868530, 410.500030, "www.libertyfreeroam.com");
+    TextDrawLetterSize(logo[5], 0.272092, 1.436666);
+    TextDrawAlignment(logo[5], 2);
+    TextDrawColor(logo[5], -1);
+    TextDrawSetShadow(logo[5], 0);
+    TextDrawSetOutline(logo[5], 1);
+    TextDrawBackgroundColor(logo[5], 255);
+    TextDrawFont(logo[5], 1);
+    TextDrawSetProportional(logo[5], 1);
+    TextDrawSetShadow(logo[5], 0);
     return 1;
 }
