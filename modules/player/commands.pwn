@@ -47,7 +47,7 @@ hook OnGameModeInit()
 YCMD:comandos(playerid, params[], help)
 {
 	PlaySelectSound(playerid);
-	ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Fechar", "");
+	ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Selecionar", "Fechar");
 	return 1;
 }
 
