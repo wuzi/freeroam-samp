@@ -44,25 +44,10 @@ hook OnGameModeInit()
 
 //------------------------------------------------------------------------------
 
-// Recomendável manter a lista em até 10 linhas, para melhor visualização
 YCMD:comandos(playerid, params[], help)
 {
 	PlaySelectSound(playerid);
-	ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_MSGBOX, "Lista de Comandos",
-	"* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite\n\
-	* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id\n\
-	* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome\n\
-	* /contar - /drift - /contador - /irevento - /lobby - /afk\n\
-	* /carcmd - /regras - /creditos - /acmds", "Fechar", "");
-	/*SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar - /drift - /contador - /irevento - /lobby - /afk");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /carcmd - /regras - /creditos");
-	if(IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
-		SendClientMessage(playerid, COLOR_SUB_TITLE, "* /acmds");
-	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");*/
+	ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Fechar", "");
 	return 1;
 }
 
@@ -892,6 +877,47 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	switch(dialogid)
 	{
+		case DIALOG_COMMAND_LIST:
+		{
+			if(!response)
+				PlayCancelSound(playerid);
+			else
+			{
+				switch (listitem)
+				{
+					case 0:
+					{
+						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_PLAYER, DIALOG_STYLE_LIST, "Lista de Comandos: Jogador",
+						"/ir\n/pm\n/clima\n/dia\n/tarde\n/noite\n/lutas\n/sp\n/irp\n/mdist\n/reportar\n/relatorio\n/admins\n/id\n/contar\n/irevento\n/lobby\n/afk", "Fechar", "Voltar");
+					}
+					case 1:
+					{
+						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_VEHICLE, DIALOG_STYLE_LIST, "Lista de Comandos: Veículo",
+						"/car\n/reparar\n/tunar\n/x\n/listadecarros\n/placa\n/ejetar\n/farol\n/drift\n/contador", "Fechar", "Voltar");
+					}
+					case 2:
+					{
+						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_GENERAL, DIALOG_STYLE_LIST, "Lista de Comandos: Geral",
+						"/regras\n/carcmd\n/creditos", "Fechar", "Voltar");
+					}
+					case 3:
+					{
+						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_ANIMS, DIALOG_STYLE_LIST, "Lista de Comandos: Animações",
+						"/animes\n/renderse\n/bebado\n/mirar\n/rir\n/roubar\n/cruzarbracos\n/mecherboca\n/pensar\n/medo\n/crack\
+						\n/fumar\n/lavarmaos\n/sentar\n/sentarcadeira\n/falar\n/tapanabunda\n/deitar\n/levantar\n/abrirportao\n/pegarbebida\n/chamargarcom\n/mostrar\
+						\n/mostrar\n/graffiti\n/chorar\n/triste\n/beber\n/comer\n/preparar\n/vomitar\n/dancar\n/masturbar\n/apontar\n/acenar\n/taichi\n/verhoras", "Fechar", "Voltar");
+					}
+				}
+			}
+		}
+		case DIALOG_COMMAND_LIST_PLAYER, DIALOG_COMMAND_LIST_VEHICLE, DIALOG_COMMAND_LIST_GENERAL, DIALOG_COMMAND_LIST_ANIMS:
+		{
+			PlayCancelSound(playerid);
+			if(!response)
+			{
+				ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Fechar", "");
+			}
+		}
 		case DIALOG_VEHICLE_LIST:
 		{
 			if(!response)
