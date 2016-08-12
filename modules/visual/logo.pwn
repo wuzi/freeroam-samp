@@ -73,7 +73,7 @@ task OnLogoUpdate[15000]()
 
 hook OnGameModeInit()
 {
-    logo[0] = TextDrawCreate(554.716125, 366.749816, "LIBERTY_FREEROAM");
+    logo[0] = TextDrawCreate(554.716125, 386.749816, "LIBERTY_FREEROAM");
     TextDrawLetterSize(logo[0], 0.360175, 2.299999);
     TextDrawAlignment(logo[0], 2);
     TextDrawColor(logo[0], 2110249193);
@@ -84,7 +84,7 @@ hook OnGameModeInit()
     TextDrawSetProportional(logo[0], 1);
     TextDrawSetShadow(logo[0], -22);
 
-    logo[1] = TextDrawCreate(585.168090, 383.666656, ".");
+    logo[1] = TextDrawCreate(585.168090, 403.666656, ".");
     TextDrawLetterSize(logo[1], 9.103252, 0.625832);
     TextDrawAlignment(logo[1], 2);
     TextDrawColor(logo[1], -1);
@@ -95,7 +95,7 @@ hook OnGameModeInit()
     TextDrawSetProportional(logo[1], 1);
     TextDrawSetShadow(logo[1], 0);
 
-    logo[2] = TextDrawCreate(520.512451, 386.000213, "O_RESPEITO_QUE_IMPOMOS_DEFINE_OQUE_SOMOS~n~");
+    logo[2] = TextDrawCreate(520.512451, 406.000213, "O_RESPEITO_QUE_IMPOMOS_DEFINE_OQUE_SOMOS~n~");
     TextDrawLetterSize(logo[2], 0.112327, 2.136665);
     TextDrawAlignment(logo[2], 1);
     TextDrawColor(logo[2], -10497);
@@ -106,7 +106,7 @@ hook OnGameModeInit()
     TextDrawSetProportional(logo[2], 1);
     TextDrawSetShadow(logo[2], 101);
 
-    logo[3] = TextDrawCreate(563.615905, 401.750000, ".");
+    logo[3] = TextDrawCreate(563.615905, 421.750000, ".");
     TextDrawLetterSize(logo[3], 9.103252, 0.625832);
     TextDrawAlignment(logo[3], 2);
     TextDrawColor(logo[3], -1);
