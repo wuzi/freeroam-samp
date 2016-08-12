@@ -96,8 +96,8 @@ SavePlayerAccount(playerid)
         return 0;
 
     // Salvar conta
-    new query[168];
-	mysql_format(gMySQL, query, sizeof(query), "UPDATE `users` SET `ip`='%s', `skin`=%d, `admin`=%d, `last_login`=%d WHERE `id`=%d", gPlayerAccountData[playerid][e_player_ip], GetPlayerSkin(playerid), gPlayerAccountData[playerid][e_player_admin], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
+    new query[198];
+	mysql_format(gMySQL, query, sizeof(query), "UPDATE users SET money=%d, skin=%d, admin=%d, drift_points=%d, ip='%s', last_login=%d WHERE id=%d", GetPlayerCash(playerid), GetPlayerSkin(playerid), gPlayerAccountData[playerid][e_player_admin], GetPlayerDriftPoints(playerid), gPlayerAccountData[playerid][e_player_ip], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
 	mysql_pquery(gMySQL, query);
     mysql_format(gMySQL, query, sizeof(query), "UPDATE user_preferences SET color=%d, fight_style=%d, auto_repair=%d, name_tags=%d, goto=%d, drift=%d, drift_counter=%d WHERE user_id=%d",
     GetPlayerColor(playerid), GetPlayerFightingStyle(playerid), GetPlayerAutoRepairState(playerid), GetPlayerNameTagsState(playerid), GetPlayerGotoState(playerid), GetPlayerDriftState(playerid), GetPlayerDriftCounter(playerid), gPlayerAccountData[playerid][e_player_database_id]);
@@ -156,7 +156,7 @@ hook OnPlayerRequestClass(playerid, classid)
         InterpolateCameraLookAt(playerid, 1333.0903, -1205.6227, 203.4406, 1333.0903, -1205.6227, 197.4406, 30000, CAMERA_MOVE);
     }
     else
-    {        
+    {
         SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
         SpawnPlayer(playerid);
     }
@@ -358,6 +358,7 @@ public OnAccountLoad(playerid)
 	{
         GetPlayerIp(playerid, gPlayerAccountData[playerid][e_player_ip], 16);
         gPlayerAccountData[playerid][e_player_database_id]  = cache_get_field_content_int(0, "id", gMySQL);
+        gPlayerAccountData[playerid][e_player_money]        = cache_get_field_content_int(0, "money", gMySQL);
         gPlayerAccountData[playerid][e_player_skin]         = cache_get_field_content_int(0, "skin", gMySQL);
         gPlayerAccountData[playerid][e_player_admin]        = cache_get_field_content_int(0, "admin", gMySQL);
         gPlayerAccountData[playerid][e_player_lastlogin]    = cache_get_field_content_int(0, "last_login", gMySQL);
@@ -366,6 +367,9 @@ public OnAccountLoad(playerid)
         SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
         TogglePlayerSpectating(playerid, false);
         ShowPlayerLobby(playerid);
+
+        // Other data
+        SetPlayerDriftPoints(playerid, cache_get_field_content_int(0, "drift_points", gMySQL));
 
         // Load player preferences
         SetPlayerColor(playerid,            cache_get_field_content_int(0, "color", gMySQL));
