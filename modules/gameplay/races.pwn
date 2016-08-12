@@ -753,7 +753,7 @@ IsRaceDialogVisible(playerid)
 
 ShowPlayerRaceList(playerid)
 {
-    new output[512], string[64], status[24];
+    new output[4096], string[64], status[24];
     strcat(output, "Nome\tJogadores\tStatus\n");
     for(new i = 0; i < MAX_RACES; i++)
     {
