@@ -141,6 +141,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/events.pwn"
 // #include "../modules/gameplay/anticheat.pwn"
 #include "../modules/gameplay/animations.pwn"
+#include "../modules/gameplay/pause.pwn"
 
 //------------------------------------------------------------------------------
 

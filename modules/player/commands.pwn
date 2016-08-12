@@ -52,13 +52,13 @@ YCMD:comandos(playerid, params[], help)
 	"* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite\n\
 	* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id\n\
 	* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome\n\
-	* /contar - /drift - /contador - /irevento - /lobby\n\
+	* /contar - /drift - /contador - /irevento - /lobby - /afk\n\
 	* /carcmd - /regras - /creditos - /acmds", "Fechar", "");
 	/*SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos ----------------------------------------");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /car - /reparar - /ir - /pm - /tunar - /x - /listadecarros - /clima - /dia - /tarde - /noite");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /placa - /lutas - /sp - /irp - /mdist - /reportar - /relatorio - /ejetar - /farol - /admins - /id");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /eu - /pagar - /autoreparo - /janela - /nick - /goto - /kill - /myacc - /mudarsenha - /mudarnome");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar - /drift - /contador - /irevento - /lobby");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /contar - /drift - /contador - /irevento - /lobby - /afk");
 	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /carcmd - /regras - /creditos");
 	if(IsPlayerAdmin(playerid) || GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
 		SendClientMessage(playerid, COLOR_SUB_TITLE, "* /acmds");
@@ -480,6 +480,32 @@ YCMD:ejetar(playerid, params[], help)
 	return true;
 }
 
+//------------------------------------------------------------------------------
+
+YCMD:afk(playerid, params[], help)
+{
+	new count = 0, string[86], hours, minutes, seconds, milliseconds;
+	SendClientMessage(playerid, COLOR_TITLE, "- Jogadores ausentes -");
+
+	foreach(new i: Player)
+	{
+		if(IsPlayerPaused(i))
+		{
+			milliseconds = GetTickCount() - GetPlayerPausedTime(i);
+			seconds = (milliseconds / 1000) % 60;
+			minutes = ((milliseconds / (1000*60)) % 60);
+			hours   = ((milliseconds / (1000*60*60)) % 24);
+
+			format(string, sizeof string, "* %s {A6A6A6}(ID: %i){FFFFFF} - %02d:%02d:%02d", GetPlayerNamef(i), i, hours, minutes, seconds);
+			SendClientMessage(playerid, COLOR_WHITE, string);
+			count++;
+		}
+	}
+
+	if(count == 0)
+		SendClientMessage(playerid, COLOR_ERROR, "* Nenhum jogador ausente online.");
+	return 1;
+}
 
 //------------------------------------------------------------------------------
 
