@@ -150,6 +150,7 @@ hook OnGameModeInit()
 // #include "../modules/gameplay/anticheat.pwn"
 #include "../modules/gameplay/animations.pwn"
 #include "../modules/gameplay/pause.pwn"
+#include "../modules/gameplay/npc.pwn"
 
 //------------------------------------------------------------------------------
 
