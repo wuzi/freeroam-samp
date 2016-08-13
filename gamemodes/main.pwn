@@ -138,13 +138,13 @@ hook OnGameModeInit()
 #include "../modules/core/advertisements.pwn"
 
 /* Gameplay */
-#include "../modules/gameplay/derby.pwn"
 #include "../modules/gameplay/bank.pwn"
 #include "../modules/gameplay/chat.pwn"
 #include "../modules/gameplay/colors.pwn"
 #include "../modules/gameplay/tuning.pwn"
 #include "../modules/gameplay/racecreator.pwn"
 #include "../modules/gameplay/races.pwn"
+#include "../modules/gameplay/derby.pwn"
 #include "../modules/gameplay/drift.pwn"
 #include "../modules/gameplay/events.pwn"
 // #include "../modules/gameplay/anticheat.pwn"

@@ -36,7 +36,9 @@ hook OnPlayerText(playerid, text[])
 	}
     else
     {
-        SendPlayerMessageToAll(playerid, text);
+        new message[144];
+        format(message, sizeof(message), "%s (%i): {ffffff}%s", GetPlayerNamef(playerid), playerid, text);
+        SendClientMessageToAll(GetPlayerColor(playerid), message);
     }
     return -1;
 }
