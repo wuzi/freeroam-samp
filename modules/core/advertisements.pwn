@@ -22,14 +22,12 @@ task SendGlobalAdvertise[ADVERTISE_INTERVAL]()
 //------------------------------------------------------------------------------
 
 static hostnames[][] = {
-    "» [LF] » Libery Freeroam « [LF] 2016 [GM v1.0] «",
-    "» [LF] » Libery Freeroam « Multiplos modos de jogo «",
-    "» [LF] » Libery Freeroam « Várias corridas «"
+    "« LF - Liberty Freeroam (0.3.7) »"
 };
 
 task UpdateHostName[UPDATE_HOSTNAME_INTERVAL]()
 {
     new cmd[128];
-    format(cmd, sizeof(cmd), "hostname %s", hostnames[random(sizeof(hostnames))]);
+    format(cmd, sizeof(cmd), "hostname            %s", hostnames[random(sizeof(hostnames))]);
     SendRconCommand(cmd);
 }

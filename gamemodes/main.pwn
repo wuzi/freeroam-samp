@@ -19,7 +19,7 @@
 #define SCRIPT_VERSION_MAJOR							0
 #define SCRIPT_VERSION_MINOR							1
 #define SCRIPT_VERSION_PATCH							0
-#define SCRIPT_VERSION_NAME								"L:F"
+#define SCRIPT_VERSION_NAME								"Freeroam/DM/Stunt/Derby"
 
 // Banco de Dados
 #define MySQL_HOST                                      "127.0.0.1"
