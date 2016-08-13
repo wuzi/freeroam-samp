@@ -496,21 +496,25 @@ YCMD:afk(playerid, params[], help)
 
 YCMD:admins(playerid, params[], help)
 {
-	new count = 0, string[74];
-	SendClientMessage(playerid, COLOR_TITLE, "- Membros da moderação online -");
-
+	new count = 0, string[74], output[4096];
 	foreach(new i: Player)
 	{
 		if(GetPlayerAdminLevel(i) >= PLAYER_RANK_RECRUIT)
 		{
-			format(string, sizeof string, "* {FFFFFF}[{%06x}%s{FFFFFF}] %s {A6A6A6}(ID: %i)", GetPlayerRankColor(i) >>> 8, GetPlayerAdminRankName(i, true), GetPlayerNamef(i), i);
-			SendClientMessage(playerid, COLOR_INFO, string);
+			format(string, sizeof string, "{FFFFFF}* [{%06x}%s{FFFFFF}] %s {A6A6A6}(ID: %i)\n", GetPlayerRankColor(i) >>> 8, GetPlayerAdminRankName(i, true), GetPlayerNamef(i), i);
+			strcat(output, string);
 			count++;
 		}
 	}
 
 	if(count == 0)
 		SendClientMessage(playerid, COLOR_ERROR, "* Nenhum membro da moderação online.");
+	else
+	{
+		PlaySelectSound(playerid);
+		strcat(output, "\n{ffffff}Caso deseja falar com um administrador utilize o campo abaixo:");
+		ShowPlayerDialog(playerid, DIALOG_ADMIN_REPORT, DIALOG_STYLE_INPUT, "Administradores Online", output, "Enviar", "Cancelar");
+	}
 	return 1;
 }
 
@@ -877,6 +881,18 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	switch(dialogid)
 	{
+		case DIALOG_ADMIN_REPORT:
+		{
+			if(!response)
+				PlayCancelSound(playerid);
+			else
+			{
+				new command[140];
+				PlaySelectSound(playerid);
+				format(command, sizeof(command), "/relatorio %s", inputtext);
+				CallRemoteFunction("OnPlayerCommandText", "is", playerid, command);
+			}
+		}
 		case DIALOG_COMMAND_LIST:
 		{
 			if(!response)
