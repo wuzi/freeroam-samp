@@ -157,6 +157,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/animations.pwn"
 #include "../modules/gameplay/pause.pwn"
 #include "../modules/gameplay/npc.pwn"
+#include "../modules/gameplay/vehiclename.pwn"
 
 //------------------------------------------------------------------------------
 

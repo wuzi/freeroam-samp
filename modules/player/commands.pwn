@@ -816,6 +816,7 @@ YCMD:car(playerid, params[], help)
 			LinkVehicleToInterior(gplCreatedVehicle[playerid][i], GetPlayerInterior(playerid));
 			PutPlayerInVehicle(playerid, gplCreatedVehicle[playerid][i], 0);
 			SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você criou um %s.", GetVehicleName(gplCreatedVehicle[playerid][i]));
+			ShowPlayerVehicleName(playerid);
 			break;
 		}
 	}
