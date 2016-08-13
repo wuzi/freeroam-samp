@@ -47,7 +47,7 @@ hook OnGameModeInit()
 YCMD:comandos(playerid, params[], help)
 {
 	PlaySelectSound(playerid);
-	ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Selecionar", "Fechar");
+	ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Selecionar", "Fechar");
 	return 1;
 }
 
@@ -65,11 +65,11 @@ YCMD:carcmd(playerid, params[], help)
 
 YCMD:regras(playerid, params[], help)
 {
-	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Regras ----------------------------------------");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Não é permitido utilizar cheats.");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Não é permitido desrespeitar outros jogadores.");
-	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Não é permitido fazer anúncio de outros servidores.");
-	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Regras ----------------------------------------");
+	ShowPlayerDialog(playerid, DIALOG_RULES, DIALOG_STYLE_MSGBOX, "{59c72c}LF - {FFFFFF}Regras",
+	"{59c72c}1 - {ffffff}Não é permitido utilizar cheats.\n\
+	{59c72c}2 - {ffffff}Não é permitido desrespeitar outros jogadres.\n\
+	{59c72c}3 - {ffffff}Não é permitido fazer anúncio de outros servidores.",
+	"Fechar", "");
 	return 1;
 }
 
@@ -910,22 +910,22 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					case 0:
 					{
-						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_PLAYER, DIALOG_STYLE_LIST, "Lista de Comandos: Jogador",
+						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_PLAYER, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos: Jogador",
 						"/ir\n/pm\n/clima\n/dia\n/tarde\n/noite\n/lutas\n/sp\n/irp\n/mdist\n/reportar\n/relatorio\n/admins\n/id\n/contar\n/irevento\n/lobby\n/afk", "Fechar", "Voltar");
 					}
 					case 1:
 					{
-						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_VEHICLE, DIALOG_STYLE_LIST, "Lista de Comandos: Veículo",
+						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_VEHICLE, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos: Veículo",
 						"/car\n/reparar\n/tunar\n/x\n/listadecarros\n/placa\n/ejetar\n/farol\n/drift\n/contador", "Fechar", "Voltar");
 					}
 					case 2:
 					{
-						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_GENERAL, DIALOG_STYLE_LIST, "Lista de Comandos: Geral",
+						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_GENERAL, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos: Geral",
 						"/regras\n/carcmd\n/ajudaacessorio\n/creditos", "Fechar", "Voltar");
 					}
 					case 3:
 					{
-						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_ANIMS, DIALOG_STYLE_LIST, "Lista de Comandos: Animações",
+						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_ANIMS, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos: Animações",
 						"/animes\n/renderse\n/bebado\n/mirar\n/rir\n/roubar\n/cruzarbracos\n/mecherboca\n/pensar\n/medo\n/crack\
 						\n/fumar\n/lavarmaos\n/sentar\n/sentarcadeira\n/falar\n/tapanabunda\n/deitar\n/levantar\n/abrirportao\n/pegarbebida\n/chamargarcom\n/mostrar\
 						\n/mostrar\n/graffiti\n/chorar\n/triste\n/beber\n/comer\n/preparar\n/vomitar\n/dancar\n/masturbar\n/apontar\n/acenar\n/taichi\n/verhoras", "Fechar", "Voltar");
@@ -938,7 +938,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			PlayCancelSound(playerid);
 			if(!response)
 			{
-				ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Selecionar", "Fechar");
+				ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Selecionar", "Fechar");
 			}
 		}
 		case DIALOG_VEHICLE_LIST:
@@ -1109,8 +1109,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 ShowPlayerCredits(playerid)
 {
-	ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{ffffff}Pessoas que contruibuiram para que o {67f571}L{ffffff}iberty {67f571}Freeroam{ffffff} existisse",
-	"\t\t\t\t{67f571}L{ffffff}iberty {67f571}Freeroam{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {67f571}L{ffffff}:{67f571}F\n\n{ffffff}Contribuidores:\nY_Less, Incognito, BlueG, PawnHunter, NexiusTailer, SA-MP Team e você", "Fechar", "");
+	ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{59c72c}LF - {FFFFFF}Creditos",
+	"\t\t\t{59c72c}L{ffffff}iberty {59c72c}Freeroam{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {59c72c}L{ffffff}:{59c72c}F\n\n\
+	{ffffff}Contribuidores:\n\tY_Less,\n\tIncognito,\n\tBlueG,\n\tPawnHunter,\n\tNexiusTailer,\n\tSA-MP Team,\n\tVocê", "Fechar", "");
 }
 
 //------------------------------------------------------------------------------

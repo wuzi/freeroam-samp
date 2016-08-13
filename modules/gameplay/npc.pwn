@@ -31,14 +31,7 @@ hook OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP checkpointid)
     if (checkpointid == gCheckpoint)
     {
         PlaySelectSound(playerid);
-        ShowPlayerDialog(playerid, DIALOG_SPAWN_HELPER, DIALOG_STYLE_MSGBOX,
-            "Bem-vindo", "{ffffff}Bem-vindo ao {59c72c}L{ffffff}iberty {59c72c}F{ffffff}reeroam!\n\n\
-            Para alterar seu modo de jogo utilize o comando /lobby.\n\
-            Para visualizar os comandos disponíveis utilize o comando /cmds.\n\
-            Não deixe de ler as /regras do servidor para evitar problemas.\n\
-            Caso deseja conhecer as pessoas que fizeram o Liberty Freeroam ser possível digite /creditos.\n\n\
-            Desejamos um bom jogo!",
-            "Fechar", "");
+        ShowPlayerDialog(playerid, DIALOG_SPAWN_HELPER, DIALOG_STYLE_LIST, "{59c72c}LF - {ffffff}Comandos Gerais", "Comandos\nRegras\nCreditos", "Selecionar", "Fechar");
     }
 }
 
@@ -50,7 +43,21 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     {
         case DIALOG_SPAWN_HELPER:
         {
-            PlayCancelSound(playerid);
+            if(!response)
+                PlayCancelSound(playerid);
+            else
+            {
+                switch (listitem)
+                {
+                    case 0:
+                        CallRemoteFunction("OnPlayerCommandText", "is", playerid, "/cmds");
+                    case 1:
+                        CallRemoteFunction("OnPlayerCommandText", "is", playerid, "/regras");
+                    case 2:
+                        CallRemoteFunction("OnPlayerCommandText", "is", playerid, "/creditos");
+
+                }
+            }
         }
     }
     return 1;
