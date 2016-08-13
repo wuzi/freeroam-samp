@@ -9,34 +9,22 @@
 */
 
 static messages[][] = {
-    "Mensagem 1",
-    "Mensagem 2",
-    "Mensagem 3",
-    "Mensagem 4",
-    "Mensagem 5",
-    "Mensagem 6",
-    "Mensagem 7",
-    "Mensagem 8",
-    "Mensagem 9"
+    "Para ver as vantagens VIP digite '{f00c0c}/vantagensvip{FFFFFF}'.",
+    "Está com dúvidas? Digite '{f00c0c}/cmds{FFFFFF}' ou peça ajuda a um administrador {f00c0c}/admins{FFFFFF}.",
+    "Viu um cheater? Contate a um administrador usando '{f00c0c}/reportar{FFFFFF}'."
 };
 
 task SendGlobalAdvertise[ADVERTISE_INTERVAL]()
 {
-    SendClientMessageToAll(0xffde00ff, messages[random(sizeof(messages))]);
+    SendClientMessageToAll(COLOR_WHITE, messages[random(sizeof(messages))]);
 }
 
 //------------------------------------------------------------------------------
 
 static hostnames[][] = {
-    "Liberty Freeroam Hostname 1",
-    "Liberty Freeroam Hostname 2",
-    "Liberty Freeroam Hostname 3",
-    "Liberty Freeroam Hostname 4",
-    "Liberty Freeroam Hostname 5",
-    "Liberty Freeroam Hostname 6",
-    "Liberty Freeroam Hostname 7",
-    "Liberty Freeroam Hostname 8",
-    "Liberty Freeroam Hostname 9"
+    "» [LF] » Libery Freeroam « [LF] 2016 [GM v1.0] «",
+    "» [LF] » Libery Freeroam « Multiplos modos de jogo «",
+    "» [LF] » Libery Freeroam « Várias corridas «"
 };
 
 task UpdateHostName[UPDATE_HOSTNAME_INTERVAL]()
