@@ -456,6 +456,7 @@ hook OnPlayerUpdate(playerid)
                     {
                         if(gPlayerData[playerid][e_spec_targetid] > i)
                         {
+                            gPlayerData[playerid][e_spec_targetid] = i;
                             SetPlayerSpecatateTarget(playerid, i);
                         }
                     }
@@ -469,6 +470,7 @@ hook OnPlayerUpdate(playerid)
                     {
                         if(gPlayerData[playerid][e_spec_targetid] < i)
                         {
+                            gPlayerData[playerid][e_spec_targetid] = i;
                             SetPlayerSpecatateTarget(playerid, i);
                         }
                     }
@@ -602,7 +604,7 @@ ResetPlayerDerbyData(playerid)
 {
     if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
         TogglePlayerSpectating(playerid, false);
-        
+
     new derbyid = GetPlayerDerby(playerid);
     SetPlayerDerby(playerid, INVALID_DERBY_ID);
     gPlayerData[playerid][e_grid_id] = 0;
