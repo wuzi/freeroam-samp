@@ -887,10 +887,17 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				PlayCancelSound(playerid);
 			else
 			{
-				new command[140];
-				PlaySelectSound(playerid);
-				format(command, sizeof(command), "/relatorio %s", inputtext);
-				CallRemoteFunction("OnPlayerCommandText", "is", playerid, command);
+				if(strlen(inputtext) < 1)
+				{
+					CallRemoteFunction("OnPlayerCommandText", "is", playerid, "/admins");
+				}
+				else
+				{					
+					new command[140];
+					PlaySelectSound(playerid);
+					format(command, sizeof(command), "/relatorio %s", inputtext);
+					CallRemoteFunction("OnPlayerCommandText", "is", playerid, command);
+				}
 			}
 		}
 		case DIALOG_COMMAND_LIST:
