@@ -157,7 +157,7 @@ hook OnPlayerRequestClass(playerid, classid)
     }
     else
     {
-        SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
+        SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 1119.9399, -1618.7476, 20.5210, 91.8327, 0, 0, 0, 0, 0, 0);
         SpawnPlayer(playerid);
     }
     return 1;
@@ -338,7 +338,7 @@ public OnAccountRegister(playerid)
     mysql_format(gMySQL, query, sizeof(query), "INSERT INTO user_preferences (user_id) VALUES (%d)", gPlayerAccountData[playerid][e_player_database_id]);
     mysql_tquery(gMySQL, query);
 
-    SetSpawnInfo(playerid, 255, 0, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
+    SetSpawnInfo(playerid, 255, 0, 1119.9399, -1618.7476, 20.5210, 91.8327, 0, 0, 0, 0, 0, 0);
     TogglePlayerSpectating(playerid, false);
     ShowPlayerLobby(playerid);
 
@@ -364,7 +364,7 @@ public OnAccountLoad(playerid)
         gPlayerAccountData[playerid][e_player_lastlogin]    = cache_get_field_content_int(0, "last_login", gMySQL);
         cache_get_field_content(0, "created_at", gPlayerAccountData[playerid][e_player_regdate], gMySQL, 32);
 
-        SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
+        SetSpawnInfo(playerid, 255, gPlayerAccountData[playerid][e_player_skin], 1119.9399, -1618.7476, 20.5210, 91.8327, 0, 0, 0, 0, 0, 0);
         TogglePlayerSpectating(playerid, false);
         ShowPlayerLobby(playerid);
 

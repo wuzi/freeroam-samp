@@ -106,7 +106,7 @@ hook OnGameModeInit()
 	DisableInteriorEnterExits();
 	SetNameTagDrawDistance(40.0);
 	EnableStuntBonusForAll(false);
-	AddPlayerClass(299, 2234.6855, -1260.9462, 23.9329, 270.0490, 0, 0, 0, 0, 0, 0);
+	AddPlayerClass(299, 1119.9399, -1618.7476, 20.5210, 91.8327, 0, 0, 0, 0, 0, 0);
 	return 1;
 }
 
