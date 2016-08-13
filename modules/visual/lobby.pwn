@@ -135,6 +135,11 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
                     ResetPlayerDerbyData(playerid);
                 }
 
+                if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+                {
+                    TogglePlayerSpectating(playerid, false);
+                }
+
                 PlayConfirmSound(playerid);
                 gPlayerCurrentMode[playerid] = GAMEMODE_FREEROAM;
                 SetPlayerPos(playerid, 2234.6855, -1260.9462, 23.9329);

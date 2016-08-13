@@ -209,7 +209,7 @@ public OnPlayerEnterRace(playerid, raceid)
     {
         ResetPlayerDerbyData(playerid);
     }
-    
+
     HidePlayerLobby(playerid);
     SetPlayerHealth(playerid, 9999.0);
     TogglePlayerControllable(playerid, true);
@@ -625,6 +625,9 @@ ShowPlayerRaceCheckpoint(playerid)
 
 ResetPlayerRaceData(playerid)
 {
+    if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+        TogglePlayerSpectating(playerid, false);
+
     new raceid = GetPlayerRace(playerid);
     SetPlayerRace(playerid, INVALID_RACE_ID);
     if(raceid != INVALID_RACE_ID)
@@ -635,9 +638,6 @@ ResetPlayerRaceData(playerid)
             DestroyVehicle(gVehicleData[raceid][grid][e_vehicle_id]);
             gVehicleData[raceid][grid][e_vehicle_id] = INVALID_VEHICLE_ID;
             DisablePlayerRaceCheckpoint(playerid);
-
-            if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
-                TogglePlayerSpectating(playerid, false);
 
             // Verifica se ainda há jogadores correndo
             new remaining_racers = 0;

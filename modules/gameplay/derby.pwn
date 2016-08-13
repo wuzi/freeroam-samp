@@ -600,6 +600,9 @@ GetDerbyPlayerPoolSize(derbyid)
 
 ResetPlayerDerbyData(playerid)
 {
+    if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+        TogglePlayerSpectating(playerid, false);
+        
     new derbyid = GetPlayerDerby(playerid);
     SetPlayerDerby(playerid, INVALID_DERBY_ID);
     gPlayerData[playerid][e_grid_id] = 0;
@@ -612,9 +615,6 @@ ResetPlayerDerbyData(playerid)
         {
             DestroyVehicle(gPlayerData[playerid][e_vehicle_id]);
             gPlayerData[playerid][e_vehicle_id] = INVALID_VEHICLE_ID;
-
-            if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
-                TogglePlayerSpectating(playerid, false);
 
             new remaining_players = 0;
             foreach(new i: Player)
