@@ -24,7 +24,7 @@ static bool:isPlayerRegistered[MAX_PLAYERS];
 
 ShowPlayerAuthentication(playerid, bool:login)
 {
-    PlayAudioStreamForPlayer(playerid, "http://servidor30.brlogic.com:8112/live");
+    PlayAudioStreamForPlayer(playerid, "https://dl.dropboxusercontent.com/u/88802402/lfintro.mp3");
     ClearPlayerScreen(playerid);
 
     if(login)
@@ -118,7 +118,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
     if(isTextDrawVisible[playerid])
-    {        
+    {
         if(playertextid == loginTextDraw[playerid][3])
         {
             new info[104];
