@@ -41,71 +41,74 @@ ShowPlayerAuthentication(playerid, bool:login)
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-    if(clickedid == Text:INVALID_TEXT_DRAW)
+    if(isTextDrawVisible[playerid])
     {
-         if(isTextDrawVisible[playerid] && !isDialogVisible[playerid])
-         {
-             SelectTextDraw(playerid, 0x74c624ff);
-         }
-    }
-    else if(clickedid == registerTextDraw[2])
-    {
-        isDialogVisible[playerid] = true;
-        ShowPlayerDialog(playerid, DIALOG_REGISTER_GENDER, DIALOG_STYLE_MSGBOX, "Cadastro: Sexo", "Informe seu sexo", "Masculino", "Feminino");
-        CancelSelectTextDraw(playerid);
-    }
-    else if(clickedid == registerTextDraw[3])
-    {
-        isDialogVisible[playerid] = true;
-        ShowPlayerDialog(playerid, DIALOG_REGISTER_PASSWORD, DIALOG_STYLE_PASSWORD, "Cadastro: Senha", "Informe sua senha", "Salvar", "Voltar");
-        CancelSelectTextDraw(playerid);
-    }
-    else if(clickedid == registerTextDraw[4])
-    {
-        new output[290];
-        for(new i = 10; i < 100; i++)
+        if(clickedid == Text:INVALID_TEXT_DRAW)
         {
-            new string[6];
-            format(string, sizeof(string), "%i\n", i);
-            strcat(output, string);
+             if(!isDialogVisible[playerid])
+             {
+                 SelectTextDraw(playerid, 0x74c624ff);
+             }
         }
-        isDialogVisible[playerid] = true;
-        ShowPlayerDialog(playerid, DIALOG_REGISTER_AGE, DIALOG_STYLE_LIST, "Cadastro: Idade", output, "Salvar", "Voltar");
-        CancelSelectTextDraw(playerid);
-    }
-    else if(clickedid == registerTextDraw[5])
-    {
-        isDialogVisible[playerid] = true;
-        ShowPlayerDialog(playerid, DIALOG_REGISTER_EMAIL, DIALOG_STYLE_INPUT, "Cadastro: Email", "Insira seu e-mail", "Salvar", "Voltar");
-        CancelSelectTextDraw(playerid);
-    }
-    else if(clickedid == registerTextDraw[6])
-    {
-        if(strlen(GetPlayerPassword(playerid)) < 4 || strlen(GetPlayerEmail(playerid)) < 4 || GetPlayerAge(playerid) < 10 || GetPlayerGender(playerid) == -1)
+        else if(clickedid == registerTextDraw[2])
         {
-            ShowPlayerRegisterTextDrawErr(playerid);
-            PlayErrorSound(playerid);
+            isDialogVisible[playerid] = true;
+            ShowPlayerDialog(playerid, DIALOG_REGISTER_GENDER, DIALOG_STYLE_MSGBOX, "Cadastro: Sexo", "Informe seu sexo", "Masculino", "Feminino");
+            CancelSelectTextDraw(playerid);
         }
-        else
+        else if(clickedid == registerTextDraw[3])
         {
-            StopAudioStreamForPlayer(playerid);
-            PlayConfirmSound(playerid);
-            SetPlayerLogged(playerid, true);
-            SendClientMessage(playerid, 0x88AA62FF, "Cadastrado.");
-            HidePlayerRegisterTextDraw(playerid);
+            isDialogVisible[playerid] = true;
+            ShowPlayerDialog(playerid, DIALOG_REGISTER_PASSWORD, DIALOG_STYLE_PASSWORD, "Cadastro: Senha", "Informe sua senha", "Salvar", "Voltar");
+            CancelSelectTextDraw(playerid);
+        }
+        else if(clickedid == registerTextDraw[4])
+        {
+            new output[290];
+            for(new i = 10; i < 100; i++)
+            {
+                new string[6];
+                format(string, sizeof(string), "%i\n", i);
+                strcat(output, string);
+            }
+            isDialogVisible[playerid] = true;
+            ShowPlayerDialog(playerid, DIALOG_REGISTER_AGE, DIALOG_STYLE_LIST, "Cadastro: Idade", output, "Salvar", "Voltar");
+            CancelSelectTextDraw(playerid);
+        }
+        else if(clickedid == registerTextDraw[5])
+        {
+            isDialogVisible[playerid] = true;
+            ShowPlayerDialog(playerid, DIALOG_REGISTER_EMAIL, DIALOG_STYLE_INPUT, "Cadastro: Email", "Insira seu e-mail", "Salvar", "Voltar");
+            CancelSelectTextDraw(playerid);
+        }
+        else if(clickedid == registerTextDraw[6])
+        {
+            if(strlen(GetPlayerPassword(playerid)) < 4 || strlen(GetPlayerEmail(playerid)) < 4 || GetPlayerAge(playerid) < 10 || GetPlayerGender(playerid) == -1)
+            {
+                ShowPlayerRegisterTextDrawErr(playerid);
+                PlayErrorSound(playerid);
+            }
+            else
+            {
+                StopAudioStreamForPlayer(playerid);
+                PlayConfirmSound(playerid);
+                SetPlayerLogged(playerid, true);
+                SendClientMessage(playerid, 0x88AA62FF, "Cadastrado.");
+                HidePlayerRegisterTextDraw(playerid);
 
-            new playerIP[16], playerName[MAX_PLAYER_NAME];
-            GetPlayerName(playerid, playerName, sizeof(playerName));
-            GetPlayerIp(playerid, playerIP, sizeof(playerIP));
+                new playerIP[16], playerName[MAX_PLAYER_NAME];
+                GetPlayerName(playerid, playerName, sizeof(playerName));
+                GetPlayerIp(playerid, playerIP, sizeof(playerIP));
 
-            new query[256];
-            mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `users` (`username`, `email`, `password`, `ip`, `created_at`) VALUES ('%e', '%e', '%e', '%s', now())", playerName, GetPlayerEmail(playerid), GetPlayerPassword(playerid), playerIP);
-            mysql_tquery(gMySQL, query, "OnAccountRegister", "i", playerid);
+                new query[256];
+                mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `users` (`username`, `email`, `password`, `ip`, `created_at`) VALUES ('%e', '%e', '%e', '%s', now())", playerName, GetPlayerEmail(playerid), GetPlayerPassword(playerid), playerIP);
+                mysql_tquery(gMySQL, query, "OnAccountRegister", "i", playerid);
+            }
         }
-    }
-    else if(clickedid == registerTextDraw[7])
-    {
-        Kick(playerid);
+        else if(clickedid == registerTextDraw[7])
+        {
+            Kick(playerid);
+        }
     }
     return 1;
 }
@@ -114,21 +117,24 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
-    if(playertextid == loginTextDraw[playerid][3])
-    {
-        new info[104];
-        format(info, sizeof(info), "Bem-vindo de volta, %s!\n\nVocê já possui uma conta.\nDigite sua senha para acessar.", GetPlayerNamef(playerid));
-        ShowPlayerDialog(playerid, DIALOG_LOGIN_PASSWORD, DIALOG_STYLE_PASSWORD, "Acesso", info, "Accessar", "Sair");
-    }
-    else if(playertextid == loginTextDraw[playerid][4])
-    {
-        PlaySelectSound(playerid);
-        ShowPlayerDialog(playerid, DIALOG_FORUM, DIALOG_STYLE_MSGBOX, "{ffffff}Nosso fórum",
-    	"{ffffff}www.libertyfreeroam.com.br/forum", "Fechar", "");
-    }
-    else if(playertextid == loginTextDraw[playerid][5])
-    {
-        ShowPlayerCredits(playerid);
+    if(isTextDrawVisible[playerid])
+    {        
+        if(playertextid == loginTextDraw[playerid][3])
+        {
+            new info[104];
+            format(info, sizeof(info), "Bem-vindo de volta, %s!\n\nVocê já possui uma conta.\nDigite sua senha para acessar.", GetPlayerNamef(playerid));
+            ShowPlayerDialog(playerid, DIALOG_LOGIN_PASSWORD, DIALOG_STYLE_PASSWORD, "Acesso", info, "Accessar", "Sair");
+        }
+        else if(playertextid == loginTextDraw[playerid][4])
+        {
+            PlaySelectSound(playerid);
+            ShowPlayerDialog(playerid, DIALOG_FORUM, DIALOG_STYLE_MSGBOX, "{ffffff}Nosso fórum",
+            "{ffffff}www.libertyfreeroam.com.br/forum", "Fechar", "");
+        }
+        else if(playertextid == loginTextDraw[playerid][5])
+        {
+            ShowPlayerCredits(playerid);
+        }
     }
     return 1;
 }

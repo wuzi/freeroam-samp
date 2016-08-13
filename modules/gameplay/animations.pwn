@@ -120,6 +120,7 @@ hook OnPlayerSpawn(playerid)
 		PreloadAnimLib(playerid,"INT_HOUSE");
 		PreloadAnimLib(playerid,"FOOD");
 		PreloadAnimLib(playerid,"PED");
+		PreloadAnimLib(playerid,"CLOTHES");
 		gPlayerAnimLibsPreloaded[playerid] = 1;
 	}
     return 1;

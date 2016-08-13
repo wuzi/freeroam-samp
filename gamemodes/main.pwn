@@ -78,6 +78,7 @@ new gMySQL;
 #include <YSI\y_iterate>
 #include <YSI\y_commands>
 #include <YSI\y_va>
+#include <mSelection>
 #include <drift>
 #include <utils>
 
@@ -130,6 +131,7 @@ hook OnGameModeInit()
 /* Jogador */
 #include "../modules/player/commands.pwn"
 #include "../modules/player/attachments.pwn"
+#include "../modules/player/changeskin.pwn"
 
 /* Admin */
 #include "../modules/admin/commands.pwn"
