@@ -29,8 +29,8 @@ hook OnPlayerText(playerid, text[])
     else if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT && strfind(text, "@", true) == 0 && strlen(text) > 1)
 	{
 		strdel(text, 0, 1);
-		new message[200];
-		format(message, 200, "@ [{%06x}%s{ededed}] %s: {e3e3e3}%s", GetPlayerRankColor(playerid) >>> 8, GetPlayerAdminRankName(playerid, true), GetPlayerNamef(playerid), text);
+		new message[144];
+		format(message, 144, "@ [{%06x}%s{ededed}] %s: {e3e3e3}%s", GetPlayerRankColor(playerid) >>> 8, GetPlayerAdminRankName(playerid, true), GetPlayerNamef(playerid), text);
 		SendAdminMessage(PLAYER_RANK_RECRUIT, 0xedededff, message);
 		return -1;
 	}
@@ -38,7 +38,21 @@ hook OnPlayerText(playerid, text[])
     {
         new message[144];
         format(message, sizeof(message), "%s (%i): {ffffff}%s", GetPlayerNamef(playerid), playerid, text);
-        SendClientMessageToAll(GetPlayerColor(playerid), message);
+
+        if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
+        {
+            new rankName[9];
+            format(rankName, 9, "[%s] ", GetPlayerAdminRankName(playerid, true));
+            strins(message, rankName, 0);
+        }
+
+        foreach(new i: Player)
+        {
+            if(GetPlayerGamemode(i) != GAMEMODE_LOBBY)
+            {
+                SendClientMessage(i, GetPlayerColor(playerid), message);
+            }
+        }
     }
     return -1;
 }
