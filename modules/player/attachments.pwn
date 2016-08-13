@@ -21,6 +21,12 @@ forward OnInsertAttachmentOnDatabase(playerid, index);
 
 //------------------------------------------------------------------------------
 
+static gPickupID;
+static gPlayerTickCount[MAX_PLAYERS];
+static gIsDialogVisible[MAX_PLAYERS];
+
+//------------------------------------------------------------------------------
+
 enum
 {
     LIST_GLASSES,
@@ -354,7 +360,19 @@ hook OnGameModeInit()
     `SX` FLOAT, `SY` FLOAT, `SZ` FLOAT,\
     `Col1` INT(11), `Col2` INT(11),\
 	PRIMARY KEY (ID), KEY (ID)) ENGINE = InnoDB DEFAULT CHARSET = latin1 AUTO_INCREMENT = 1;");
+    gPickupID = CreateDynamicPickup(18645, 1, 206.3237, -100.5559, 1005.2578, 0, 15);
     return 1;
+}
+
+//------------------------------------------------------------------------------
+
+hook OnPlayerPickUpDynPickup(playerid, pickupid)
+{
+    if(pickupid == gPickupID && !gIsDialogVisible[playerid] && gPlayerTickCount[playerid] < GetTickCount())
+    {
+        CallRemoteFunction("OnPlayerCommandText", "is", playerid, "/compraracessorio");
+        gIsDialogVisible[playerid] = true;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -363,6 +381,7 @@ hook OnPlayerDisconnect(playerid, reason)
 {
 	SavePlayerAttachments(playerid);
     ResetPlayerAttachments(playerid);
+    gIsDialogVisible[playerid] = false;
     gIsPlayerEditing[playerid] = false;
 	gPlayerAlreadySpawned[playerid] = false;
     return 1;
@@ -537,6 +556,12 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         "Editar", "");
 
 		SendClientMessage(playerid, 0xFFFFFFFF, "* Você comprou um {CCFF00}acessório{ffffff}! (/ajudaacessorio)");
+
+        gIsDialogVisible[playerid] = false;
+        gPlayerTickCount[playerid] = GetTickCount() + 2500;
+        SetPlayerPos(playerid, 217.4102, -98.5851, 1005.2578);
+        SetPlayerFacingAngle(playerid, 270.5558);
+        SetCameraBehindPlayer(playerid);
 
 		new query[220];
         mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `attachments` (`user_id`, `Index`, `Model`, `Bone`, `X`, `Y`, `Z`, `RX`, `RY`, `RZ`, `SX`, `SY`, `SZ`, `Col1`, `Col2`) VALUES (%d, %d, %d, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0)", GetPlayerDatabaseID(playerid), free_index, attachments_data[(listitem+category)][1]);
