@@ -81,8 +81,8 @@ public OnBuildingLoad()
 
         gBuildingData[i][e_building_locked]   = cache_get_row_int(i, 13, gMySQL);
 
-        gBuildingData[i][e_building_out_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[i][e_building_out_x], gBuildingData[i][e_building_out_y], gBuildingData[i][e_building_out_z], gBuildingData[i][e_building_out_v], gBuildingData[i][e_building_out_i]);
-        gBuildingData[i][e_building_in_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[i][e_building_in_x], gBuildingData[i][e_building_in_y], gBuildingData[i][e_building_in_z], gBuildingData[i][e_building_in_v], gBuildingData[i][e_building_in_i]);
+        gBuildingData[i][e_building_out_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[i][e_building_out_x], gBuildingData[i][e_building_out_y], gBuildingData[i][e_building_out_z] - 0.7, gBuildingData[i][e_building_out_v], gBuildingData[i][e_building_out_i]);
+        gBuildingData[i][e_building_in_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[i][e_building_in_x], gBuildingData[i][e_building_in_y], gBuildingData[i][e_building_in_z] - 0.7, gBuildingData[i][e_building_in_v], gBuildingData[i][e_building_in_i]);
         gCreatedBuildings++;
 	}
     printf("Number of buildings loaded: %d", gCreatedBuildings);
@@ -239,7 +239,7 @@ YCMD:insertbuilding(playerid, params[], help)
     gBuildingData[bid][e_building_out_a]    = a;
     gBuildingData[bid][e_building_out_i]    = i;
     gBuildingData[bid][e_building_out_v]    = v;
-    gBuildingData[bid][e_building_out_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[bid][e_building_out_x], gBuildingData[bid][e_building_out_y], gBuildingData[bid][e_building_out_z], gBuildingData[bid][e_building_out_v], gBuildingData[bid][e_building_out_i]);
+    gBuildingData[bid][e_building_out_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[bid][e_building_out_x], gBuildingData[bid][e_building_out_y], gBuildingData[bid][e_building_out_z] - 0.7, gBuildingData[bid][e_building_out_v], gBuildingData[bid][e_building_out_i]);
     gBuildingData[bid][e_building_in_pkp_id] = CreateDynamicPickup(19902, 1, 0.0, 0.0, 0.0, 50, 50);
 
     SendClientMessagef(playerid, COLOR_ADMIN_ACTION, "* Você inseriu um building no banco de dados, bid: %d.", bid);
@@ -280,7 +280,7 @@ YCMD:updatebuilding(playerid, params[], help)
         gBuildingData[bid][e_building_out_v]    = v;
 
         DestroyDynamicPickup(gBuildingData[bid][e_building_out_pkp_id]);
-        gBuildingData[bid][e_building_out_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[bid][e_building_out_x], gBuildingData[bid][e_building_out_y], gBuildingData[bid][e_building_out_z], gBuildingData[bid][e_building_out_v], gBuildingData[bid][e_building_out_i]);
+        gBuildingData[bid][e_building_out_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[bid][e_building_out_x], gBuildingData[bid][e_building_out_y], gBuildingData[bid][e_building_out_z] - 0.7, gBuildingData[bid][e_building_out_v], gBuildingData[bid][e_building_out_i]);
 
         SendClientMessagef(playerid, COLOR_ADMIN_ACTION, "* Você alterou a entrada do building %d.", bid);
 
@@ -304,7 +304,7 @@ YCMD:updatebuilding(playerid, params[], help)
         gBuildingData[bid][e_building_in_v]    = v;
 
         DestroyDynamicPickup(gBuildingData[bid][e_building_in_pkp_id]);
-        gBuildingData[bid][e_building_in_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[bid][e_building_in_x], gBuildingData[bid][e_building_in_y], gBuildingData[bid][e_building_in_z], gBuildingData[bid][e_building_in_v], gBuildingData[bid][e_building_in_i]);
+        gBuildingData[bid][e_building_in_pkp_id] = CreateDynamicPickup(19902, 1, gBuildingData[bid][e_building_in_x], gBuildingData[bid][e_building_in_y], gBuildingData[bid][e_building_in_z] - 0.7, gBuildingData[bid][e_building_in_v], gBuildingData[bid][e_building_in_i]);
 
         SendClientMessagef(playerid, COLOR_ADMIN_ACTION, "* Você alterou a saída do building %d.", bid);
 
