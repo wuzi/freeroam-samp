@@ -313,9 +313,13 @@ task OnDerbyUpdate[1000]()
                     {
                         if(gPlayerData[i][e_state] == DERBY_PLAYER_STATE_ALIVE)
                         {
+                            new away_time = (GetTickCount() - GetPlayerPausedTime(i));
                             GetPlayerPos(i, x, y, z);
-                            if(z <= 10.0)
+                            if(z <= 10.0 || away_time > 4500)
                             {
+                                if(away_time > 4500)
+                                    SendClientMessage(i, COLOR_WARNING, "* Você foi desclassificado por ficar ausente no derby.");
+
                                 gDerbyData[derbyid][e_derby_leaderboard][gDerbyData[derbyid][e_derby_lcounter]] = i;
                                 gDerbyData[derbyid][e_derby_lcounter]++;
                                 gPlayerData[i][e_end_time] = GetTickCount();
