@@ -29,11 +29,13 @@ static bool:gIsLobbyShown[MAX_PLAYERS];
 ShowPlayerLobby(playerid)
 {
     new tempstr[32];
-    format(tempstr, sizeof(tempstr), "Freeroam~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_FREEROAM), (MAX_PLAYERS / 2));
+    format(tempstr, sizeof(tempstr), "Freeroam~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_FREEROAM), MAX_PLAYERS);
     TextDrawSetString(lobbyTextdraw[9], tempstr);
     format(tempstr, sizeof(tempstr), "Corrida~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_RACE), (MAX_PLAYERS / 2));
     TextDrawSetString(lobbyTextdraw[11], tempstr);
-    ClearPlayerScreen(playerid, 20);
+    format(tempstr, sizeof(tempstr), "Derby~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_DERBY), (MAX_PLAYERS / 2));
+    TextDrawSetString(lobbyTextdraw[12], tempstr);
+    ClearPlayerScreen(playerid, 10);
 
     for(new i = 0; i < sizeof(lobbyTextdraw); i++)
     {
@@ -109,7 +111,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
                 HidePlayerLobby(playerid);
             }
         }
-        else if(clickedid == lobbyTextdraw[3] || clickedid == lobbyTextdraw[7])
+        else if(clickedid == lobbyTextdraw[3])
         {
             PlayErrorSound(playerid);
             SendClientMessage(playerid, COLOR_ERROR, "* Este modo de jogo ainda está em desenvolvimento.");
@@ -128,6 +130,10 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
                     ResetPlayerRaceData(playerid);
                     DisableRemoteVehicleCollisions(playerid, false);
                 }
+                else if(GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+                {
+                    ResetPlayerDerbyData(playerid);
+                }
 
                 PlayConfirmSound(playerid);
                 gPlayerCurrentMode[playerid] = GAMEMODE_FREEROAM;
@@ -143,6 +149,11 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
         {
             PlayConfirmSound(playerid);
             ShowPlayerRaceList(playerid);
+        }
+        else if(clickedid == lobbyTextdraw[7])
+        {
+            PlayConfirmSound(playerid);
+            ShowPlayerDerbyList(playerid);
         }
     }
     return 1;
@@ -285,7 +296,7 @@ hook OnGameModeInit()
     TextDrawSetPreviewRot(lobbyTextdraw[8], 0.000000, 0.000000, 0.000000, 1.000000);
 
     new tempstr[32];
-    format(tempstr, sizeof(tempstr), "Freeroam~n~0 / %d", (MAX_PLAYERS / 2));
+    format(tempstr, sizeof(tempstr), "Freeroam~n~0 / %d", MAX_PLAYERS);
     lobbyTextdraw[9] = TextDrawCreate(120.0, 242.0, tempstr);
     TextDrawLetterSize(lobbyTextdraw[9], 0.229332, 0.878220);
     TextDrawAlignment(lobbyTextdraw[9], 2);
@@ -320,7 +331,8 @@ hook OnGameModeInit()
     TextDrawSetProportional(lobbyTextdraw[11], 1);
     TextDrawSetShadow(lobbyTextdraw[11], 0);
 
-    lobbyTextdraw[12] = TextDrawCreate(498.0, 242.0, "derby");
+    format(tempstr, sizeof(tempstr), "Derby~n~0 / %d", (MAX_PLAYERS / 2));
+    lobbyTextdraw[12] = TextDrawCreate(498.0, 242.0, tempstr);
     TextDrawLetterSize(lobbyTextdraw[12], 0.229332, 0.878220);
     TextDrawAlignment(lobbyTextdraw[12], 2);
     TextDrawColor(lobbyTextdraw[12], -1);

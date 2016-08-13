@@ -163,7 +163,6 @@ hook OnGameModeInit()
 
 //------------------------------------------------------------------------------
 
-
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
     switch (dialogid)
@@ -184,6 +183,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 PlayErrorSound(playerid);
                 SendClientMessage(playerid, COLOR_ERROR, "* Essa corrida está lotada.");
+                ShowPlayerRaceList(playerid);
             }
             else
             {
@@ -205,6 +205,11 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 public OnPlayerEnterRace(playerid, raceid)
 {
+    if(GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+    {
+        ResetPlayerDerbyData(playerid);
+    }
+    
     HidePlayerLobby(playerid);
     SetPlayerHealth(playerid, 9999.0);
     TogglePlayerControllable(playerid, true);

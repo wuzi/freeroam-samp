@@ -52,11 +52,18 @@ new gMySQL;
 // Quantos segundos a corrida irá levar para iniciar após o limite minimo de jogadores ser atingido
 #define RACE_COUNT_DOWN									30
 
+// Quantos segundos o derby irá levar para iniciar após o limite minimo de jogadores ser atingido
+#define DERBY_COUNT_DOWN								30
+
 // Quantos segundos o evento irá levar para iniciar após ser criado
 #define EVENT_COUNT_DOWN								60
 
+// Quantidade máxima de derby no servidor
+#define MAX_DERBY										32
+
 #define MAX_RACE_NAME									64
 #define MINIMUM_PLAYERS_TO_START_RACE					1
+#define MINIMUM_PLAYERS_TO_START_DERBY					2
 #define INVALID_RACE_ID                                -1
 
 //------------------------------------------------------------------------------
@@ -131,6 +138,7 @@ hook OnGameModeInit()
 #include "../modules/core/advertisements.pwn"
 
 /* Gameplay */
+#include "../modules/gameplay/derby.pwn"
 #include "../modules/gameplay/bank.pwn"
 #include "../modules/gameplay/chat.pwn"
 #include "../modules/gameplay/colors.pwn"

@@ -732,8 +732,8 @@ YCMD:clima(playerid, params[], help)
 
 YCMD:ir(playerid, params[], help)
 {
-	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE)
-		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando em uma corrida.");
+	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando neste modo de jogo.");
 
 	new targetid;
 	if(sscanf(params, "u", targetid))
@@ -771,7 +771,7 @@ YCMD:ir(playerid, params[], help)
 
 YCMD:car(playerid, params[], help)
 {
-	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE)
+	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode criar veículos neste modo de jogo.");
 
 	new vehicleName[32], color1, color2, idx, iString[128];
@@ -915,7 +915,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			PlayCancelSound(playerid);
 			if(!response)
 			{
-				ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Fechar", "");
+				ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Selecionar", "Fechar");
 			}
 		}
 		case DIALOG_VEHICLE_LIST:
@@ -999,15 +999,19 @@ ptask OnPlayerAutoRepair[1250](playerid)
 {
 	if(gplAutoRepair[playerid] && IsPlayerInAnyVehicle(playerid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
 	{
-		RepairVehicle(GetPlayerVehicleID(playerid));
+		if(GetPlayerGamemode(playerid) != GAMEMODE_DERBY)
+			RepairVehicle(GetPlayerVehicleID(playerid));
 	}
 }
+
+//------------------------------------------------------------------------------
 
 public OnVehicleDamageStatusUpdate(vehicleid, playerid)
 {
 	if(gplAutoRepair[playerid] && IsPlayerInVehicle(playerid, vehicleid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !gplDriftActive[playerid])
 	{
-		RepairVehicle(GetPlayerVehicleID(playerid));
+		if(GetPlayerGamemode(playerid) != GAMEMODE_DERBY)
+			RepairVehicle(GetPlayerVehicleID(playerid));
 	}
 	return 1;
 }
