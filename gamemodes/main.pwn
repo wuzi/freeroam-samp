@@ -30,6 +30,8 @@ new gMySQL;
 
 //------------------------------------------------------------------------------
 
+#define MAX_BUILDINGS									32
+
 #define MAX_CREATED_VEHICLE_PER_PLAYER					1
 
 // Intervalo entre as mensagens aleatórias do servidor em milisegundos
@@ -127,6 +129,7 @@ hook OnGameModeInit()
 
 /* Dados */
 #include "../modules/data/player.pwn"
+#include "../modules/data/building.pwn"
 
 /* Jogador */
 #include "../modules/player/commands.pwn"

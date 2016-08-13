@@ -36,3 +36,4 @@
 #define COLOR_RANK_MODERATOR    0x31b2d4FF
 #define COLOR_RANK_HELPER       0x259ab9FF
 #define COLOR_RANK_RECRUIT      0x238ba7FF
+#define COLOR_ADMIN_ACTION      0x7dcfb6ff
