@@ -892,7 +892,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					CallRemoteFunction("OnPlayerCommandText", "is", playerid, "/admins");
 				}
 				else
-				{					
+				{
 					new command[140];
 					PlaySelectSound(playerid);
 					format(command, sizeof(command), "/relatorio %s", inputtext);
@@ -921,7 +921,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					case 2:
 					{
 						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_GENERAL, DIALOG_STYLE_LIST, "Lista de Comandos: Geral",
-						"/regras\n/carcmd\n/creditos", "Fechar", "Voltar");
+						"/regras\n/carcmd\n/ajudaacessorio\n/creditos", "Fechar", "Voltar");
 					}
 					case 3:
 					{

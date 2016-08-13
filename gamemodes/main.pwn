@@ -129,6 +129,7 @@ hook OnGameModeInit()
 
 /* Jogador */
 #include "../modules/player/commands.pwn"
+#include "../modules/player/attachments.pwn"
 
 /* Admin */
 #include "../modules/admin/commands.pwn"
