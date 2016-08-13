@@ -20,9 +20,35 @@ static skinlist = mS_INVALID_LISTID;
 
 //------------------------------------------------------------------------------
 
+static gPickupID;
+static gPlayerTickCount[MAX_PLAYERS];
+static gIsModelSelectionVisible[MAX_PLAYERS];
+
+//------------------------------------------------------------------------------
+
 hook OnGameModeInit()
 {
     skinlist = LoadModelSelectionMenu("skins.txt");
+    gPickupID = CreateDynamicPickup(1275, 1, 208.8840, -100.7389, 1005.2578, 0, 15);
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+hook OnPlayerPickUpDynPickup(playerid, pickupid)
+{
+    if(pickupid == gPickupID && !gIsModelSelectionVisible[playerid] && gPlayerTickCount[playerid] < GetTickCount())
+    {
+        gIsModelSelectionVisible[playerid] = true;
+        ShowModelSelectionMenu(playerid, skinlist, "Selecione a skin", 0x00000046, 0x6FA3FF99, 0x9ABEFFAA);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+    gIsModelSelectionVisible[playerid] = false;
     return 1;
 }
 
@@ -48,6 +74,8 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
                 ApplyAnimation(playerid, "CLOTHES", "CLO_Buy", 4.1, 0, 1, 1, 0, 0);
             }
 		}
+        gPlayerTickCount[playerid] = GetTickCount() + 2500;
+        gIsModelSelectionVisible[playerid] = false;
 	}
 	return 1;
 }
@@ -56,6 +84,7 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
 
 YCMD:skin(playerid, params[], help)
 {
+    gIsModelSelectionVisible[playerid] = true;
     ShowModelSelectionMenu(playerid, skinlist, "Selecione a skin", 0x00000046, 0x6FA3FF99, 0x9ABEFFAA);
     return 1;
 }
