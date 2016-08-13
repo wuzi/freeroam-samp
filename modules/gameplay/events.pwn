@@ -781,8 +781,8 @@ timer OnEventUpdate[1000]()
 
                 gIsPlayerInEvent[i] = false;
                 SetPlayerGamemode(i, GAMEMODE_FREEROAM);
-                SetPlayerPos(i, 2234.6855, -1260.9462, 23.9329);
-                SetPlayerFacingAngle(i, 270.0490);
+                SetPlayerPos(i, 1119.9399, -1618.7476, 20.5210);
+                SetPlayerFacingAngle(i, 91.8327);
                 SetPlayerInterior(i, 0);
                 SetPlayerVirtualWorld(i, 0);
                 SetPlayerHealth(i, 100.0);
@@ -806,8 +806,8 @@ timer EndEvent[7500]()
             TogglePlayerSpectating(i, false);
             gIsPlayerInEvent[i] = false;
             SetPlayerGamemode(i, GAMEMODE_FREEROAM);
-            SetPlayerPos(i, 2234.6855, -1260.9462, 23.9329);
-            SetPlayerFacingAngle(i, 270.0490);
+            SetPlayerPos(i, 1119.9399, -1618.7476, 20.5210);
+            SetPlayerFacingAngle(i, 91.8327);
             SetPlayerInterior(i, 0);
             SetPlayerVirtualWorld(i, 0);
             SetPlayerHealth(i, 100.0);
@@ -954,6 +954,9 @@ YCMD:criarevento(playerid, params[], help)
 
 YCMD:irevento(playerid, params[], help)
 {
+    if(GetPlayerGamemode(playerid) != GAMEMODE_FREEROAM)
+        return SendClientMessage(playerid, COLOR_ERROR, "* Você precisa estar no gamemode freeroam para ir ao evento.");
+        
     if(!gIsPlayerInEvent[playerid])
     {
         if(gEventState == EVENT_STATE_STARTING)

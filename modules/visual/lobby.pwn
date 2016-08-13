@@ -142,8 +142,8 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 
                 PlayConfirmSound(playerid);
                 gPlayerCurrentMode[playerid] = GAMEMODE_FREEROAM;
-                SetPlayerPos(playerid, 2234.6855, -1260.9462, 23.9329);
-                SetPlayerFacingAngle(playerid, 270.0490);
+                SetPlayerPos(playerid, 1119.9399, -1618.7476, 20.5210);
+                SetPlayerFacingAngle(playerid, 91.8327);
                 SetPlayerInterior(playerid, 0);
                 SetPlayerVirtualWorld(playerid, 0);
                 SetPlayerHealth(playerid, 100.0);
