@@ -83,7 +83,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 hook OnGameModeInit()
 {
-    txtAnimHelper = TextDrawCreate(610.0, 400.0,
+    txtAnimHelper = TextDrawCreate(610.0, 430.0,
 	"~r~~k~~PED_SPRINT~ ~w~para parar o anim");
 	TextDrawUseBox(txtAnimHelper, 0);
 	TextDrawFont(txtAnimHelper, 2);
