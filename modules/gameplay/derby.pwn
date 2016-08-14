@@ -154,6 +154,7 @@ public OnPlayerEnterDerby(playerid, derbyid)
     TogglePlayerControllable(playerid, true);
     SetPlayerDerby(playerid, derbyid);
     SetPlayerGamemode(playerid, GAMEMODE_DERBY);
+    SetPlayerVirtualWorld(playerid, (derbyid + VIRTUAL_WORLD));
 
     if(gDerbyData[derbyid][e_derby_state] == DERBY_STATE_WAITING_PLAYERS || gDerbyData[derbyid][e_derby_state] == DERBY_STATE_STARTING)
     {
@@ -161,7 +162,6 @@ public OnPlayerEnterDerby(playerid, derbyid)
         SetPlayerInterior(playerid, 10);
         SetPlayerPos(playerid, gLobbySpawns[rand][0], gLobbySpawns[rand][1], gLobbySpawns[rand][2]);
         SetPlayerFacingAngle(playerid, gLobbySpawns[rand][3]);
-        SetPlayerVirtualWorld(playerid, (derbyid + VIRTUAL_WORLD));
         SendClientMessagef(playerid, COLOR_SUCCESS, "* Você entrou no derby %s!", gDerbyData[derbyid][e_derby_name]);
     }
 
