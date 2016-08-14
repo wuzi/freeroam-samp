@@ -96,6 +96,35 @@ stock SendAdminMessage(rank, color, const message[], va_args<>)
 
 //------------------------------------------------------------------------------
 
+stock SendVIPMessage(color, const message[], va_args<>)
+{
+	if(numargs() > 2)
+	{
+		new string[144];
+		va_format(string, sizeof(string), message, va_start<2>);
+		foreach(new i: Player)
+		{
+			if(!IsPlayerVIP(i) || !IsPlayerLogged(i))
+	            continue;
+
+	        SendClientMessage(i, color, string);
+		}
+	}
+	else
+	{
+		foreach(new i: Player)
+		{
+			if(!IsPlayerVIP(i) || !IsPlayerLogged(i))
+	            continue;
+
+	        SendClientMessage(i, color, message);
+		}
+	}
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
 stock SendMultiLineMessage(playerid, color, message[])
 {
     if(strlen(message) > 144)

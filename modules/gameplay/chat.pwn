@@ -34,6 +34,14 @@ hook OnPlayerText(playerid, text[])
 		SendAdminMessage(PLAYER_RANK_RECRUIT, 0xedededff, message);
 		return -1;
 	}
+    else if(IsPlayerVIP(playerid) && strfind(text, "!", true) == 0 && strlen(text) > 1)
+	{
+		strdel(text, 0, 1);
+		new message[144];
+		format(message, 144, "! [{ff0000}VIP{ededed}] %s: {e3e3e3}%s", GetPlayerNamef(playerid), text);
+		SendVIPMessage(0xedededff, message);
+		return -1;
+	}
     else
     {
         new message[144];
@@ -44,6 +52,10 @@ hook OnPlayerText(playerid, text[])
             new rankName[9];
             format(rankName, 9, "[%s] ", GetPlayerAdminRankName(playerid, true));
             strins(message, rankName, 0);
+        }
+        else if(IsPlayerVIP(playerid))
+        {
+            strins(message, "[VIP] ", 0);
         }
 
         foreach(new i: Player)

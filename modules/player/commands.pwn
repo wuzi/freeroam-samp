@@ -63,6 +63,62 @@ YCMD:carcmd(playerid, params[], help)
 
 //------------------------------------------------------------------------------
 
+YCMD:vantagensvip(playerid, params[], help)
+{
+	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Vantagens VIP ----------------------------------------");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Com uma conta VIP além de você estar nos ajudando a manter o servidor online,");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* você também ganha beneficios!");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, " ");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Chat apenas para VIPs.");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Tag [VIP] antes de seu nome no chat.");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /kitvip");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /ajudavip");
+	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Vantagens VIP ----------------------------------------");
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
+YCMD:ajudavip(playerid, params[], help)
+{
+	if(!IsPlayerVIP(playerid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+
+	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Ajuda VIP ----------------------------------------");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* /kitvip - Recebe um kit de armas vip.");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, "* Use ! antes de suas mensagens para falar no chat VIP.");
+	SendClientMessage(playerid, COLOR_SUB_TITLE, " ");
+	SendClientMessagef(playerid, COLOR_SUB_TITLE, "* Sua conta VIP expira em: %s", convertTimestamp(GetPlayerVIP(playerid)));
+	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Ajuda VIP ----------------------------------------");
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
+YCMD:kitvip(playerid, params[], help)
+{
+	if(!IsPlayerVIP(playerid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+
+	if(IsPlayerInEvent(playerid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode usar este comando em um evento.");
+
+	GivePlayerWeapon(playerid, 4, 1);
+	GivePlayerWeapon(playerid, 16, 99999);
+	GivePlayerWeapon(playerid, 24, 99999);
+	GivePlayerWeapon(playerid, 26, 99999);
+	GivePlayerWeapon(playerid, 29, 99999);
+	GivePlayerWeapon(playerid, 30, 99999);
+	GivePlayerWeapon(playerid, 34, 99999);
+	GivePlayerWeapon(playerid, 39, 99999);
+
+	PlayerPlaySound(playerid, 5203, 0.0, 0.0, 0.0);
+	SendClientMessage(playerid, COLOR_SUCCESS, "* Você recebeu seu kit vip.");
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
 YCMD:regras(playerid, params[], help)
 {
 	ShowPlayerDialog(playerid, DIALOG_RULES, DIALOG_STYLE_MSGBOX, "{59c72c}LF - {FFFFFF}Regras",

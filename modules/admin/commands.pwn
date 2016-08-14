@@ -30,7 +30,7 @@ YCMD:acmds(playerid, params[], help)
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /rtc - /ircar - /puxarcar - /dararma - /verip - /mutar - /desmutar - /congelar - /descongelar");
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
-        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /gmx - /criarcorrida - /criarevento - /setmoney - /setbanco");
+        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /gmx - /criarcorrida - /criarevento - /setmoney - /setbanco - /setvip");
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_OWNER || IsPlayerAdmin(playerid))
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /setadmin");
@@ -727,6 +727,46 @@ SSSSSSSSSSSSSSS         UUUUUUUUU      BBBBBBBBBBBBBBBBB             OOOOOOOOO  
  	return 1;
  }
 
+ //------------------------------------------------------------------------------
+
+ YCMD:setvip(playerid, params[], help)
+ {
+    if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
+    {
+        new targetid, days;
+        if(sscanf(params, "ui", targetid, days))
+            return SendClientMessage(playerid, COLOR_INFO, "* /setvip [playerid] [dias]");
+
+        else if(!IsPlayerLogged(targetid))
+            return SendClientMessage(playerid, COLOR_ERROR, "* O jogador não está conectado.");
+
+        else if(days < 0)
+            return SendClientMessage(playerid, COLOR_ERROR, "* Valor inválido.");
+
+        SetPlayerVIP(targetid, gettime() + (days * 86400));
+        if(playerid != targetid)
+        {
+            if(!days)
+                SendClientMessagef(targetid, COLOR_PLAYER_COMMAND, "* %s removeu seu VIP.", GetPlayerNamef(playerid));
+            else
+                SendClientMessagef(targetid, COLOR_PLAYER_COMMAND, "* %s ativou seu VIP por %d dias.", GetPlayerNamef(playerid), days);
+        }
+
+        if(!days)
+            SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você removeu o VIP de %s.", GetPlayerNamef(targetid));
+        else
+        {
+            PlayerPlaySound(targetid, 5203, 0.0, 0.0, 0.0);
+            SendClientMessagef(playerid, COLOR_PLAYER_COMMAND, "* Você ativou o VIP de %s por %d dias.", GetPlayerNamef(targetid), days);
+        }
+    }
+    else
+    {
+        SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+    }
+    return 1;
+ }
+
 /*
 OOOOOOOOO     WWWWWWWW                           WWWWWWWWNNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRR
 OO:::::::::OO   W::::::W                           W::::::WN:::::::N       N::::::NE::::::::::::::::::::ER::::::::::::::::R
@@ -746,6 +786,7 @@ OO:::::::::OO              W:::W           W:::W           N::::::N        N::::
 OOOOOOOOO                 WWW             WWW            NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEERRRRRRRR     RRRRRRR
 
 */
+
 //------------------------------------------------------------------------------
 
 YCMD:setadmin(playerid, params[], help)
