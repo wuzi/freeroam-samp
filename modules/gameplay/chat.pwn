@@ -49,8 +49,8 @@ hook OnPlayerText(playerid, text[])
 
         if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
         {
-            new rankName[9];
-            format(rankName, 9, "[%s] ", GetPlayerAdminRankName(playerid, true));
+            new rankName[14];
+            format(rankName, 14, "[%s] ", GetPlayerAdminRankName(playerid, true));
             strins(message, rankName, 0);
         }
         else if(IsPlayerVIP(playerid))
