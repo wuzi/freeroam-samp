@@ -586,8 +586,8 @@ YCMD:sp(playerid, params[], help)
 
 YCMD:irp(playerid, params[], help)
 {
-    if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
-        return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando neste modo de jogo.");
 
     SetPlayerInterior(playerid, gplMarkExt[playerid][0]);
     SetPlayerVirtualWorld(playerid, gplMarkExt[playerid][1]);
