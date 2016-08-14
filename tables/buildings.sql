@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 13, 2016 at 09:10
+-- Generation Time: Aug 14, 2016 at 06:57
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.21
 
@@ -78,7 +78,8 @@ INSERT INTO `buildings` (`ID`, `building_out_x`, `building_out_y`, `building_out
 (28, 850.919, -1587.45, 13, 228.357, 0, 0, -2240.62, 137.119, 1034.9, 273.643, 6, 0, 0),
 (29, 823.961, -1588.24, 13, 137.208, 0, 0, 412.007, -54.441, 1001.4, 6.97, 12, 0, 0),
 (30, 1115.8, -1603.21, 20.563, 174.385, 0, 0, 207.635, -110.998, 1005.13, 358.29, 15, 0, 0),
-(31, 1106.77, -1603.36, 20.556, 183.785, 0, 0, 501.872, -67.566, 998.758, 175.613, 11, 0, 0);
+(31, 1106.77, -1603.36, 20.556, 183.785, 0, 0, 501.872, -67.566, 998.758, 175.613, 11, 0, 0),
+(32, -777.266, 505.135, 1376.59, 271.206, 1, 0, -795.001, 489.288, 1376.19, 2.675, 1, 0, 1);
 
 --
 -- Indexes for dumped tables
@@ -99,7 +100,7 @@ ALTER TABLE `buildings`
 -- AUTO_INCREMENT for table `buildings`
 --
 ALTER TABLE `buildings`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
