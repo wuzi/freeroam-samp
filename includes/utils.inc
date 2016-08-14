@@ -235,7 +235,11 @@ new aVehicleNames[212][] = {	// Vehicle Names - Betamaster
 #define PlaySelectSound(%0)     PlayerPlaySound(%0,1083,0.0,0.0,0.0)
 #define PlayCancelSound(%0)     PlayerPlaySound(%0,1084,0.0,0.0,0.0)
 #define PlayErrorSound(%0)      PlayerPlaySound(%0,1085,0.0,0.0,0.0)
-#define PlayBuySound(%0)		PlayerPlaySound(%0,1133,0.0,0.0,0.0)
+
+stock PlayBuySound(playerid, soundid = 1133)
+{
+	PlayerPlaySound(playerid, soundid, 0.0, 0.0, 0.0);
+}
 
 //------------------------------------------------------------------------------
 
