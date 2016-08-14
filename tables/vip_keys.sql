@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 14, 2016 at 08:23 
+-- Generation Time: Aug 14, 2016 at 08:23
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.21
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `vip_keys` (
   `id` int(11) NOT NULL,
-  `serial` varchar(26) NOT NULL,
+  `serial` varchar(32) NOT NULL,
   `days` int(11) NOT NULL,
   `used` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
