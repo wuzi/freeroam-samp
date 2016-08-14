@@ -226,7 +226,6 @@ public OnPlayerEnterRace(playerid, raceid)
     SetPlayerGamemode(playerid, GAMEMODE_RACE);
     DisableRemoteVehicleCollisions(playerid, true);
     SetPlayerVirtualWorld(playerid, (raceid + 2000));
-    gPlayerData[playerid][e_state] = RACE_PLAYER_STATE_RACING;
 
     if(gRaceData[raceid][e_race_state] == RACE_STATE_WAITING_PLAYERS || gRaceData[raceid][e_race_state] == RACE_STATE_STARTING)
     {
@@ -235,6 +234,7 @@ public OnPlayerEnterRace(playerid, raceid)
         SetPlayerPos(playerid, gLobbySpawns[rand][0], gLobbySpawns[rand][1], gLobbySpawns[rand][2]);
         SetPlayerFacingAngle(playerid, gLobbySpawns[rand][3]);
         SendClientMessagef(playerid, COLOR_SUCCESS, "* Você entrou na corrida %s!", gRaceData[raceid][e_race_name]);
+        gPlayerData[playerid][e_state] = RACE_PLAYER_STATE_RACING;
     }
 
     if(gRaceData[raceid][e_race_state] == RACE_STATE_WAITING_PLAYERS)
@@ -274,6 +274,7 @@ public OnPlayerEnterRace(playerid, raceid)
         {
             if(GetPlayerRace(i) == raceid && gPlayerData[i][e_state] == RACE_PLAYER_STATE_RACING)
             {
+                SetPlayerInterior(playerid, 0);
                 SetPlayerSpecatateTarget(playerid, i);
                 break;
             }
@@ -386,7 +387,7 @@ task OnRaceUpdate[1000]()
 
 hook OnPlayerSpawn(playerid)
 {
-    if(GetPlayerRace(playerid) != INVALID_RACE_ID)
+    if(GetPlayerRace(playerid) != INVALID_RACE_ID && gPlayerData[playerid][e_state] == RACE_PLAYER_STATE_RACING)
     {
         new raceid = GetPlayerRace(playerid);
         new racer_id = gPlayerData[playerid][e_grid_id];
@@ -444,7 +445,7 @@ hook OnPlayerUpdate(playerid)
             gPlayerSpecTick[playerid] = GetTickCount() + 50;
             if(lr == KEY_LEFT)
             {
-                for(new i = GetPlayerPoolSize(), j = 0; i > j; i--)
+                foreach(new i: Player)
                 {
                     if(GetPlayerRace(i) == raceid && gPlayerData[i][e_state] == RACE_PLAYER_STATE_RACING)
                     {
@@ -667,7 +668,7 @@ ResetPlayerRaceData(playerid)
             {
                 new grid = gPlayerData[playerid][e_grid_id];
                 DestroyVehicle(gVehicleData[raceid][grid][e_vehicle_id]);
-                gVehicleData[raceid][grid][e_vehicle_id] = INVALID_VEHICLE_ID;                
+                gVehicleData[raceid][grid][e_vehicle_id] = INVALID_VEHICLE_ID;
             }
             DisablePlayerRaceCheckpoint(playerid);
 
