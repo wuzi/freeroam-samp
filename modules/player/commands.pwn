@@ -25,6 +25,8 @@ static gCountDown;
 
 static gplCreatedVehicle[MAX_PLAYERS][MAX_CREATED_VEHICLE_PER_PLAYER];
 
+forward OnCheckVipKey(playerid);
+
 //------------------------------------------------------------------------------
 
 hook OnGameModeInit()
@@ -314,6 +316,23 @@ YCMD:pagar(playerid, params[], help)
 
 	SetPlayerCash(playerid, GetPlayerCash(playerid) - value);
 	SetPlayerCash(targetid, GetPlayerCash(targetid) + value);
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
+YCMD:ativarvip(playerid, params[], help)
+{
+	new	key[30];
+	if(sscanf(params, "s[30]", key))
+		return SendClientMessage(playerid, COLOR_INFO, "* /ativarvip [chave]");
+
+	else if(IsPlayerVIP(playerid))
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você já é VIP.");	
+
+	new query[128];
+    mysql_format(gMySQL, query, sizeof(query), "SELECT * FROM `vip_keys` WHERE `serial` = '%e' LIMIT 1", key);
+    mysql_tquery(gMySQL, query, "OnCheckVipKey", "i", playerid);
 	return 1;
 }
 
@@ -1238,6 +1257,39 @@ ShowPlayerCredits(playerid)
 	ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{59c72c}LF - {FFFFFF}Creditos",
 	"\t\t\t{59c72c}L{ffffff}iberty {59c72c}Freeroam{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {59c72c}L{ffffff}:{59c72c}F\n\n\
 	{ffffff}Contribuidores:\n\tY_Less,\n\tIncognito,\n\tBlueG,\n\tPawnHunter,\n\tNexiusTailer,\n\tSA-MP Team,\n\tVocê", "Fechar", "");
+}
+
+//------------------------------------------------------------------------------
+
+public OnCheckVipKey(playerid)
+{
+	new rows, fields;
+	cache_get_data(rows, fields, gMySQL);
+	if(!rows)
+	{
+        PlayErrorSound(playerid);
+		SendClientMessage(playerid, COLOR_ERROR, "* Esta chave não existe.");
+	}
+    else
+    {
+		if(cache_get_field_content_int(0, "used", gMySQL) != 0)
+		{
+			PlayErrorSound(playerid);
+			SendClientMessage(playerid, COLOR_ERROR, "* Esta chave já foi utilizada.");
+		}
+		else
+		{
+			new days = cache_get_field_content_int(0, "days", gMySQL);
+			SetPlayerVIP(playerid, gettime() + (86400 * days));
+			PlayerPlaySound(playerid, 5203, 0.0, 0.0, 0.0);
+			SendClientMessagef(playerid, COLOR_SUCCESS, "* Sua conta VIP foi ativada por %d dias!", days);
+
+			new query[64];
+	    	mysql_format(gMySQL, query, sizeof(query), "UPDATE `vip_keys` SET `used`=1 WHERE `id`=%d", cache_get_field_content_int(0, "id", gMySQL));
+	    	mysql_pquery(gMySQL, query);
+		}
+    }
+	return 1;
 }
 
 //------------------------------------------------------------------------------

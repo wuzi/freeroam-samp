@@ -30,7 +30,7 @@ YCMD:acmds(playerid, params[], help)
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /rtc - /ircar - /puxarcar - /dararma - /verip - /mutar - /desmutar - /congelar - /descongelar");
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
-        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /gmx - /criarcorrida - /criarevento - /setmoney - /setbanco - /setvip");
+        SendClientMessage(playerid, COLOR_SUB_TITLE, "* /gmx - /criarcorrida - /criarevento - /setmoney - /setbanco - /setvip - /gerarchavevip");
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_OWNER || IsPlayerAdmin(playerid))
         SendClientMessage(playerid, COLOR_SUB_TITLE, "* /setadmin");
@@ -766,6 +766,66 @@ SSSSSSSSSSSSSSS         UUUUUUUUU      BBBBBBBBBBBBBBBBB             OOOOOOOOO  
     }
     return 1;
  }
+
+ //------------------------------------------------------------------------------
+
+ YCMD:gerarchavevip(playerid, params[], help)
+ {
+    if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
+    {
+        new days;
+        if(sscanf(params, "i", days))
+            return SendClientMessage(playerid, COLOR_INFO, "* /gerarchavevip [dias]");
+
+        else if(days < 1)
+            return SendClientMessage(playerid, COLOR_ERROR, "* Dias não podem ser menor que 1.");
+
+        new key[30];
+        key = GenerateVIPKey();
+        SendClientMessagef(playerid, COLOR_TITLE, "Chave VIP Gerada!");
+        SendClientMessagef(playerid, COLOR_SUB_TITLE, "Dias: %d", days);
+        SendClientMessagef(playerid, COLOR_SUB_TITLE, "Chave: %s", key);
+
+        new query[128];
+        mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `vip_keys` (`serial`, `days`, `used`) VALUES ('%e', %d, 0)", key, days);
+        mysql_tquery(gMySQL, query);
+    }
+    else
+    {
+        SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+    }
+    return 1;
+ }
+
+//------------------------------------------------------------------------------
+
+GenerateVIPKey()
+{
+    new allowed_characters[] = {
+        'A', 'B', 'C', 'D', 'E',
+        'F', 'G', 'H', 'I', 'J',
+        'K', 'L', 'M', 'N', 'O',
+        'P', 'Q', 'R', 'S', 'T',
+        'U', 'V', 'W', 'X', 'Y',
+        'Z', '0', '1', '2', '3',
+        '4', '5', '6', '7', '8',
+        '9'
+    };
+
+    new key[30], character;
+    for(new i = 0; i < sizeof(key) - 1; i++)
+    {
+        character = random(sizeof(allowed_characters));
+        key[i] = allowed_characters[character];
+
+        if(i == 4 || i == 10 || i == 16 || i == 22)
+        {
+            i++;
+            key[i] = '-';
+        }
+    }
+    return key;
+}
 
 /*
 OOOOOOOOO     WWWWWWWW                           WWWWWWWWNNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRR
