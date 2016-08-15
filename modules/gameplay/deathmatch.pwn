@@ -156,7 +156,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     {
         case DIALOG_DEATHMATCH:
         {
-            if(!response)
+            if(!response || !gDeathmatchData[listitem][e_dm_db_id])
             {
                 PlayCancelSound(playerid);
             }
@@ -623,7 +623,7 @@ IsDeathmatchDialogVisible(playerid)
 
 ShowPlayerDeathmatchList(playerid)
 {
-    new output[4096], string[64], status[24];
+    new output[4096], string[64], status[24], count = 0;
     strcat(output, "Nome\tJogadores\tStatus\n");
     for(new i = 0; i < MAX_DEATHMATCHES; i++)
     {
@@ -641,9 +641,14 @@ ShowPlayerDeathmatchList(playerid)
         }
         format(string, sizeof(string), "%s\t%d / %d\t%s\n", gDeathmatchData[i][e_dm_name], GetDmPlayerPoolSize(i), GetDmMaxPlayers(i), status);
         strcat(output, string);
+        count++;
     }
     gIsDialogShown[playerid] = true;
-    ShowPlayerDialog(playerid, DIALOG_DEATHMATCH, DIALOG_STYLE_TABLIST_HEADERS, "Deathmatches", output, "Selecionar", "Voltar");
+
+    if(count)
+        ShowPlayerDialog(playerid, DIALOG_DEATHMATCH, DIALOG_STYLE_TABLIST_HEADERS, "Deathmatches", output, "Selecionar", "Voltar");
+    else
+        ShowPlayerDialog(playerid, DIALOG_DEATHMATCH, DIALOG_STYLE_LIST, "Deathmatches", "Nenhuma sala existente", "Voltar", "");
 }
 
 //------------------------------------------------------------------------------

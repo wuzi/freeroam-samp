@@ -177,7 +177,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     {
         case DIALOG_RACE:
         {
-            if(!response)
+            if(!response || !gRaceData[listitem][e_race_id])
             {
                 PlayCancelSound(playerid);
             }
@@ -797,7 +797,7 @@ IsRaceDialogVisible(playerid)
 
 ShowPlayerRaceList(playerid)
 {
-    new output[4096], string[64], status[24];
+    new output[4096], string[64], status[24], count = 0;
     strcat(output, "Nome\tJogadores\tStatus\n");
     for(new i = 0; i < MAX_RACES; i++)
     {
@@ -815,7 +815,12 @@ ShowPlayerRaceList(playerid)
         }
         format(string, sizeof(string), "%s\t%d / %d\t%s\n", gRaceData[i][e_race_name], GetRacePlayerPoolSize(i), GetRaceMaxPlayers(i), status);
         strcat(output, string);
+        count++;
     }
     gIsDialogShown[playerid] = true;
-    ShowPlayerDialog(playerid, DIALOG_RACE, DIALOG_STYLE_TABLIST_HEADERS, "Corridas", output, "Selecionar", "Voltar");
+
+    if(count)
+        ShowPlayerDialog(playerid, DIALOG_RACE, DIALOG_STYLE_TABLIST_HEADERS, "Corridas", output, "Selecionar", "Voltar");
+    else
+        ShowPlayerDialog(playerid, DIALOG_RACE, DIALOG_STYLE_LIST, "Corridas", "Nenhuma sala existente.", "Voltar", "");
 }
