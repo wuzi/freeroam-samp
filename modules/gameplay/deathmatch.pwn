@@ -341,7 +341,13 @@ hook OnPlayerSpawn(playerid)
     if(GetPlayerDeathmatch(playerid) != INVALID_DEATHMATCH_ID && GetPlayerGamemode(playerid) == GAMEMODE_DEATHMATCH)
     {
         new dmid = GetPlayerDeathmatch(playerid);
-        new spawn_id = gPlayerData[playerid][e_player_spawn];
+        new count = 0;
+        for(new i = 0; i < MAX_DEATHMATCH_PLAYERS; i++)
+        {
+            if(gDeathmatchData[dmid][e_dm_spawn_x][i] != 0.0)
+                count++;
+        }
+        new spawn_id = random(count);
         SetPlayerInterior(playerid, gDeathmatchData[dmid][e_dm_interior]);
         SetPlayerPos(playerid, gDeathmatchData[dmid][e_dm_spawn_x][spawn_id], gDeathmatchData[dmid][e_dm_spawn_y][spawn_id], gDeathmatchData[dmid][e_dm_spawn_z][spawn_id]);
         SetPlayerFacingAngle(playerid, gDeathmatchData[dmid][e_dm_spawn_a][spawn_id]);
