@@ -404,22 +404,6 @@ hook OnPlayerDeath(playerid, killerid, reason)
     return 1;
 }
 
-YCMD:abc(playerid, params[], help)
-{
-    new leaderboard[MAX_PLAYERS];
-    SortArrayUsingComparator(gPlayerData, CompareKills, SORT_IS_PLAYERS) => leaderboard;
-
-    for (new i = 0; i < sizeof(leaderboard); i++) {
-        new plid = leaderboard[i];
-
-        if (!IsPlayerConnected(playerid))
-            continue;
-
-        SendClientMessagef(playerid, -1, "id: %i - playerid: %d", i, plid);
-    }
-    return 1;
-}
-
 //------------------------------------------------------------------------------
 
 Comparator:CompareKills(left[e_player_dm_data], right[e_player_dm_data])
