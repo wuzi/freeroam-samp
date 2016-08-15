@@ -218,6 +218,11 @@ public OnPlayerEnterRace(playerid, raceid)
     {
         ResetPlayerDerbyData(playerid);
     }
+    else if(GetPlayerGamemode(playerid) == GAMEMODE_DEATHMATCH)
+    {
+        ResetPlayerDeathmatchData(playerid);
+        ResetPlayerWeapons(playerid);
+    }
 
     HidePlayerLobby(playerid);
     SetPlayerRace(playerid, raceid);

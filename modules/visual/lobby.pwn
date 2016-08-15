@@ -31,9 +31,11 @@ ShowPlayerLobby(playerid)
     new tempstr[32];
     format(tempstr, sizeof(tempstr), "Freeroam~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_FREEROAM), MAX_PLAYERS);
     TextDrawSetString(lobbyTextdraw[9], tempstr);
-    format(tempstr, sizeof(tempstr), "Corrida~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_RACE), (MAX_PLAYERS / 2));
+    format(tempstr, sizeof(tempstr), "Deathmatch~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_DEATHMATCH), (MAX_PLAYERS / 3));
+    TextDrawSetString(lobbyTextdraw[10], tempstr);
+    format(tempstr, sizeof(tempstr), "Corrida~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_RACE), (MAX_PLAYERS / 3));
     TextDrawSetString(lobbyTextdraw[11], tempstr);
-    format(tempstr, sizeof(tempstr), "Derby~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_DERBY), (MAX_PLAYERS / 2));
+    format(tempstr, sizeof(tempstr), "Derby~n~%d / %d", GetTotalPlayersOfGamemode(GAMEMODE_DERBY), (MAX_PLAYERS / 3));
     TextDrawSetString(lobbyTextdraw[12], tempstr);
     ClearPlayerScreen(playerid, 10);
 
@@ -99,7 +101,7 @@ YCMD:lobby(playerid, params[], help)
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-    if(gIsLobbyShown[playerid] && !IsRaceDialogVisible(playerid))
+    if(gIsLobbyShown[playerid] && !IsRaceDialogVisible(playerid) && !IsDerbyDialogVisible(playerid) && !IsDeathmatchDialogVisible(playerid))
     {
         if(clickedid == Text:INVALID_TEXT_DRAW)
         {
@@ -110,11 +112,6 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
                 PlayCancelSound(playerid);
                 HidePlayerLobby(playerid);
             }
-        }
-        else if(clickedid == lobbyTextdraw[3])
-        {
-            PlayErrorSound(playerid);
-            SendClientMessage(playerid, COLOR_ERROR, "* Este modo de jogo ainda está em desenvolvimento.");
         }
         else if(clickedid == lobbyTextdraw[1])
         {
@@ -149,6 +146,11 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
                 SetPlayerHealth(playerid, 100.0);
                 HidePlayerLobby(playerid);
             }
+        }
+        else if(clickedid == lobbyTextdraw[3])
+        {
+            PlayConfirmSound(playerid);
+            ShowPlayerDeathmatchList(playerid);
         }
         else if(clickedid == lobbyTextdraw[5])
         {
@@ -313,7 +315,8 @@ hook OnGameModeInit()
     TextDrawSetProportional(lobbyTextdraw[9], 1);
     TextDrawSetShadow(lobbyTextdraw[9], 0);
 
-    lobbyTextdraw[10] = TextDrawCreate(250.0, 242.0, "deathmatch");
+    format(tempstr, sizeof(tempstr), "Deathmatch~n~0 / %d", (MAX_PLAYERS / 3));
+    lobbyTextdraw[10] = TextDrawCreate(250.0, 242.0, tempstr);
     TextDrawLetterSize(lobbyTextdraw[10], 0.229332, 0.878220);
     TextDrawAlignment(lobbyTextdraw[10], 2);
     TextDrawColor(lobbyTextdraw[10], -1);
@@ -324,7 +327,7 @@ hook OnGameModeInit()
     TextDrawSetProportional(lobbyTextdraw[10], 1);
     TextDrawSetShadow(lobbyTextdraw[10], 0);
 
-    format(tempstr, sizeof(tempstr), "Corrida~n~0 / %d", (MAX_PLAYERS / 2));
+    format(tempstr, sizeof(tempstr), "Corrida~n~0 / %d", (MAX_PLAYERS / 3));
     lobbyTextdraw[11] = TextDrawCreate(375.0, 242.0, tempstr);
     TextDrawLetterSize(lobbyTextdraw[11], 0.229332, 0.878220);
     TextDrawAlignment(lobbyTextdraw[11], 2);
@@ -336,7 +339,7 @@ hook OnGameModeInit()
     TextDrawSetProportional(lobbyTextdraw[11], 1);
     TextDrawSetShadow(lobbyTextdraw[11], 0);
 
-    format(tempstr, sizeof(tempstr), "Derby~n~0 / %d", (MAX_PLAYERS / 2));
+    format(tempstr, sizeof(tempstr), "Derby~n~0 / %d", (MAX_PLAYERS / 3));
     lobbyTextdraw[12] = TextDrawCreate(498.0, 242.0, tempstr);
     TextDrawLetterSize(lobbyTextdraw[12], 0.229332, 0.878220);
     TextDrawAlignment(lobbyTextdraw[12], 2);

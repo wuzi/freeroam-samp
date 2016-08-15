@@ -661,7 +661,7 @@ YCMD:sp(playerid, params[], help)
 
 YCMD:irp(playerid, params[], help)
 {
-	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+	if(GetPlayerGamemode(playerid) != GAMEMODE_FREEROAM)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando neste modo de jogo.");
 
     SetPlayerInterior(playerid, gplMarkExt[playerid][0]);
@@ -811,7 +811,7 @@ YCMD:clima(playerid, params[], help)
 
 YCMD:ir(playerid, params[], help)
 {
-	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+	if(GetPlayerGamemode(playerid) != GAMEMODE_FREEROAM)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando neste modo de jogo.");
 
 	new targetid;
@@ -853,7 +853,7 @@ YCMD:ir(playerid, params[], help)
 
 YCMD:car(playerid, params[], help)
 {
-	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+	if(GetPlayerGamemode(playerid) != GAMEMODE_FREEROAM)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode criar veículos neste modo de jogo.");
 
 	new vehicleName[32], color1, color2, idx, iString[128];
@@ -958,7 +958,7 @@ YCMD:pm(playerid, params[], help)
 
 YCMD:ls(playerid, params[], help)
 {
-	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+	if(GetPlayerGamemode(playerid) != GAMEMODE_FREEROAM)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando neste modo de jogo.");
 
     if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
@@ -975,7 +975,7 @@ YCMD:ls(playerid, params[], help)
 
 YCMD:sf(playerid, params[], help)
 {
-	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+	if(GetPlayerGamemode(playerid) != GAMEMODE_FREEROAM)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando neste modo de jogo.");
 
     if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
@@ -992,7 +992,7 @@ YCMD:sf(playerid, params[], help)
 
 YCMD:lv(playerid, params[], help)
 {
-	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+	if(GetPlayerGamemode(playerid) != GAMEMODE_FREEROAM)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando neste modo de jogo.");
 
     if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
@@ -1009,7 +1009,7 @@ YCMD:lv(playerid, params[], help)
 
 YCMD:lb(playerid, params[], help)
 {
-	if(GetPlayerGamemode(playerid) == GAMEMODE_RACE || GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+	if(GetPlayerGamemode(playerid) != GAMEMODE_FREEROAM)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não usar este comando neste modo de jogo.");
 
     SetPlayerInterior(playerid, 1);

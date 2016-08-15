@@ -148,6 +148,11 @@ public OnPlayerEnterDerby(playerid, derbyid)
         ResetPlayerRaceData(playerid);
         DisableRemoteVehicleCollisions(playerid, false);
     }
+    else if(GetPlayerGamemode(playerid) == GAMEMODE_DEATHMATCH)
+    {
+        ResetPlayerDeathmatchData(playerid);
+        ResetPlayerWeapons(playerid);
+    }
 
     HidePlayerLobby(playerid);
     SetPlayerHealth(playerid, 9999.0);
@@ -673,6 +678,13 @@ ResetPlayerDerbyData(playerid)
             }
         }
     }
+}
+
+//------------------------------------------------------------------------------
+
+IsDerbyDialogVisible(playerid)
+{
+    return gIsDialogShown[playerid];
 }
 
 //------------------------------------------------------------------------------
