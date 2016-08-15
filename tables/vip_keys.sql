@@ -30,6 +30,7 @@ CREATE TABLE `vip_keys` (
   `id` int(11) NOT NULL,
   `serial` varchar(32) NOT NULL,
   `days` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
   `used` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

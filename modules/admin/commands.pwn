@@ -1543,22 +1543,8 @@ YCMD:gerarchavevip(playerid, params[], help)
 {
     if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
     {
-        new days;
-        if(sscanf(params, "i", days))
-            return SendClientMessage(playerid, COLOR_INFO, "* /gerarchavevip [dias]");
-
-        else if(days < 1)
-            return SendClientMessage(playerid, COLOR_ERROR, "* Dias não podem ser menor que 1.");
-
-        new key[30];
-        key = GenerateVIPKey();
-        SendClientMessagef(playerid, COLOR_TITLE, "Chave VIP Gerada!");
-        SendClientMessagef(playerid, COLOR_SUB_TITLE, "Dias: %d", days);
-        SendClientMessagef(playerid, COLOR_SUB_TITLE, "Chave: %s", key);
-
-        new query[128];
-        mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `vip_keys` (`serial`, `days`, `used`) VALUES ('%e', %d, 0)", key, days);
-        mysql_tquery(gMySQL, query);
+        PlaySelectSound(playerid);
+        ShowPlayerDialog(playerid, DIALOG_GENERATE_VIP_KEY, DIALOG_STYLE_LIST, "Gerar chave VIP", "Dias\nTipo\nGerar", "Selecionar", "Fechar");
     }
     else
     {
@@ -2054,6 +2040,97 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 gSurveyData[e_survey_no]++;
                 SendClientMessage(playerid, COLOR_SUCCESS, "* Você votou não.");
+            }
+        }
+        case DIALOG_GENERATE_VIP_KEY:
+        {
+            if(!response)
+            {
+                PlayCancelSound(playerid);
+            }
+            else
+            {
+                switch (listitem)
+                {
+                    case 0:
+                        ShowPlayerDialog(playerid, DIALOG_GEN_VIP_KEY_DAYS, DIALOG_STYLE_INPUT, "Gerar chave vip: Dias", "Informe quantos dias este VIP irá durar:", "Confirmar", "Voltar");
+                    case 1:
+                        ShowPlayerDialog(playerid, DIALOG_GEN_VIP_KEY_TYPE, DIALOG_STYLE_LIST, "Gerar chave vip: Tipo", "Bronze\nPrata\nOuro", "Confirmar", "Voltar");
+                    case 2:
+                    {
+                        if(GetPVarInt(playerid, "gen_vip_days") < 1)
+                        {
+                            PlayErrorSound(playerid);
+                            SendClientMessage(playerid, COLOR_ERROR, "* Você não definiu os dias.");
+                            ShowPlayerDialog(playerid, DIALOG_GENERATE_VIP_KEY, DIALOG_STYLE_LIST, "Gerar chave VIP", "Dias\nTipo\nGerar", "Selecionar", "Fechar");
+                            return 1;
+                        }
+
+                        new key[30], type[30];
+                        key = GenerateVIPKey();
+
+                        if(GetPVarInt(playerid, "gen_vip_type") == 0)
+                            type = "Bronze";
+                        else if(GetPVarInt(playerid, "gen_vip_type") == 1)
+                            type = "Prata";
+                        else if(GetPVarInt(playerid, "gen_vip_type") == 2)
+                            type = "Ouro";
+
+                        SendClientMessagef(playerid, COLOR_TITLE, "Chave VIP Gerada!");
+                        SendClientMessagef(playerid, COLOR_SUB_TITLE, "Dias: %d", GetPVarInt(playerid, "gen_vip_days"));
+                        SendClientMessagef(playerid, COLOR_SUB_TITLE, "Tipo: %s", type);
+                        SendClientMessagef(playerid, COLOR_SUB_TITLE, "Chave: %s", key);
+
+                        new query[148];
+                        mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `vip_keys` (`serial`, `days`, `type`, `used`) VALUES ('%e', %d, %d, 0)", key, GetPVarInt(playerid, "gen_vip_days"), GetPVarInt(playerid, "gen_vip_type"));
+                        mysql_tquery(gMySQL, query);
+                    }
+                }
+            }
+        }
+        case DIALOG_GEN_VIP_KEY_DAYS:
+        {
+            if(!response)
+            {
+                PlayCancelSound(playerid);
+                ShowPlayerDialog(playerid, DIALOG_GENERATE_VIP_KEY, DIALOG_STYLE_LIST, "Gerar chave VIP", "Dias\nTipo\nGerar", "Selecionar", "Fechar");
+            }
+            else
+            {
+                new days;
+                if(sscanf(inputtext, "i", days))
+                {
+                    PlayErrorSound(playerid);
+                    ShowPlayerDialog(playerid, DIALOG_GEN_VIP_KEY_DAYS, DIALOG_STYLE_INPUT, "Gerar chave vip: Dias", "Informe quantos dias este VIP irá durar:", "Confirmar", "Voltar");
+                }
+
+                else if(days < 1)
+                {
+                    PlayErrorSound(playerid);
+                    SendClientMessage(playerid, COLOR_ERROR, "* Dias não podem ser menor que 1.");
+                    ShowPlayerDialog(playerid, DIALOG_GEN_VIP_KEY_DAYS, DIALOG_STYLE_INPUT, "Gerar chave vip: Dias", "Informe quantos dias este VIP irá durar:", "Confirmar", "Voltar");
+                }
+
+                else
+                {
+                    PlaySelectSound(playerid);
+                    SetPVarInt(playerid, "gen_vip_days", days);
+                    ShowPlayerDialog(playerid, DIALOG_GENERATE_VIP_KEY, DIALOG_STYLE_LIST, "Gerar chave VIP", "Dias\nTipo\nGerar", "Selecionar", "Fechar");
+                }
+            }
+        }
+        case DIALOG_GEN_VIP_KEY_TYPE:
+        {
+            if(!response)
+            {
+                PlayCancelSound(playerid);
+                ShowPlayerDialog(playerid, DIALOG_GENERATE_VIP_KEY, DIALOG_STYLE_LIST, "Gerar chave VIP", "Dias\nTipo\nGerar", "Selecionar", "Fechar");
+            }
+            else
+            {
+                PlaySelectSound(playerid);
+                SetPVarInt(playerid, "gen_vip_type", listitem);
+                ShowPlayerDialog(playerid, DIALOG_GENERATE_VIP_KEY, DIALOG_STYLE_LIST, "Gerar chave VIP", "Dias\nTipo\nGerar", "Selecionar", "Fechar");
             }
         }
     }
