@@ -71,6 +71,7 @@ new gMySQL;
 #define MINIMUM_PLAYERS_TO_START_DERBY					2
 #define INVALID_RACE_ID									-1
 #define INVALID_DEATHMATCH_ID							-1
+#define MAX_DEATHMATCH_NAME								32
 
 //------------------------------------------------------------------------------
 
@@ -156,6 +157,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/races.pwn"
 #include "../modules/gameplay/derby.pwn"
 #include "../modules/gameplay/deathmatch.pwn"
+#include "../modules/gameplay/dmcreator.pwn"
 #include "../modules/gameplay/drift.pwn"
 #include "../modules/gameplay/events.pwn"
 // #include "../modules/gameplay/anticheat.pwn"

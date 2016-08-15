@@ -15,7 +15,6 @@
 static const VIRTUAL_WORLD = 1000;
 
 #define MAX_DEATHMATCHES                                            32
-#define MAX_DEATHMATCH_NAME                                         30
 #define MAX_DEATHMATCH_PLAYERS                                      30
 
 //------------------------------------------------------------------------------
@@ -583,7 +582,11 @@ SetPlayerDeathmatch(playerid, dmid)
 
 GetPlayerDeathmatch(playerid)
 {
-    return gPlayerData[playerid][e_player_deathmatch_id];
+    if(GetPlayerGamemode(playerid) == GAMEMODE_DEATHMATCH)
+    {
+        return gPlayerData[playerid][e_player_deathmatch_id];
+    }
+    return INVALID_DEATHMATCH_ID;
 }
 
 //------------------------------------------------------------------------------

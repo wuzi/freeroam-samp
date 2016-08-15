@@ -45,7 +45,7 @@ YCMD:acmds(playerid, params[], help)
     {
         strcat(output, "{229f09}Nível 2\n{FFFFFF}/banir - /setarinterior - /setarvw - /advertir - /jetpack - /setarvida - /setarcolete - /congelar - /descongelar\n");
         strcat(output, "/dararma - /desarmar - /respawn - /destruircarro - /calar - /descalar - /forcarcarro - /forcarskin - /trazertodos - /moverplayer\n");
-        strcat(output, "/fakeban");
+        strcat(output, "/fakeban\n\n");
     }
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_MODERATOR)
@@ -56,7 +56,7 @@ YCMD:acmds(playerid, params[], help)
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
     {
-        strcat(output, "{229f09}Nível 4\n{FFFFFF}/gmx - /criarcorrida - /criarevento - /setmoney - /setbanco - /setvip - /gerarchavevip - /kickartodos\n");
+        strcat(output, "{229f09}Nível 4\n{FFFFFF}/gmx - /criarcorrida - /criardm - /criarevento - /setmoney - /setbanco - /setvip - /gerarchavevip - /kickartodos\n");
         strcat(output, "/desarmartodos - /chatfalso - /invisivel - /visivel - /interiortodos - /congelartodos - /descongelartodos - /ips - /matartodos\n");
         strcat(output, "/darvip - /tirarvip - /deletarconta\n\n");
     }

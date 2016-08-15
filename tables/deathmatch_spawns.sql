@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 15, 2016 at 07:19 
+-- Generation Time: Aug 15, 2016 at 10:56 
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.21
 
@@ -32,7 +32,8 @@ CREATE TABLE `deathmatch_spawns` (
   `x` float NOT NULL,
   `y` float NOT NULL,
   `z` float NOT NULL,
-  `a` float NOT NULL
+  `a` float NOT NULL,
+  `prize` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
