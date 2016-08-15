@@ -328,7 +328,7 @@ YCMD:ativarvip(playerid, params[], help)
 		return SendClientMessage(playerid, COLOR_INFO, "* /ativarvip [chave]");
 
 	else if(IsPlayerVIP(playerid))
-		return SendClientMessage(playerid, COLOR_ERROR, "* Você já é VIP.");	
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você já é VIP.");
 
 	new query[128];
     mysql_format(gMySQL, query, sizeof(query), "SELECT * FROM `vip_keys` WHERE `serial` = '%e' LIMIT 1", key);
@@ -826,6 +826,9 @@ YCMD:ir(playerid, params[], help)
 
 	else if(gplGotoBlocked[targetid])
 		return SendClientMessage(playerid, COLOR_ERROR, "* Este jogador bloqueou os teleportes até ele.");
+
+	else if(GetPlayerGamemode(targetid) != GAMEMODE_FREEROAM)
+		return SendClientMessage(playerid, COLOR_ERROR, "* Este jogador não está no modo freeroam.");
 
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(targetid, x, y, z);

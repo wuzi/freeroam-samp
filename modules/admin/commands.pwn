@@ -152,6 +152,9 @@ RRRRRRRR     RRRRRRREEEEEEEEEEEEEEEEEEEEEE       CCCCCCCCCCCCCRRRRRRRR     RRRRR
  	else if(targetid == playerid)
  		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode puxar você mesmo.");
 
+    else if(GetPlayerGamemode(targetid) != GAMEMODE_FREEROAM)
+    	return SendClientMessage(playerid, COLOR_ERROR, "* Este jogador não está no modo freeroam.");
+
  	new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x, y, z);
 
