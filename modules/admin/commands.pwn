@@ -33,7 +33,7 @@ YCMD:acmds(playerid, params[], help)
     if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_RECRUIT)
  		return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
 
-    new output[2048];
+    new output[2088];
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_RECRUIT)
     {
         strcat(output, "{229f09}Nível 1\n{FFFFFF}/jogar - /trabalhar - /servico - /infoplayer - /verip - /avisar - /destrancarcarros - /kickar\n");
