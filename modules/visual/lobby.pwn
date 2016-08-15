@@ -184,6 +184,13 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 hook OnPlayerDisconnect(playerid, reason)
 {
     gIsLobbyShown[playerid]         = false;
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+hook OnPlayerConnect(playerid)
+{
     gPlayerCurrentMode[playerid]    = GAMEMODE_LOBBY;
     return 1;
 }
