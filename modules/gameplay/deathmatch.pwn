@@ -363,23 +363,30 @@ hook OnPlayerDeath(playerid, killerid, reason)
     {
         if(GetPlayerDeathmatch(playerid) == GetPlayerDeathmatch(killerid))
         {
+            new dmid = GetPlayerDeathmatch(killerid);
             gPlayerData[playerid][e_player_deaths]++;
             gPlayerData[killerid][e_player_kills]++;
 
-            new dmid = GetPlayerDeathmatch(killerid);
             if(gPlayerData[killerid][e_player_kills] == gDeathmatchData[dmid][e_dm_points])
             {
                 new output[4096], string[128], leaderboard[MAX_PLAYERS], count;
                 strcat(output, "#\tJogador\tK/D\n");
                 gDeathmatchData[dmid][e_dm_state] = DM_STATE_ENDING;
+                SortArrayUsingComparator(gPlayerData, CompareKills, SORT_IS_PLAYERS) => leaderboard;
                 for (new i = 0; i < sizeof(leaderboard); i++)
                 {
                     new pid = leaderboard[i];
+
+                    if (pid == INVALID_PLAYER_ID)
+                        break;
+
                     if (!IsPlayerLogged(pid) || GetPlayerDeathmatch(pid) != dmid)
                         continue;
 
+                    GivePlayerCash(playerid, gDeathmatchData[dmid][e_dm_prize][count]);
+
                     count++;
-                    format(string, sizeof(string), "%i\t%s\t%d/%d\n", i + 1, GetPlayerNamef(pid), gPlayerData[pid][e_player_kills], gPlayerData[pid][e_player_deaths]);
+                    format(string, sizeof(string), "%i\t%s\t%d/%d\n", count, GetPlayerNamef(pid), gPlayerData[pid][e_player_kills], gPlayerData[pid][e_player_deaths]);
                     strcat(output, string);
                 }
 
@@ -408,10 +415,7 @@ hook OnPlayerDeath(playerid, killerid, reason)
 
 Comparator:CompareKills(left[e_player_dm_data], right[e_player_dm_data])
 {
-    // Returning negative means "left goes above"
-    // Positive means "left goes below"
-    // floatcmp returns -1 if right > left, 0 if equal, and 1 if left > right
-    return floatcmp(left[e_player_kills], right[e_player_kills]);
+    return floatcmp(right[e_player_kills], left[e_player_kills]);
 }
 
 //------------------------------------------------------------------------------
@@ -494,11 +498,13 @@ task OnDeathMatchUpdate[1000]()
             }
             else if(gDeathmatchCountdown[dmid] == 1)
             {
+                new remaining_players = 0;
                 gDeathmatchCountdown[dmid]--;
                 foreach(new i: Player)
                 {
                     if(GetPlayerDeathmatch(i) == dmid)
                     {
+                        SetPlayerHealth(i, 100.0);
                         TogglePlayerControllable(i, true);
                         GameTextForPlayer(i, "~g~GO!", 3000, 3);
                         PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
@@ -508,7 +514,26 @@ task OnDeathMatchUpdate[1000]()
                         {
                             GivePlayerWeapon(i, gDeathmatchData[dmid][e_dm_weapon][j], 9999);
                         }
+
+                        if(gPlayerData[i][e_player_state] == DM_PLAYER_STATE_PLAYING)
+                        {
+                            remaining_players++;
+                        }
                     }
+                }
+
+                // Verifica se ainda há jogadores
+                if(remaining_players < 2)
+                {
+                    gDeathmatchData[dmid][e_dm_state] = DM_STATE_ENDING;
+                    foreach(new i: Player)
+                    {
+                        if(GetPlayerDeathmatch(i) == dmid)
+                        {
+                            ShowPlayerDialog(i, DIALOG_DEATHMATCH_LEADERBOARD, DIALOG_STYLE_LIST, "Resultados finais", "Sem jogadores suficientes", "Fechar", "");
+                        }
+                    }
+                    defer EndDeathmatch(dmid);
                 }
             }
         }
@@ -556,7 +581,7 @@ ResetPlayerDeathmatchData(playerid)
     {
         if(gDeathmatchData[dmid][e_dm_state] == DM_STATE_STARTED)
         {
-            // Verifica se ainda há jogadores correndo
+            // Verifica se ainda há jogadores
             new remaining_players = 0;
             foreach(new i: Player)
             {
@@ -566,8 +591,8 @@ ResetPlayerDeathmatchData(playerid)
                 }
             }
 
-            // Se não houver mais corredores finaliza a corrida,
-            // Se houver, aguarda a corrida finalizar
+            // Se não houver mais jogadores finaliza a partida,
+            // Se houver, aguarda a partida finalizar
             if(remaining_players < 2)
             {
                 gDeathmatchData[dmid][e_dm_state] = DM_STATE_ENDING;
@@ -575,7 +600,7 @@ ResetPlayerDeathmatchData(playerid)
                 {
                     if(GetPlayerDeathmatch(i) == dmid)
                     {
-                        ShowPlayerDialog(i, DIALOG_DEATHMATCH_LEADERBOARD, DIALOG_STYLE_TABLIST_HEADERS, "Resultados finais", "Sem jogadores suficientes", "Fechar", "");
+                        ShowPlayerDialog(i, DIALOG_DEATHMATCH_LEADERBOARD, DIALOG_STYLE_LIST, "Resultados finais", "Sem jogadores suficientes", "Fechar", "");
                     }
                 }
                 defer EndDeathmatch(dmid);
@@ -589,7 +614,7 @@ ResetPlayerDeathmatchData(playerid)
         gPlayerData[playerid][e_player_state]          = DM_PLAYER_STATE_NONE;
         gPlayerData[playerid][e_player_deathmatch_id]  = INVALID_DEATHMATCH_ID;
 
-        // Se não houver nenhum jogador correndo, reiniciar a corrida
+        // Se não houver nenhum jogador jogando, reiniciar a partida
         if(GetDmPlayerPoolSize(dmid) == 0)
         {
             EndDeathmatch(dmid);

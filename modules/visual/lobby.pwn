@@ -139,6 +139,11 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
                 {
                     ResetPlayerDerbyData(playerid);
                 }
+                else if(GetPlayerGamemode(playerid) == GAMEMODE_DEATHMATCH)
+                {
+                    ResetPlayerDeathmatchData(playerid);
+                    ResetPlayerWeapons(playerid);
+                }
 
                 if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
                 {
