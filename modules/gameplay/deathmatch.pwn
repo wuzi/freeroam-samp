@@ -622,7 +622,7 @@ GetDmPlayerPoolSize(dmid)
     new counter = 0;
     foreach(new i: Player)
     {
-        if(gPlayerData[i][e_player_deathmatch_id] == dmid)
+        if(GetPlayerDeathmatch(i) == dmid)
             counter++;
     }
     return counter;
