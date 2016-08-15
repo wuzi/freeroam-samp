@@ -43,6 +43,10 @@ ShowPlayerLobby(playerid)
     {
         TextDrawShowForPlayer(playerid, lobbyTextdraw[i]);
     }
+    foreach(new i: Player)
+    {
+        ShowPlayerNameTagForPlayer(playerid, i, false);
+    }
     SelectTextDraw(playerid, 0x0e8893ff);
     gIsLobbyShown[playerid] = true;
 }
@@ -54,6 +58,10 @@ HidePlayerLobby(playerid)
     for(new i = 0; i < sizeof(lobbyTextdraw); i++)
     {
         TextDrawHideForPlayer(playerid, lobbyTextdraw[i]);
+    }
+    foreach(new i: Player)
+    {
+        ShowPlayerNameTagForPlayer(playerid, i, true);
     }
     CancelSelectTextDraw(playerid);
     gIsLobbyShown[playerid] = false;
