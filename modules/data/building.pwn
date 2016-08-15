@@ -186,7 +186,7 @@ public OnInsertBuilding(buildingid)
 YCMD:abuildingcmds(playerid, params[], help)
 {
     if(!IsPlayerAdmin(playerid))
- 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+ 		return SendClientMessage(playerid, COLOR_ERROR, "* Você precisa estar logado na RCON para isso.");
 
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Comandos Buildings - Banco de Dados ----------------------------------------");
 
