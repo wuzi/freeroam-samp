@@ -1258,8 +1258,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 ShowPlayerCredits(playerid)
 {
 	ShowPlayerDialog(playerid, DIALOG_CREDITS, DIALOG_STYLE_MSGBOX, "{59c72c}LF - {FFFFFF}Creditos",
-	"\t\t\t{59c72c}L{ffffff}iberty {59c72c}Freeroam{ffffff}\n\t\t\t{ffffff}Desenvolvido pela equipe {59c72c}L{ffffff}:{59c72c}F\n\n\
-	{ffffff}Contribuidores:\n\tY_Less,\n\tIncognito,\n\tBlueG,\n\tPawnHunter,\n\tNexiusTailer,\n\tSA-MP Team,\n\tVocê", "Fechar", "");
+	"{59c72c}L{ffffff}iberty {59c72c}Freeroam{ffffff}\n{ffffff}Desenvolvido pela equipe {59c72c}L{ffffff}:{59c72c}F\n\n\
+	{ffffff}Contribuidores:\nY_Less, Incognito, BlueG, PawnHunter, NexiusTailer, SA-MP Team, Você", "Fechar", "");
 }
 
 //------------------------------------------------------------------------------
