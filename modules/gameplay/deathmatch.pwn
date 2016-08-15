@@ -46,6 +46,8 @@ enum e_dm_data
     e_dm_interior,
     e_dm_weapon[11],
     e_dm_name[MAX_DEATHMATCH_NAME],
+    e_dm_points,
+    e_dm_prize[MAX_DEATHMATCH_PLAYERS],
     Float:e_dm_spawn_x[MAX_DEATHMATCH_PLAYERS],
     Float:e_dm_spawn_y[MAX_DEATHMATCH_PLAYERS],
     Float:e_dm_spawn_z[MAX_DEATHMATCH_PLAYERS],
@@ -59,7 +61,8 @@ enum
 {
     DM_STATE_WAITING_PLAYERS,
     DM_STATE_STARTING,
-    DM_STATE_STARTED
+    DM_STATE_STARTED,
+    DM_STATE_ENDING
 }
 
 enum
@@ -110,6 +113,7 @@ public OnDeathmatchLoad()
     {
         gDeathmatchData[i][e_dm_db_id] = cache_get_field_content_int(i, "id", gMySQL);
         gDeathmatchData[i][e_dm_interior]  = cache_get_field_content_int(i, "interior", gMySQL);
+        gDeathmatchData[i][e_dm_points] = cache_get_field_content_int(i, "points", gMySQL);
         cache_get_field_content(i, "name", gDeathmatchData[i][e_dm_name], gMySQL, MAX_DEATHMATCH_NAME);
 
         new query[68];
@@ -132,6 +136,7 @@ public OnDeathmatchSpawnLoad(dmid)
         gDeathmatchData[dmid][e_dm_spawn_y][i] = cache_get_field_content_float(i, "y", gMySQL);
         gDeathmatchData[dmid][e_dm_spawn_z][i] = cache_get_field_content_float(i, "z", gMySQL);
         gDeathmatchData[dmid][e_dm_spawn_a][i] = cache_get_field_content_float(i, "a", gMySQL);
+        gDeathmatchData[dmid][e_dm_prize][i] = cache_get_field_content_int(i, "prize", gMySQL);
     }
 }
 
@@ -360,6 +365,35 @@ hook OnPlayerDeath(playerid, killerid, reason)
         {
             gPlayerData[playerid][e_player_deaths]++;
             gPlayerData[killerid][e_player_kills]++;
+
+            new dmid = GetPlayerDeathmatch(killerid);
+            if(gPlayerData[killerid][e_player_kills] == gDeathmatchData[dmid][e_dm_points])
+            {
+                new output[4096], string[128], leaderboard[MAX_PLAYERS], count;
+                strcat(output, "#\tJogador\tK/D\n");
+                gDeathmatchData[dmid][e_dm_state] = DM_STATE_ENDING;
+                for (new i = 0; i < sizeof(leaderboard); i++)
+                {
+                    new pid = leaderboard[i];
+                    if (!IsPlayerLogged(pid) || GetPlayerDeathmatch(pid) != dmid)
+                        continue;
+
+                    count++;
+                    format(string, sizeof(string), "%i\t%s\t%d/%d\n", i + 1, GetPlayerNamef(pid), gPlayerData[pid][e_player_kills], gPlayerData[pid][e_player_deaths]);
+                    strcat(output, string);
+                }
+
+                foreach(new i: Player)
+                {
+                    if(GetPlayerDeathmatch(i) == dmid)
+                    {
+                        ResetPlayerWeapons(i);
+                        ShowPlayerDialog(i, DIALOG_DEATHMATCH_LEADERBOARD, DIALOG_STYLE_TABLIST_HEADERS, "Resultados finais", output, "Fechar", "");
+                    }
+                }
+
+                defer EndDeathmatch(dmid);
+            }
         }
     }
     else if(killerid == INVALID_PLAYER_ID && GetPlayerDeathmatch(playerid) != INVALID_DEATHMATCH_ID)
@@ -368,6 +402,32 @@ hook OnPlayerDeath(playerid, killerid, reason)
             gPlayerData[playerid][e_player_kills]--;
     }
     return 1;
+}
+
+YCMD:abc(playerid, params[], help)
+{
+    new leaderboard[MAX_PLAYERS];
+    SortArrayUsingComparator(gPlayerData, CompareKills, SORT_IS_PLAYERS) => leaderboard;
+
+    for (new i = 0; i < sizeof(leaderboard); i++) {
+        new plid = leaderboard[i];
+
+        if (!IsPlayerConnected(playerid))
+            continue;
+
+        SendClientMessagef(playerid, -1, "id: %i - playerid: %d", i, plid);
+    }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
+Comparator:CompareKills(left[e_player_dm_data], right[e_player_dm_data])
+{
+    // Returning negative means "left goes above"
+    // Positive means "left goes below"
+    // floatcmp returns -1 if right > left, 0 if equal, and 1 if left > right
+    return floatcmp(left[e_player_kills], right[e_player_kills]);
 }
 
 //------------------------------------------------------------------------------
@@ -526,30 +586,12 @@ ResetPlayerDeathmatchData(playerid)
             // Se houver, aguarda a corrida finalizar
             if(remaining_players < 2)
             {
-                new output[4096];
-                strcat(output, "#\tJogador\tTempo\tK/D\n");
-                foreach(new i: Player)
-                {
-                    if(gPlayerData[i][e_player_state] != DM_PLAYER_STATE_PLAYING)
-                        continue;
-
-                    if(gPlayerData[i][e_player_end] == 0)
-                        gPlayerData[i][e_player_end] = GetTickCount();
-
-                    new j_minutes         = (gPlayerData[i][e_player_end] - gPlayerData[i][e_player_start]) / 60000;
-                    new j_seconds         = (((gPlayerData[i][e_player_end] - gPlayerData[i][e_player_start]) % (1000 * 60 * 60)) % (1000 * 60)) / 1000;
-                    new j_milliseconds    = (gPlayerData[i][e_player_end] - gPlayerData[i][e_player_start]) % 1000;
-
-                    new string[74];
-                    format(string, sizeof(string), "%d\t%s\t%02d:%02d:%03d\t%d/%d\n", i + 1, GetPlayerNamef(i), j_minutes, j_seconds, j_milliseconds, gPlayerData[i][e_player_kills], gPlayerData[i][e_player_deaths]);
-                    strcat(output, string);
-                }
-
+                gDeathmatchData[dmid][e_dm_state] = DM_STATE_ENDING;
                 foreach(new i: Player)
                 {
                     if(GetPlayerDeathmatch(i) == dmid)
                     {
-                        ShowPlayerDialog(i, DIALOG_DEATHMATCH_LEADERBOARD, DIALOG_STYLE_TABLIST_HEADERS, "Resultados finais", output, "Fechar", "");
+                        ShowPlayerDialog(i, DIALOG_DEATHMATCH_LEADERBOARD, DIALOG_STYLE_TABLIST_HEADERS, "Resultados finais", "Sem jogadores suficientes", "Fechar", "");
                     }
                 }
                 defer EndDeathmatch(dmid);
@@ -641,6 +683,8 @@ ShowPlayerDeathmatchList(playerid)
                 status = "Prestes a iniciar";
             case DM_STATE_STARTED:
                 status = "Em andamento";
+            case DM_STATE_ENDING:
+                status = "Encerrando";
         }
         format(string, sizeof(string), "%s\t%d / %d\t%s\n", gDeathmatchData[i][e_dm_name], GetDmPlayerPoolSize(i), GetDmMaxPlayers(i), status);
         strcat(output, string);

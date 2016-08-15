@@ -86,6 +86,7 @@ new gMySQL;
 #include <YSI\y_commands>
 #include <YSI\y_va>
 #include <mSelection>
+#include <md-sort>
 #include <drift>
 #include <utils>
 
