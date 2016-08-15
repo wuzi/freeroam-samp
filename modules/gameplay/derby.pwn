@@ -203,6 +203,7 @@ public OnPlayerEnterDerby(playerid, derbyid)
             if(GetPlayerDerby(p) == derbyid && gPlayerData[p][e_state] == DERBY_PLAYER_STATE_ALIVE)
             {
                 gPlayerData[playerid][e_spec_targetid] = p;
+                SetPlayerInterior(playerid, 0);
                 SetPlayerSpecatateTarget(playerid, p);
             }
         }
