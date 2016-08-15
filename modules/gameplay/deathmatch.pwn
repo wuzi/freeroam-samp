@@ -355,7 +355,8 @@ hook OnPlayerSpawn(playerid)
 
         for(new j = 0; j < 11; j++)
         {
-            GivePlayerWeapon(playerid, gDeathmatchData[dmid][e_dm_weapon][j], 9999);
+            if(gDeathmatchData[dmid][e_dm_state] == DM_STATE_STARTED)
+                GivePlayerWeapon(playerid, gDeathmatchData[dmid][e_dm_weapon][j], 99999);
         }
     }
     return 1;
