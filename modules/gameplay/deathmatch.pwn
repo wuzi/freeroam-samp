@@ -230,11 +230,13 @@ public OnDeathmatchExport(playerid)
 	SendClientMessage(playerid, COLOR_SUCCESS, "* Deathmatch criado com sucesso.");
 
     // Carregando o mapa criado
+    new bool:found = false;
     for(new i = 0; i < MAX_DEATHMATCHES; i++)
     {
         if(gDeathmatchData[i][e_dm_db_id])
             continue;
 
+        found = true;
         gDeathmatchData[i][e_dm_db_id]      = dmid;
         gDeathmatchData[i][e_dm_points]     = gPlayerPoints[playerid];
         gDeathmatchData[i][e_dm_interior]   = GetPlayerInterior(playerid);
@@ -258,6 +260,9 @@ public OnDeathmatchExport(playerid)
     	}
         break;
     }
+
+    if(!found)
+        SendClientMessage(playerid, COLOR_ERROR, "* O deathmatch não pôde ser carregado por ter atingido o limite de deathmatch.");
 
 
 	// Limpando dados temporários
