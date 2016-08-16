@@ -1267,7 +1267,7 @@ YCMD:setarcor(playerid, params[], help)
         return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
 
 	new targetid, color;
-	if(sscanf(params, "ui", targetid, color))
+	if(sscanf(params, "ux", targetid, color))
 		SendClientMessage(playerid, COLOR_INFO, "* /setarcor [playerid] [cor]");
 	else
     {
