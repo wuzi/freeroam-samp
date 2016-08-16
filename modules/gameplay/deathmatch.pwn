@@ -14,7 +14,7 @@
 
 static const VIRTUAL_WORLD = 1000;
 
-#define MAX_DEATHMATCHES                                            32
+#define MAX_DEATHMATCHES                                            64
 #define MAX_DEATHMATCH_PLAYERS                                      30
 
 //------------------------------------------------------------------------------
@@ -111,6 +111,9 @@ public OnDeathmatchLoad()
 	cache_get_data(rows, fields, gMySQL);
     for(new i = 0; i < rows; i++)
     {
+        if(i == MAX_DEATHMATCHES)
+            break;
+
         gDeathmatchData[i][e_dm_db_id] = cache_get_field_content_int(i, "id", gMySQL);
         gDeathmatchData[i][e_dm_interior]  = cache_get_field_content_int(i, "interior", gMySQL);
         gDeathmatchData[i][e_dm_points] = cache_get_field_content_int(i, "points", gMySQL);

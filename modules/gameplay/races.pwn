@@ -106,6 +106,9 @@ public OnRaceLoad()
 	cache_get_data(rows, fields, gMySQL);
     for(new i = 0; i < rows; i++)
     {
+        if(i == MAX_RACES)
+            break;
+
         gRaceData[i][e_race_id]         = cache_get_field_content_int(i, "id", gMySQL);
         gRaceData[i][e_race_cp_type]    = cache_get_field_content_int(i, "cp_type", gMySQL);
         gRaceData[i][e_race_cp_size]    = cache_get_field_content_float(i, "cp_size", gMySQL);
