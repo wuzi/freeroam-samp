@@ -20,6 +20,7 @@ static const VIRTUAL_WORLD = 1000;
 //------------------------------------------------------------------------------
 
 forward OnDeathmatchLoad();
+forward OnDeathMatchDelete(playerid, dmid);
 forward OnDeathmatchSpawnLoad(dmid);
 forward OnDeathmatchExport(playerid);
 forward OnDeathmatchWeaponsLoad(dmid);
@@ -159,6 +160,22 @@ public OnDeathmatchLoad()
 
 //------------------------------------------------------------------------------
 
+public OnDeathMatchDelete(playerid, dmid)
+{
+    if(cache_affected_rows() > 0)
+    {
+        PlaySelectSound(playerid);
+        SendClientMessage(playerid, COLOR_SUCCESS, "* Mapa deletado com sucesso, ele ainda estará disponível para jogar até o servidor reiniciar.");
+    }
+    else
+    {
+        PlayErrorSound(playerid);
+        SendClientMessage(playerid, COLOR_ERROR, "* Este mapa já foi deletado.");
+    }
+}
+
+//------------------------------------------------------------------------------
+
 public OnDeathmatchSpawnLoad(dmid)
 {
     new rows, fields;
@@ -293,6 +310,20 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         case DIALOG_DEATHMATCH_LEADERBOARD:
         {
             PlaySelectSound(playerid);
+        }
+        case DIALOG_DEATHMATCH_DELETE:
+        {
+            if(!response || !gDeathmatchData[listitem][e_dm_db_id])
+            {
+                PlayCancelSound(playerid);
+            }
+            else
+            {
+                new query[64];
+                mysql_format(gMySQL, query, sizeof(query), "DELETE FROM `deathmatches` WHERE `deathmatches`.`id` = %d", gDeathmatchData[listitem][e_dm_db_id]);
+                mysql_tquery(gMySQL, query, "OnDeathMatchDelete", "ii", playerid, gDeathmatchData[listitem][e_dm_db_id]);
+            }
+            gIsDialogShown[playerid] = false;
         }
         case DIALOG_DM_CREATOR:
         {
@@ -1132,6 +1163,23 @@ YCMD:criardm(playerid, params[], help)
 
 //------------------------------------------------------------------------------
 
+YCMD:deletardm(playerid, params[], help)
+{
+	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
+	{
+        ShowPlayerDeathmatchList(playerid, true);
+        PlayerPlaySound(playerid, 1055, 0.0, 0.0, 0.0);
+        SendClientMessage(playerid, COLOR_WARNING, "* ATENÇÃO: Essa operação NÃO tem volta!");
+	}
+	else
+	{
+		SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+	}
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
 SetPlayerDeathmatch(playerid, dmid)
 {
     gPlayerData[playerid][e_player_deathmatch_id] = dmid;
@@ -1183,7 +1231,7 @@ IsDeathmatchDialogVisible(playerid)
 
 //------------------------------------------------------------------------------
 
-ShowPlayerDeathmatchList(playerid)
+ShowPlayerDeathmatchList(playerid, bool:delete = false)
 {
     new output[4096], string[64], status[24], count = 0;
     strcat(output, "Nome\tJogadores\tStatus\n");
@@ -1210,9 +1258,9 @@ ShowPlayerDeathmatchList(playerid)
     gIsDialogShown[playerid] = true;
 
     if(count)
-        ShowPlayerDialog(playerid, DIALOG_DEATHMATCH, DIALOG_STYLE_TABLIST_HEADERS, "Deathmatches", output, "Selecionar", "Voltar");
+        ShowPlayerDialog(playerid, (!delete) ? DIALOG_DEATHMATCH : DIALOG_DEATHMATCH_DELETE, DIALOG_STYLE_TABLIST_HEADERS, "Deathmatches", output, "Selecionar", "Voltar");
     else
-        ShowPlayerDialog(playerid, DIALOG_DEATHMATCH, DIALOG_STYLE_LIST, "Deathmatches", "Nenhuma sala existente", "Voltar", "");
+        ShowPlayerDialog(playerid, (!delete) ? DIALOG_DEATHMATCH : DIALOG_DEATHMATCH_DELETE, DIALOG_STYLE_LIST, "Deathmatches", "Nenhuma sala existente", "Voltar", "");
 }
 
 //------------------------------------------------------------------------------
