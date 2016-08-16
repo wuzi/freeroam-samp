@@ -1120,6 +1120,12 @@ hook OnPlayerEnterRaceCP(playerid)
                     new j_milliseconds    = (gPlayerData[j][e_end_time] - gPlayerData[j][e_start_time]) % 1000;
 
                     GivePlayerCash(j, gPrizeData[raceid][i]);
+                    if(i == 0)
+                        SetPlayerPoint(j, GetPlayerPoint(j) + 5);
+                    else if(i == 1)
+                        SetPlayerPoint(j, GetPlayerPoint(j) + 3);
+                    else
+                        SetPlayerPoint(j, GetPlayerPoint(j) + 1);
 
                     new string[64];
                     format(string, sizeof(string), "%d\t%s\t%02d:%02d:%03d\n", i + 1, GetPlayerNamef(j), j_minutes, j_seconds, j_milliseconds);
@@ -1338,6 +1344,12 @@ ResetPlayerRaceData(playerid)
                     new j_milliseconds    = (gPlayerData[j][e_end_time] - gPlayerData[j][e_start_time]) % 1000;
 
                     GivePlayerCash(j, gPrizeData[raceid][i]);
+                    if(i == 0)
+                        SetPlayerPoint(j, GetPlayerPoint(j) + 5);
+                    else if(i == 1)
+                        SetPlayerPoint(j, GetPlayerPoint(j) + 3);
+                    else
+                        SetPlayerPoint(j, GetPlayerPoint(j) + 1);
 
                     new string[64];
                     format(string, sizeof(string), "%d\t%s\t%02d:%02d:%03d\n", i + 1, GetPlayerNamef(j), j_minutes, j_seconds, j_milliseconds);

@@ -17,6 +17,7 @@ static gPlayerCombo[MAX_PLAYERS] = {1, ...};
 static gPlayerPoints[MAX_PLAYERS];
 // static gPlayerBestScore[MAX_PLAYERS];
 static gPlayerTotalScore[MAX_PLAYERS];
+static gPlayerScoreCounter[MAX_PLAYERS];
 static Timer:gPlayerTimer[MAX_PLAYERS] = {Timer:-1, ...};
 
 //------------------------------------------------------------------------------
@@ -97,6 +98,14 @@ public OnDriftEnd(playerid, reason, Float: distance, time)
     */
 
     SetPlayerDriftPoints(playerid, gPlayerTotalScore[playerid] + gPlayerPoints[playerid]);
+
+    gPlayerScoreCounter[playerid] += gPlayerPoints[playerid];
+    if(gPlayerScoreCounter[playerid] > 1000)
+    {
+        SetPlayerPoint(playerid, GetPlayerPoint(playerid) + 1);
+        gPlayerScoreCounter[playerid] = 0;
+    }
+
     if(GetPlayerDriftCounter(playerid))
     {
         new tmpstr[32];
@@ -261,6 +270,7 @@ hook OnPlayerDisconnect(playerid, reason)
     gPlayerPoints[playerid] = 0;
     // gPlayerBestScore[playerid] = 0;
     gPlayerTotalScore[playerid] = 0;
+    gPlayerScoreCounter[playerid] = 0;
     TextDrawHideForPlayer(playerid, gDriftTextDraw[0]);
     TextDrawHideForPlayer(playerid, gDriftTextDraw[1]);
     TextDrawHideForPlayer(playerid, gDriftTextDraw[2]);
@@ -325,7 +335,6 @@ SetPlayerDriftPoints(playerid, value)
 {
     new tmpstr[32];
     gPlayerTotalScore[playerid] = value;
-    SetPlayerScore(playerid, value / 1000);
     format(tmpstr, sizeof(tmpstr), "TOTAL_SCORE:_%d", gPlayerTotalScore[playerid]);
     PlayerTextDrawSetString(playerid, gPlTextDrift[playerid][1], tmpstr);
 }

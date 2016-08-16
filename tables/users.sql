@@ -33,6 +33,8 @@ CREATE TABLE `users` (
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `money` int(11) NOT NULL,
+  `bank` int(11) NOT NULL,
+  `score` int(11) NOT NULL,
   `skin` int(11) NOT NULL,
   `admin` int(11) NOT NULL,
   `vip` int(11) NOT NULL,

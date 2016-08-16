@@ -901,6 +901,13 @@ hook OnPlayerDeath(playerid, killerid, reason)
 
                     GivePlayerCash(playerid, gDeathmatchData[dmid][e_dm_prize][count]);
 
+                    if(i == 0)
+                        SetPlayerPoint(playerid, GetPlayerPoint(playerid) + 5);
+                    else if(i == 1)
+                        SetPlayerPoint(playerid, GetPlayerPoint(playerid) + 3);
+                    else
+                        SetPlayerPoint(playerid, GetPlayerPoint(playerid) + 1);
+
                     count++;
                     format(string, sizeof(string), "%i\t%s\t%d/%d\n", count, GetPlayerNamef(pid), gPlayerData[pid][e_player_kills], gPlayerData[pid][e_player_deaths]);
                     strcat(output, string);
