@@ -548,11 +548,11 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 					case 4:
 					{
-						if(gPlayerCurrentVehicle[playerid] < 2)
+						if(gPlayerCurrentVehicle[playerid] < MINIMUM_PLAYERS_TO_START_RACE)
 						{
 							PlayErrorSound(playerid);
 							ShowPlayerRaceDialog(playerid);
-							SendClientMessage(playerid, COLOR_ERROR, "* Você precisa criar pelo menos 2 posições no grid para exportar.");
+							SendClientMessagef(playerid, COLOR_ERROR, "* Você precisa criar pelo menos %d posições no grid para exportar.", MINIMUM_PLAYERS_TO_START_RACE);
 						}
 						else if(gPlayerCurrentCheckpoint[playerid] < 1)
 						{
