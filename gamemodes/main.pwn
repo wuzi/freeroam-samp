@@ -155,7 +155,6 @@ hook OnGameModeInit()
 #include "../modules/gameplay/chat.pwn"
 #include "../modules/gameplay/colors.pwn"
 #include "../modules/gameplay/tuning.pwn"
-#include "../modules/gameplay/racecreator.pwn"
 #include "../modules/gameplay/races.pwn"
 #include "../modules/gameplay/derby.pwn"
 #include "../modules/gameplay/deathmatch.pwn"

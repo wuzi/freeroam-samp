@@ -56,9 +56,9 @@ YCMD:acmds(playerid, params[], help)
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
     {
-        strcat(output, "{229f09}Nível 4\n{FFFFFF}/gmx - /criarcorrida - /criardm - /deletardm - /criarevento - /setmoney - /setbanco - /setvip - /gerarchavevip\n");
+        strcat(output, "{229f09}Nível 4\n{FFFFFF}/gmx - /criarcorrida - /deletarcorrida - /criardm - /deletardm - /criarevento - /setmoney - /setbanco - /setvip\n");
         strcat(output, "/desarmartodos - /chatfalso - /invisivel - /visivel - /interiortodos - /congelartodos - /descongelartodos - /ips - /matartodos\n");
-        strcat(output, "/darvip - /tirarvip - /deletarconta - /kickartodos\n\n");
+        strcat(output, "/darvip - /tirarvip - /deletarconta - /kickartodos - /gerarchavevip\n\n");
     }
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_OWNER)
