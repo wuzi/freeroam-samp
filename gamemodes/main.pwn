@@ -65,13 +65,13 @@ new gMySQL;
 
 #define DEATHMATCH_COUNT_DOWN							30
 
-#define MAX_RACE_NAME									64
+#define MAX_RACE_NAME									34
 #define MINIMUM_PLAYERS_TO_START_RACE					1
 #define MINIMUM_PLAYERS_TO_START_DM						2
 #define MINIMUM_PLAYERS_TO_START_DERBY					2
 #define INVALID_RACE_ID									-1
 #define INVALID_DEATHMATCH_ID							-1
-#define MAX_DEATHMATCH_NAME								32
+#define MAX_DEATHMATCH_NAME								34
 
 //------------------------------------------------------------------------------
 
