@@ -107,7 +107,10 @@ public OnRaceLoad()
     for(new i = 0; i < rows; i++)
     {
         if(i == MAX_RACES)
+        {
+            print("[error] Trying to load more races than defined in MAX_RACES.");
             break;
+        }
 
         gRaceData[i][e_race_id]         = cache_get_field_content_int(i, "id", gMySQL);
         gRaceData[i][e_race_cp_type]    = cache_get_field_content_int(i, "cp_type", gMySQL);

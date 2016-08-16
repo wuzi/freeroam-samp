@@ -112,7 +112,10 @@ public OnDeathmatchLoad()
     for(new i = 0; i < rows; i++)
     {
         if(i == MAX_DEATHMATCHES)
+        {
+            print("[error] Trying to load more deathmatches than defined in MAX_DEATHMATCHES.");
             break;
+        }
 
         gDeathmatchData[i][e_dm_db_id] = cache_get_field_content_int(i, "id", gMySQL);
         gDeathmatchData[i][e_dm_interior]  = cache_get_field_content_int(i, "interior", gMySQL);
