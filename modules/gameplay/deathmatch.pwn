@@ -374,6 +374,19 @@ hook OnPlayerDeath(playerid, killerid, reason)
             gPlayerData[playerid][e_player_deaths]++;
             gPlayerData[killerid][e_player_kills]++;
 
+            new leaderid = INVALID_PLAYER_ID, leader_points = 0;
+            foreach(new i: Player)
+            {
+                if(GetPlayerDeathmatch(i) == dmid && gPlayerData[i][e_player_kills] >= leader_points)
+                {
+                    leaderid = i;
+                    leader_points = gPlayerData[i][e_player_kills];
+                }
+            }
+
+            UpdatePlayerDeathmatchHud(playerid, gPlayerData[playerid][e_player_kills], gPlayerData[playerid][e_player_deaths], leaderid, leader_points, gDeathmatchData[dmid][e_dm_points]);
+            UpdatePlayerDeathmatchHud(killerid, gPlayerData[killerid][e_player_kills], gPlayerData[killerid][e_player_deaths], leaderid, leader_points, gDeathmatchData[dmid][e_dm_points]);
+
             if(gPlayerData[killerid][e_player_kills] == gDeathmatchData[dmid][e_dm_points])
             {
                 new output[4096], string[128], leaderboard[MAX_PLAYERS], count;
@@ -526,6 +539,8 @@ task OnDeathMatchUpdate[1000]()
                         {
                             remaining_players++;
                         }
+                        UpdatePlayerDeathmatchHud(i, 0, 0, INVALID_PLAYER_ID, 0, gDeathmatchData[dmid][e_dm_points]);
+                        ShowPlayerDeathmatchHud(i);
                     }
                 }
 
@@ -557,6 +572,7 @@ timer EndDeathmatch[7500](dmid)
     {
         if(GetPlayerDeathmatch(i) == dmid)
         {
+            HidePlayerDeathmatchHud(i);
             if(GetPlayerState(i) == PLAYER_STATE_SPECTATING)
             {
                 TogglePlayerSpectating(i, false);
@@ -582,6 +598,7 @@ ResetPlayerDeathmatchData(playerid)
     if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
         TogglePlayerSpectating(playerid, false);
 
+    HidePlayerDeathmatchHud(playerid);
     new dmid = GetPlayerDeathmatch(playerid);
     SetPlayerDeathmatch(playerid, INVALID_DEATHMATCH_ID);
     if(dmid != INVALID_DEATHMATCH_ID)

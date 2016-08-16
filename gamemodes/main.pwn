@@ -132,6 +132,7 @@ hook OnGameModeInit()
 #include "../modules/visual/logo.pwn"
 #include "../modules/visual/authentication.pwn"
 #include "../modules/visual/lobby.pwn"
+#include "../modules/visual/deathmatch.pwn"
 
 /* Dados */
 #include "../modules/data/player.pwn"

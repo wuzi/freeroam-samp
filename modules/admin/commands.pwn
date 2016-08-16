@@ -1104,11 +1104,11 @@ YCMD:tempo(playerid, params[], help)
         SendClientMessage(playerid, COLOR_ERROR, "* Minuto inválido.");
 	else
     {
+        SetWorldTime(hour);
         foreach(new i: Player)
         {
             SetPlayerTime(playerid, hour, minute);
         }
-        SetWorldTime(hour);
 		SendClientMessageToAllf(COLOR_ADMIN_COMMAND, "* %s alterou o horário do servidor para %02d:%02d.", GetPlayerNamef(playerid), hour, minute);
 	}
 	return 1;
