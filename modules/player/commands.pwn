@@ -1064,7 +1064,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					case 2:
 					{
 						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_TELEPORT, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos: Teleportes",
-						"/ls\n/sf\n/lv\n/lb", "Fechar", "Voltar");
+						"/ls\n/sf\n/lv\n/lb\n/interiores", "Fechar", "Voltar");
 					}
 					case 3:
 					{
