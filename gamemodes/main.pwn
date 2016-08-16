@@ -159,7 +159,6 @@ hook OnGameModeInit()
 #include "../modules/gameplay/races.pwn"
 #include "../modules/gameplay/derby.pwn"
 #include "../modules/gameplay/deathmatch.pwn"
-#include "../modules/gameplay/dmcreator.pwn"
 #include "../modules/gameplay/drift.pwn"
 #include "../modules/gameplay/events.pwn"
 // #include "../modules/gameplay/anticheat.pwn"
