@@ -1086,7 +1086,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			PlayCancelSound(playerid);
 			if(!response)
 			{
-				ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos", "Jogador\nVeículo\nGeral\nAnimações", "Selecionar", "Fechar");
+				ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos", "Jogador\nVeículo\nTeleportes\nGeral\nAnimações", "Selecionar", "Fechar");
 			}
 		}
 		case DIALOG_VEHICLE_LIST:
