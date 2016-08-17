@@ -38,6 +38,7 @@ CREATE TABLE `users` (
   `skin` int(11) NOT NULL,
   `admin` int(11) NOT NULL,
   `vip` int(11) NOT NULL,
+  `played_time` int(11) NOT NULL,
   `kills` int(11) NOT NULL,
   `deaths` int(11) NOT NULL,
   `race_wins` int(11) NOT NULL,

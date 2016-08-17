@@ -19,13 +19,14 @@ forward OnSelectKillsRanking(playerid);
 forward OnSelectRacesRanking(playerid);
 forward OnSelectDerbyRanking(playerid);
 forward OnSelectDeathRanking(playerid);
+forward OnSelectPTimeRanking(playerid);
 
 //------------------------------------------------------------------------------
 
 YCMD:rank(playerid, params[], help)
 {
     PlaySelectSound(playerid);
-    ShowPlayerDialog(playerid, DIALOG_RANKING, DIALOG_STYLE_LIST, "Ranks", "Score\nAbates\nCorridas\nDerby\nMata-Mata", "Selecionar", "Voltar");
+    ShowPlayerDialog(playerid, DIALOG_RANKING, DIALOG_STYLE_LIST, "Ranks", "Score\nAbates\nCorridas\nDerby\nMata-Mata\nTempo Jogado", "Selecionar", "Voltar");
     return 1;
 }
 
@@ -121,6 +122,24 @@ public OnSelectDeathRanking(playerid)
 
 //------------------------------------------------------------------------------
 
+public OnSelectPTimeRanking(playerid)
+{
+    new rows, fields, output[4096], string[48], username[MAX_PLAYER_NAME], played_time;
+	cache_get_data(rows, fields, gMySQL);
+    strcat(output, "Rank\tNome\tTempo\n");
+    for(new i = 0; i < rows; i++)
+    {
+        played_time = cache_get_field_content_int(i, "played_time", gMySQL);
+        cache_get_field_content(i, "username", username, gMySQL, MAX_PLAYER_NAME);
+        format(string, sizeof(string), "%iº\t%s\t%s\n", i + 1, username, convertSeconds(played_time));
+        strcat(output, string);
+    }
+    ShowPlayerDialog(playerid, DIALOG_RANKING_PLAYED, DIALOG_STYLE_TABLIST_HEADERS, "Ranking: Tempo Jogado", output, "Voltar", "");
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
     switch (dialogid)
@@ -155,13 +174,17 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         mysql_tquery(gMySQL, "SELECT username, dm_wins FROM users ORDER BY dm_wins DESC LIMIT 95", "OnSelectDeathRanking", "i", playerid);
                     }
+                    case 5:
+                    {
+                        mysql_tquery(gMySQL, "SELECT username, played_time FROM users ORDER BY played_time DESC LIMIT 50", "OnSelectPTimeRanking", "i", playerid);
+                    }
                 }
             }
         }
-        case DIALOG_RANKING_SCORE, DIALOG_RANKING_KILLS, DIALOG_RANKING_RACES, DIALOG_RANKING_DERBY, DIALOG_RANKING_DM:
+        case DIALOG_RANKING_SCORE, DIALOG_RANKING_KILLS, DIALOG_RANKING_RACES, DIALOG_RANKING_DERBY, DIALOG_RANKING_DM, DIALOG_RANKING_PLAYED:
         {
             PlayCancelSound(playerid);
-            ShowPlayerDialog(playerid, DIALOG_RANKING, DIALOG_STYLE_LIST, "Ranks", "Score\nAbates\nCorridas\nDerby\nMata-Mata", "Selecionar", "Voltar");
+            ShowPlayerDialog(playerid, DIALOG_RANKING, DIALOG_STYLE_LIST, "Ranks", "Score\nAbates\nCorridas\nDerby\nMata-Mata\nTempo Jogado", "Selecionar", "Voltar");
         }
     }
     return 1;

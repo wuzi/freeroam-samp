@@ -350,6 +350,18 @@ stock ConvertToGameText(in[])
 
 //------------------------------------------------------------------------------
 
+convertSeconds(seconds)
+{
+	new output[42];
+	if(seconds < 86400)
+		format(output, sizeof(output), "%02dh %02dm %02ds", (seconds / 3600), (seconds - (3600 * (seconds / 3600))) / 60, (seconds % 60));
+	else
+		 format(output, sizeof(output), "%02dd %02dh %02dm %02ds", seconds / 86400, (seconds - (86400 * (seconds / 86400))) / 3600, (seconds - (3600 * (seconds / 3600))) / 60, (seconds % 60));
+	return output;
+}
+
+//------------------------------------------------------------------------------
+
 // Convert UNIX time to human readable time
 stock convertTimestamp( timestamp, _form=0 )
 {
