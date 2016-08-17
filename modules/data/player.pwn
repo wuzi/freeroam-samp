@@ -112,13 +112,21 @@ SavePlayerAccount(playerid)
 
 ResetPlayerData(playerid)
 {
-    new ct = gettime();
-
     gPlayerStates[playerid] = E_PLAYER_STATE_NONE;
-
     gPlayerAccountData[playerid][e_player_database_id]  = 0;
+    gPlayerAccountData[playerid][e_player_money]        = 0;
+    gPlayerAccountData[playerid][e_player_bank]         = 0;
+    gPlayerAccountData[playerid][e_player_score]        = 0;
+    gPlayerAccountData[playerid][e_player_age]          = 0;
+    gPlayerAccountData[playerid][e_player_skin]         = 0;
+    gPlayerAccountData[playerid][e_player_tutorial]     = 0;
+    gPlayerAccountData[playerid][e_player_vip]          = 0;
+    gPlayerAccountData[playerid][e_player_muted]        = false;
+    gPlayerAccountData[playerid][e_player_warning]      = 0;
+    gPlayerAccountData[playerid][e_player_played_time]  = 0;
+    gPlayerAccountData[playerid][e_player_admin]        = 0;
     gPlayerAccountData[playerid][e_player_regdate][0]   = '\0';
-    gPlayerAccountData[playerid][e_player_lastlogin]    = ct;
+    gPlayerAccountData[playerid][e_player_lastlogin]    = gettime();
 }
 
 //------------------------------------------------------------------------------
