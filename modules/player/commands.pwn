@@ -1159,6 +1159,11 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 		SendClientMessage(playerid, COLOR_ERROR, "* Você precisa estar logado para usar algum comando.");
 		return COMMAND_DENIED;
 	}
+	else if(IsPlayerInTutorial(playerid))
+    {
+		PlayErrorSound(playerid);
+        return COMMAND_DENIED;
+    }
 	else if(success != COMMAND_OK)
 		SendClientMessage(playerid, COLOR_ERROR, "* Este comando não existe. Veja /comandos.");
 	return COMMAND_OK;

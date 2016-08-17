@@ -21,6 +21,11 @@ hook OnPlayerText(playerid, text[])
         SendClientMessage(playerid, COLOR_ERROR, "* Você não está logado.");
         return -1;
     }
+    else if(IsPlayerInTutorial(playerid))
+    {
+        PlayErrorSound(playerid);
+        return -1;
+    }
     else if(IsPlayerMuted(playerid))
     {
         SendClientMessage(playerid, COLOR_ERROR, "* Você está mutado.");
@@ -60,7 +65,7 @@ hook OnPlayerText(playerid, text[])
 
         foreach(new i: Player)
         {
-            if(GetPlayerGamemode(i) != GAMEMODE_LOBBY)
+            if(GetPlayerGamemode(i) != GAMEMODE_LOBBY && !IsPlayerInTutorial(i))
             {
                 SendClientMessage(i, GetPlayerColor(playerid), message);
             }

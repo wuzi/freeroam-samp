@@ -133,6 +133,7 @@ hook OnGameModeInit()
 #include "../modules/visual/authentication.pwn"
 #include "../modules/visual/lobby.pwn"
 #include "../modules/visual/deathmatch.pwn"
+#include "../modules/visual/tutorial.pwn"
 
 /* Dados */
 #include "../modules/data/player.pwn"
@@ -166,6 +167,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/npc.pwn"
 #include "../modules/gameplay/vehiclename.pwn"
 #include "../modules/gameplay/interior.pwn"
+#include "../modules/gameplay/tutorial.pwn"
 
 //------------------------------------------------------------------------------
 

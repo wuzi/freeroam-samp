@@ -38,6 +38,7 @@ CREATE TABLE `users` (
   `skin` int(11) NOT NULL,
   `admin` int(11) NOT NULL,
   `vip` int(11) NOT NULL,
+  `tutorial` int(11) NOT NULL,
   `drift_points` int(11) NOT NULL,
   `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,

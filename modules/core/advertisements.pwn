@@ -16,7 +16,13 @@ static messages[][] = {
 
 task SendGlobalAdvertise[ADVERTISE_INTERVAL]()
 {
-    SendClientMessageToAll(COLOR_WHITE, messages[random(sizeof(messages))]);
+    foreach(new i: Player)
+    {
+        if(!IsPlayerInTutorial(i) && GetPlayerGamemode(i) != GAMEMODE_LOBBY)
+        {
+            SendClientMessage(i, COLOR_WHITE, messages[random(sizeof(messages))]);
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
