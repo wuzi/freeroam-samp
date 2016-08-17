@@ -10,6 +10,8 @@
 
 #include <YSI\y_hooks>
 
+static gPlayerCheatCount[MAX_PLAYERS][53];
+
 //------------------------------------------------------------------------------
 
 static const g_anticheat_names[][] =
@@ -71,11 +73,55 @@ static const g_anticheat_names[][] =
 
 //------------------------------------------------------------------------------
 
+hook OnPlayerDisconnect(playerid, reason)
+{
+    for(new i = 0; i < sizeof(gPlayerCheatCount[]); i++)
+    {
+        gPlayerCheatCount[playerid][i] = 0;
+    }
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+
 forward OnCheatDetected(playerid, ip_address[], type, code);
 public OnCheatDetected(playerid, ip_address[], type, code)
 {
-    SendAdminMessage(PLAYER_RANK_RECRUIT, COLOR_LIGHT_RED, "[ANTICHEAT] O jogador %s foi acusado de suspeitas de %s.", GetPlayerNamef(playerid), g_anticheat_names[code]);
+    if(!type)
+    {
+        gPlayerCheatCount[playerid][code]++;
+        if(gPlayerCheatCount[playerid][code] >= 3)
+        {
+            new count = 0;
+            foreach(new i: Player)
+            {
+                if(GetPlayerAdminLevel(i) >= PLAYER_RANK_RECRUIT)
+                {
+                    count++;
+                }
+            }
+
+            if(count)
+                SendAdminMessage(PLAYER_RANK_RECRUIT, COLOR_LIGHT_RED, "[ANTICHEAT] O jogador %s foi acusado de suspeitas de %s.", GetPlayerNamef(playerid), g_anticheat_names[code]);
+            else
+            {
+                SendClientMessageToAllf(COLOR_LIGHT_RED, "[ANTICHEAT] O jogador %s foi kickado do servidor. Motivo: Suspeitas de %s.", GetPlayerNamef(playerid), g_anticheat_names[code]);
+                Kick(playerid);
+            }
+        }
+    }
     return 1;
+}
+
+//------------------------------------------------------------------------------
+
+ptask OnResetFalsePositives[30000](playerid)
+{
+    for(new i = 0; i < sizeof(gPlayerCheatCount[]); i++)
+    {
+        if(gPlayerCheatCount[playerid][i] > 0)
+            gPlayerCheatCount[playerid][i]--;
+    }
 }
 
 //------------------------------------------------------------------------------

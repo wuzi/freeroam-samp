@@ -77,7 +77,7 @@ new gMySQL;
 
 // Bibliotecas
 #include <streamer>
-// #include <next-ac>
+#include <next-ac>
 #include <sscanf2>
 #include <a_mysql>
 #include <YSI\y_hooks>
@@ -162,7 +162,7 @@ hook OnGameModeInit()
 #include "../modules/gameplay/deathmatch.pwn"
 #include "../modules/gameplay/drift.pwn"
 #include "../modules/gameplay/events.pwn"
-// #include "../modules/gameplay/anticheat.pwn"
+#include "../modules/gameplay/anticheat.pwn"
 #include "../modules/gameplay/animations.pwn"
 #include "../modules/gameplay/pause.pwn"
 #include "../modules/gameplay/npc.pwn"
