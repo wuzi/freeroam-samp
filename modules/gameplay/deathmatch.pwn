@@ -1112,6 +1112,7 @@ ResetPlayerDeathmatchData(playerid)
     HidePlayerDeathmatchHud(playerid);
     new dmid = GetPlayerDeathmatch(playerid);
     SetPlayerDeathmatch(playerid, INVALID_DEATHMATCH_ID);
+    SetPlayerWantedLevel(playerid, 0);
     if(dmid != INVALID_DEATHMATCH_ID)
     {
         if(gDeathmatchData[dmid][e_dm_state] == DM_STATE_STARTED)
