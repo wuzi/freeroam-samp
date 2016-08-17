@@ -166,7 +166,7 @@ YCMD:myacc(playerid, params[], help)
 	GetPlayerIp(playerid, ip, 16);
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Minha Conta ----------------------------------------");
 	SendClientMessagef(playerid, COLOR_SUB_TITLE, "Nome: %s - Dinheiro: $%d - Banco: $%d - IP: %s", GetPlayerNamef(playerid), GetPlayerCash(playerid), GetPlayerBankCash(playerid), ip);
-	SendClientMessagef(playerid, COLOR_SUB_TITLE, "Ultimo Login: %s", convertTimestamp(GetPlayerLastLogin(playerid)));
+	SendClientMessagef(playerid, COLOR_SUB_TITLE, "Ultimo Login: %s - Tempo Jogado: %s", convertTimestamp(GetPlayerLastLogin(playerid)), GetPlayerPlayedTimeStamp(playerid));
 	SendClientMessage(playerid, COLOR_TITLE, "---------------------------------------- Minha Conta ----------------------------------------");
 	return 1;
 }
