@@ -100,8 +100,8 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
                 GetPlayerName(playerid, playerName, sizeof(playerName));
                 GetPlayerIp(playerid, playerIP, sizeof(playerIP));
 
-                new query[256];
-                mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `users` (`username`, `email`, `password`, `ip`, `created_at`) VALUES ('%e', '%e', '%e', '%s', now())", playerName, GetPlayerEmail(playerid), GetPlayerPassword(playerid), playerIP);
+                new query[286];
+                mysql_format(gMySQL, query, sizeof(query), "INSERT INTO `users` (`username`, `email`, `password`, `gender`, `age`, `ip`, `created_at`) VALUES ('%e', '%e', '%e', '%s', now())", playerName, GetPlayerEmail(playerid), GetPlayerPassword(playerid), GetPlayerGender(playerid), GetPlayerAge(playerid), playerIP);
                 mysql_tquery(gMySQL, query, "OnAccountRegister", "i", playerid);
             }
         }
