@@ -870,13 +870,19 @@ hook OnPlayerDeath(playerid, killerid, reason)
             gPlayerData[playerid][e_player_deaths]++;
             gPlayerData[killerid][e_player_kills]++;
 
+            SetPlayerWantedLevel(playerid, 0);
+            SetPlayerWantedLevel(killerid, GetPlayerWantedLevel(killerid) + 1);
+
             new leaderid = INVALID_PLAYER_ID, leader_points = 0;
             foreach(new i: Player)
             {
-                if(GetPlayerDeathmatch(i) == dmid && gPlayerData[i][e_player_kills] >= leader_points)
+                if(GetPlayerDeathmatch(i) == dmid)
                 {
-                    leaderid = i;
-                    leader_points = gPlayerData[i][e_player_kills];
+                    if(gPlayerData[i][e_player_kills] >= leader_points)
+                    {
+                        leaderid = i;
+                        leader_points = gPlayerData[i][e_player_kills];
+                    }
                 }
             }
 
@@ -930,6 +936,8 @@ hook OnPlayerDeath(playerid, killerid, reason)
     {
         if(gPlayerData[playerid][e_player_kills] > 0)
             gPlayerData[playerid][e_player_kills]--;
+
+        SetPlayerWantedLevel(playerid, 0);
     }
     return 1;
 }

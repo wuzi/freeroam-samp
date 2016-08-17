@@ -43,7 +43,9 @@ static const gTutorialText[][][] =
     {
         "Mata-Mata",
         "No mata-mata seu objetivo é matar o maior número de jogadores para vencer a partida \
-        caso você cometa suicídio você perderá 1 abate.~n~~n~O jogador que atingir o limite definido vence a partida!"
+        caso você cometa suicídio você perderá 1 abate.~n~~n~\
+        Abaixo de seu dinheiro as estrelas de procurado simbolizam seu killing spree, quanto mais estrelas melhor está sendo sua performance.~n~~n~\
+        O jogador que atingir o limite definido vence a partida!"
     },
     {
         "Derby",
