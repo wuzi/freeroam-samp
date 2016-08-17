@@ -8,6 +8,8 @@
 *       -
 */
 
+#include <YSI\y_hooks>
+
 static messages[][] = {
     "Para ver as vantagens VIP digite '{f00c0c}/vantagensvip{FFFFFF}'.",
     "Está com dúvidas? Digite '{f00c0c}/cmds{FFFFFF}' ou peça ajuda a um administrador {f00c0c}/admins{FFFFFF}.",
@@ -36,4 +38,10 @@ task UpdateHostName[UPDATE_HOSTNAME_INTERVAL]()
     new cmd[128];
     format(cmd, sizeof(cmd), "hostname            %s", hostnames[random(sizeof(hostnames))]);
     SendRconCommand(cmd);
+}
+
+hook OnGameModeInit()
+{
+    UpdateHostName();
+    return 1;
 }
