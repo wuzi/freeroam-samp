@@ -13,8 +13,6 @@
 
 #if !defined FILTERSCRIPT
 
-//#define DEBUG
-
 #include <nex-ac_en.lang>	//Localization
 
 #define	NEX_AC_VERSION				"1.9.6"
