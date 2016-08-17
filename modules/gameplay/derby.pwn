@@ -378,6 +378,16 @@ task OnDerbyUpdate[1000]()
                         new string[64];
                         format(string, sizeof(string), "%d\t%s\t%02d:%02d:%03d\n", ranking, GetPlayerNamef(j), j_minutes, j_seconds, j_milliseconds);
                         strcat(output, string);
+
+                        if(ranking == 1)
+                        {
+                            SetPlayerPoint(j, GetPlayerPoint(j) + 5);
+                            SetPlayerDerbyWins(j, GetPlayerDerbyWins(j) + 1);
+                        }
+                        else if(ranking == 2)
+                            SetPlayerPoint(j, GetPlayerPoint(j) + 3);
+                        else
+                            SetPlayerPoint(j, GetPlayerPoint(j) + 1);
                     }
 
                     foreach(new i: Player)
@@ -665,6 +675,16 @@ ResetPlayerDerbyData(playerid)
                     new string[64];
                     format(string, sizeof(string), "%d\t%s\t%02d:%02d:%03d\n", ranking, GetPlayerNamef(j), j_minutes, j_seconds, j_milliseconds);
                     strcat(output, string);
+
+                    if(ranking == 1)
+                    {
+                        SetPlayerPoint(j, GetPlayerPoint(j) + 5);
+                        SetPlayerDerbyWins(j, GetPlayerDerbyWins(j) + 1);
+                    }
+                    else if(ranking == 2)
+                        SetPlayerPoint(j, GetPlayerPoint(j) + 3);
+                    else
+                        SetPlayerPoint(j, GetPlayerPoint(j) + 1);
                 }
 
                 foreach(new i: Player)

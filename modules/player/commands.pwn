@@ -1054,7 +1054,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					case 0:
 					{
 						ShowPlayerDialog(playerid, DIALOG_COMMAND_LIST_PLAYER, DIALOG_STYLE_LIST, "{59c72c}LF - {FFFFFF}Lista de Comandos: Jogador",
-						"/ir\n/pm\n/clima\n/dia\n/tarde\n/noite\n/lutas\n/sp\n/irp\n/mdist\n/reportar\n/relatorio\n/admins\n/id\n/contar\n/irevento\n/lobby\n/afk", "Fechar", "Voltar");
+						"/ir\n/pm\n/clima\n/dia\n/tarde\n/noite\n/lutas\n/sp\n/irp\n/mdist\n/reportar\n/relatorio\n/admins\n/id\n/contar\n/rank\n/irevento\n/lobby\n/afk", "Fechar", "Voltar");
 					}
 					case 1:
 					{

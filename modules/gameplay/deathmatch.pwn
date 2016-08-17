@@ -870,6 +870,9 @@ hook OnPlayerDeath(playerid, killerid, reason)
             gPlayerData[playerid][e_player_deaths]++;
             gPlayerData[killerid][e_player_kills]++;
 
+            SetPlayerKill(killerid, GetPlayerKill(killerid) + 1);
+            SetPlayerDeath(playerid, GetPlayerDeath(playerid) + 1);
+
             SetPlayerWantedLevel(playerid, 0);
             SetPlayerWantedLevel(killerid, GetPlayerWantedLevel(killerid) + 1);
 
@@ -908,7 +911,10 @@ hook OnPlayerDeath(playerid, killerid, reason)
                     GivePlayerCash(pid, gDeathmatchData[dmid][e_dm_prize][count]);
 
                     if(i == 0)
+                    {
                         SetPlayerPoint(pid, GetPlayerPoint(pid) + 5);
+                        SetPlayerDeathmatchWins(playerid, GetPlayerDeathmatchWins(playerid) + 1);
+                    }
                     else if(i == 1)
                         SetPlayerPoint(pid, GetPlayerPoint(pid) + 3);
                     else
@@ -938,6 +944,7 @@ hook OnPlayerDeath(playerid, killerid, reason)
             gPlayerData[playerid][e_player_kills]--;
 
         SetPlayerWantedLevel(playerid, 0);
+        SetPlayerDeath(playerid, GetPlayerDeath(playerid) + 1);
     }
     return 1;
 }

@@ -1121,7 +1121,10 @@ hook OnPlayerEnterRaceCP(playerid)
 
                     GivePlayerCash(j, gPrizeData[raceid][i]);
                     if(i == 0)
+                    {
                         SetPlayerPoint(j, GetPlayerPoint(j) + 5);
+                        SetPlayerRaceWins(j, GetPlayerRaceWins(j) + 1);
+                    }
                     else if(i == 1)
                         SetPlayerPoint(j, GetPlayerPoint(j) + 3);
                     else
@@ -1345,7 +1348,10 @@ ResetPlayerRaceData(playerid)
 
                     GivePlayerCash(j, gPrizeData[raceid][i]);
                     if(i == 0)
+                    {
                         SetPlayerPoint(j, GetPlayerPoint(j) + 5);
+                        SetPlayerRaceWins(j, GetPlayerRaceWins(j) + 1);
+                    }
                     else if(i == 1)
                         SetPlayerPoint(j, GetPlayerPoint(j) + 3);
                     else

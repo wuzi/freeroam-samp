@@ -42,7 +42,12 @@ enum e_player_adata
     e_player_warning,
     e_player_played_time,
     e_player_admin,
-    e_player_lastlogin
+    e_player_lastlogin,
+    e_player_kills,
+    e_player_deaths,
+    e_player_race_wins,
+    e_player_dm_wins,
+    e_player_derby_wins
 }
 static gPlayerAccountData[MAX_PLAYERS][e_player_adata];
 
@@ -99,9 +104,23 @@ SavePlayerAccount(playerid)
         return 0;
 
     // Salvar conta
-    new query[238];
-	mysql_format(gMySQL, query, sizeof(query), "UPDATE users SET money=%d, bank=%d, score=%d, skin=%d, admin=%d, vip=%d, tutorial=%d, drift_points=%d, played_time=%d, ip='%s', last_login=%d WHERE id=%d", GetPlayerCash(playerid), GetPlayerBankCash(playerid), gPlayerAccountData[playerid][e_player_score], GetPlayerSkin(playerid), gPlayerAccountData[playerid][e_player_admin], gPlayerAccountData[playerid][e_player_vip], gPlayerAccountData[playerid][e_player_tutorial], GetPlayerDriftPoints(playerid), gPlayerAccountData[playerid][e_player_played_time], gPlayerAccountData[playerid][e_player_ip], gettime(), gPlayerAccountData[playerid][e_player_database_id]);
-	mysql_pquery(gMySQL, query);
+    new query[400];
+	mysql_format(gMySQL, query, sizeof(query),
+    "UPDATE users SET money=%d, bank=%d, score=%d, skin=%d, admin=%d, vip=%d, \
+    kills=%d, deaths=%d, race_wins=%d, dm_wins=%d, derby_wins=%d, \
+    tutorial=%d, drift_points=%d, played_time=%d, ip='%s', last_login=%d WHERE id=%d",
+    GetPlayerCash(playerid), GetPlayerBankCash(playerid), gPlayerAccountData[playerid][e_player_score],
+    GetPlayerSkin(playerid), gPlayerAccountData[playerid][e_player_admin],
+    gPlayerAccountData[playerid][e_player_vip],
+    gPlayerAccountData[playerid][e_player_kills], gPlayerAccountData[playerid][e_player_deaths],
+    gPlayerAccountData[playerid][e_player_race_wins], gPlayerAccountData[playerid][e_player_dm_wins],
+    gPlayerAccountData[playerid][e_player_derby_wins],
+    gPlayerAccountData[playerid][e_player_tutorial],
+    GetPlayerDriftPoints(playerid), gPlayerAccountData[playerid][e_player_played_time],
+    gPlayerAccountData[playerid][e_player_ip], gettime(),
+    gPlayerAccountData[playerid][e_player_database_id]);
+    mysql_pquery(gMySQL, query);
+
     mysql_format(gMySQL, query, sizeof(query), "UPDATE user_preferences SET color=%d, fight_style=%d, auto_repair=%d, name_tags=%d, goto=%d, drift=%d, drift_counter=%d WHERE user_id=%d",
     GetPlayerColor(playerid), GetPlayerFightingStyle(playerid), GetPlayerAutoRepairState(playerid), GetPlayerNameTagsState(playerid), GetPlayerGotoState(playerid), GetPlayerDriftState(playerid), GetPlayerDriftCounter(playerid), gPlayerAccountData[playerid][e_player_database_id]);
 	mysql_pquery(gMySQL, query);
@@ -120,6 +139,11 @@ ResetPlayerData(playerid)
     gPlayerAccountData[playerid][e_player_age]          = 0;
     gPlayerAccountData[playerid][e_player_skin]         = 0;
     gPlayerAccountData[playerid][e_player_tutorial]     = 0;
+    gPlayerAccountData[playerid][e_player_kills]        = 0;
+    gPlayerAccountData[playerid][e_player_deaths]       = 0;
+    gPlayerAccountData[playerid][e_player_race_wins]    = 0;
+    gPlayerAccountData[playerid][e_player_dm_wins]      = 0;
+    gPlayerAccountData[playerid][e_player_derby_wins]   = 0;
     gPlayerAccountData[playerid][e_player_vip]          = 0;
     gPlayerAccountData[playerid][e_player_muted]        = false;
     gPlayerAccountData[playerid][e_player_warning]      = 0;
@@ -377,6 +401,13 @@ public OnAccountLoad(playerid)
         gPlayerAccountData[playerid][e_player_vip]          = cache_get_field_content_int(0, "vip", gMySQL);
         gPlayerAccountData[playerid][e_player_tutorial]     = cache_get_field_content_int(0, "tutorial", gMySQL);
         gPlayerAccountData[playerid][e_player_lastlogin]    = cache_get_field_content_int(0, "last_login", gMySQL);
+
+        gPlayerAccountData[playerid][e_player_kills]        = cache_get_field_content_int(0, "kills", gMySQL);
+        gPlayerAccountData[playerid][e_player_deaths]       = cache_get_field_content_int(0, "deaths", gMySQL);
+        gPlayerAccountData[playerid][e_player_race_wins]    = cache_get_field_content_int(0, "race_wins", gMySQL);
+        gPlayerAccountData[playerid][e_player_dm_wins]      = cache_get_field_content_int(0, "dm_wins", gMySQL);
+        gPlayerAccountData[playerid][e_player_derby_wins]   = cache_get_field_content_int(0, "derby_wins", gMySQL);
+
         cache_get_field_content(0, "created_at", gPlayerAccountData[playerid][e_player_regdate], gMySQL, 32);
         SetPlayerPoint(playerid, cache_get_field_content_int(0, "score", gMySQL));
 
@@ -647,6 +678,58 @@ ChangePlayerName(playerid, name[])
     mysql_format(gMySQL, query, sizeof(query),"SELECT * FROM `users` WHERE `username` = '%e' LIMIT 1", name);
     mysql_tquery(gMySQL, query, "OnNameCheck", "is", playerid, name);
     return 1;
+}
+
+//------------------------------------------------------------------------------
+
+GetPlayerKill(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_kills];
+}
+
+SetPlayerKill(playerid, kills)
+{
+    gPlayerAccountData[playerid][e_player_kills] = kills;
+}
+
+GetPlayerDeath(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_deaths];
+}
+
+SetPlayerDeath(playerid, deaths)
+{
+    gPlayerAccountData[playerid][e_player_deaths] = deaths;
+}
+
+GetPlayerDeathmatchWins(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_dm_wins];
+}
+
+SetPlayerDeathmatchWins(playerid, wins)
+{
+    gPlayerAccountData[playerid][e_player_dm_wins] = wins;
+}
+
+GetPlayerRaceWins(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_race_wins];
+}
+
+SetPlayerRaceWins(playerid, wins)
+{
+    gPlayerAccountData[playerid][e_player_race_wins] = wins;
+}
+
+GetPlayerDerbyWins(playerid)
+{
+    return gPlayerAccountData[playerid][e_player_derby_wins];
+}
+
+SetPlayerDerbyWins(playerid, wins)
+{
+    gPlayerAccountData[playerid][e_player_derby_wins] = wins;
 }
 
 //------------------------------------------------------------------------------

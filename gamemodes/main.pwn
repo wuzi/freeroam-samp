@@ -138,6 +138,7 @@ hook OnGameModeInit()
 /* Dados */
 #include "../modules/data/player.pwn"
 #include "../modules/data/building.pwn"
+#include "../modules/data/ranking.pwn"
 
 /* Jogador */
 #include "../modules/player/commands.pwn"
