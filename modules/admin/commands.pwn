@@ -254,7 +254,7 @@ YCMD:avisar(playerid, params[], help)
 
     new message[128];
     if(sscanf(params, "s[128]", message))
-        return SendClientMessage(playerid, COLOR_INFO, "* /aviso [texto]");
+        return SendClientMessage(playerid, COLOR_INFO, "* /avisar [texto]");
 
     new output[144];
     format(output, sizeof(output), "Admin %s [nivel %d]: %s", GetPlayerNamef(playerid), GetPlayerAdminLevel(playerid), message);
@@ -272,7 +272,7 @@ YCMD:a(playerid, params[], help)
 
     new text[128];
     if(sscanf(params, "s[128]", text))
-        return SendClientMessage(playerid, COLOR_INFO, "* /texto [texto]");
+        return SendClientMessage(playerid, COLOR_INFO, "* /a [texto]");
 
     new output[144];
     format(output, 144, "@ [{%06x}%s{ededed}] %s: {e3e3e3}%s", GetPlayerRankColor(playerid) >>> 8, GetPlayerAdminRankName(playerid, true), GetPlayerNamef(playerid), text);
