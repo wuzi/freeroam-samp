@@ -1100,7 +1100,7 @@ timer EndDeathmatch[7500](dmid)
     {
         if(GetPlayerDeathmatch(i) == dmid)
         {
-            SetPlayerDeathmatch(i, 0);
+            SetPlayerWantedLevel(i, 0);
             HidePlayerDeathmatchHud(i);
             if(GetPlayerState(i) == PLAYER_STATE_SPECTATING)
             {
