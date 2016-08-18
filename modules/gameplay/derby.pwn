@@ -593,7 +593,11 @@ SetPlayerDerby(playerid, derbyid)
 
 GetPlayerDerby(playerid)
 {
-    return gPlayerCurrentDerby[playerid];
+    if(GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+    {        
+        return gPlayerCurrentDerby[playerid];
+    }
+    return INVALID_DERBY_ID;
 }
 
 GetDerbyMaxPlayers()
