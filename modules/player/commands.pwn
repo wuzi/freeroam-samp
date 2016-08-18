@@ -109,13 +109,13 @@ YCMD:kitvip(playerid, params[], help)
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você só pode usar este comando no freeroam.");
 
 	GivePlayerWeapon(playerid, 4, 1);
-	GivePlayerWeapon(playerid, 16, 99999);
-	GivePlayerWeapon(playerid, 24, 99999);
-	GivePlayerWeapon(playerid, 26, 99999);
-	GivePlayerWeapon(playerid, 29, 99999);
-	GivePlayerWeapon(playerid, 30, 99999);
-	GivePlayerWeapon(playerid, 34, 99999);
-	GivePlayerWeapon(playerid, 39, 99999);
+	GivePlayerWeapon(playerid, 16, 50);
+	GivePlayerWeapon(playerid, 24, 250);
+	GivePlayerWeapon(playerid, 26, 1000);
+	GivePlayerWeapon(playerid, 29, 1000);
+	GivePlayerWeapon(playerid, 30, 1000);
+	GivePlayerWeapon(playerid, 34, 1000);
+	GivePlayerWeapon(playerid, 39, 1000);
 
 	PlayerPlaySound(playerid, 5203, 0.0, 0.0, 0.0);
 	SendClientMessage(playerid, COLOR_SUCCESS, "* Você recebeu seu kit vip.");
