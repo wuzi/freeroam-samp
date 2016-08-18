@@ -960,6 +960,20 @@ hook OnPlayerDeath(playerid, killerid, reason)
 
         SetPlayerWantedLevel(playerid, 0);
         SetPlayerDeath(playerid, GetPlayerDeath(playerid) + 1);
+
+        new leaderid = INVALID_PLAYER_ID, leader_points = 0, dmid = GetPlayerDeathmatch(playerid);
+        foreach(new i: Player)
+        {
+            if(GetPlayerDeathmatch(i) == dmid)
+            {
+                if(gPlayerData[i][e_player_kills] >= leader_points)
+                {
+                    leaderid = i;
+                    leader_points = gPlayerData[i][e_player_kills];
+                }
+            }
+        }
+        UpdatePlayerDeathmatchHud(playerid, gPlayerData[playerid][e_player_kills], gPlayerData[playerid][e_player_deaths], leaderid, leader_points, gDeathmatchData[dmid][e_dm_points]);
     }
     return 1;
 }
