@@ -12,13 +12,15 @@
 
 //------------------------------------------------------------------------------
 
-static PlayerText:loginTextDraw[MAX_PLAYERS][7];
+static PlayerText:loginTextDraw[MAX_PLAYERS][8];
 static Text:registerTextDraw[9];
 static Text:backgroundTextDraw[7];
 
 static bool:isTextDrawVisible[MAX_PLAYERS];
 static bool:isDialogVisible[MAX_PLAYERS];
 static bool:isPlayerRegistered[MAX_PLAYERS];
+
+static gPlayerRecoverCode[MAX_PLAYERS][64];
 
 //------------------------------------------------------------------------------
 
@@ -135,6 +137,20 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
         {
             ShowPlayerCredits(playerid);
         }
+        else if(playertextid == loginTextDraw[playerid][7])
+        {
+            new output[148];
+            PlaySelectSound(playerid);
+            if(strlen(gPlayerRecoverCode[playerid]) < 2)
+            {
+                strcat(gPlayerRecoverCode[playerid], GenerateKey());
+                format(output, sizeof(output), "Código: %s.", gPlayerRecoverCode[playerid]);
+                SendMail(GetPlayerEmail(playerid), "recover@libertyfreeroam.com", "Liberty Freeroam", "Recuperar Senha", output);
+
+            }
+            format(output, sizeof(output), "Enviamos um código para seu e-mail (%s).\nInsira o código abaixo para resetar sua senha:", GetPlayerEmail(playerid));
+            ShowPlayerDialog(playerid, DIALOG_RESETPASS_CODE, DIALOG_STYLE_INPUT, "Resetar senha", output, "Enviar", "Voltar");
+        }
     }
     return 1;
 }
@@ -145,6 +161,52 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
     switch (dialogid)
     {
+        case DIALOG_RESETPASS_PASS:
+        {
+            if(!response)
+            {
+                PlayErrorSound(playerid);
+                ShowPlayerDialog(playerid, DIALOG_RESETPASS_PASS, DIALOG_STYLE_INPUT, "Resetar senha", "{00ff00}CÓDIGO CORRETO!\n\n{ffffff}Insira sua nova senha:", "Salvar", "");
+            }
+            else if(strlen(inputtext) > MAX_PLAYER_PASSWORD - 1)
+            {
+                PlayErrorSound(playerid);
+                ShowPlayerDialog(playerid, DIALOG_RESETPASS_PASS, DIALOG_STYLE_INPUT, "Resetar senha", "{ff0000}SENHA MUITO LONGA!\n\n{ffffff}Insira sua nova senha:", "Salvar", "");
+            }
+            else if(strlen(inputtext) < 4)
+            {
+                PlayErrorSound(playerid);
+                ShowPlayerDialog(playerid, DIALOG_RESETPASS_PASS, DIALOG_STYLE_INPUT, "Resetar senha", "{ff0000}SENHA MUITO CURTA!\n\n{ffffff}Insira sua nova senha:", "Salvar", "");
+            }
+            else
+            {
+                SetPlayerPassword(playerid, inputtext);
+                SendClientMessage(playerid, COLOR_SUCCESS, "* Sua senha foi alterada com sucesso!");
+                SendClientMessage(playerid, COLOR_SUB_TITLE, "* Você pode logar agora.");
+            }
+        }
+        case DIALOG_RESETPASS_CODE:
+        {
+            if(!response)
+            {
+                PlayCancelSound(playerid);
+            }
+            else
+            {
+                if(!strcmp(gPlayerRecoverCode[playerid], inputtext) && strlen(inputtext) > 1)
+                {
+                    PlaySelectSound(playerid);
+                    ShowPlayerDialog(playerid, DIALOG_RESETPASS_PASS, DIALOG_STYLE_INPUT, "Resetar senha", "{00ff00}CÓDIGO CORRETO!\n\n{ffffff}Insira sua nova senha:", "Salvar", "");
+                }
+                else
+                {
+                    new output[188];
+                    PlayErrorSound(playerid);
+                    format(output, sizeof(output), "Enviamos um código para seu e-mail (%s).\nInsira o código abaixo para resetar sua senha:\n\n{ff0000}CÓDIGO INCORRETO!", GetPlayerEmail(playerid));
+                    ShowPlayerDialog(playerid, DIALOG_RESETPASS_CODE, DIALOG_STYLE_INPUT, "Resetar senha", output, "Enviar", "Voltar");
+                }
+            }
+        }
         case DIALOG_LOGIN_PASSWORD:
         {
             if(!response)
@@ -348,6 +410,18 @@ ShowPlayerLoginTextDraw(playerid)
     PlayerTextDrawSetPreviewRot(playerid, loginTextDraw[playerid][6], 1.000000, 1.000000, 1.000000, 1.000000);
     PlayerTextDrawSetSelectable(playerid, loginTextDraw[playerid][6], 0);
 
+    loginTextDraw[playerid][7] = CreatePlayerTextDraw(playerid, 235.000000, 382.000000, " RECUPERAR SENHA");
+    PlayerTextDrawBackgroundColor(playerid, loginTextDraw[playerid][7], 255);
+    PlayerTextDrawFont(playerid, loginTextDraw[playerid][7], 1);
+    PlayerTextDrawLetterSize(playerid, loginTextDraw[playerid][7], 0.500000, 1.499999);
+    PlayerTextDrawColor(playerid, loginTextDraw[playerid][7], -1);
+    PlayerTextDrawSetOutline(playerid, loginTextDraw[playerid][7], 1);
+    PlayerTextDrawSetProportional(playerid, loginTextDraw[playerid][7], 1);
+    PlayerTextDrawUseBox(playerid, loginTextDraw[playerid][7], 1);
+    PlayerTextDrawBoxColor(playerid, loginTextDraw[playerid][7], 102);
+    PlayerTextDrawTextSize(playerid, loginTextDraw[playerid][7], 403.000000, 10.000000);
+    PlayerTextDrawSetSelectable(playerid, loginTextDraw[playerid][7], true);
+
     for(new i = 0; i < sizeof(backgroundTextDraw); i++)
         TextDrawShowForPlayer(playerid, backgroundTextDraw[i]);
 
@@ -430,6 +504,7 @@ hook OnPlayerDisconnect(playerid, reason)
     isDialogVisible[playerid]       = false;
     isTextDrawVisible[playerid]     = false;
     isPlayerRegistered[playerid]    = false;
+    gPlayerRecoverCode[playerid][0] = '\0';
 
     new szDisconnectReason[3][] =
     {
@@ -491,7 +566,7 @@ hook OnGameModeInit()
     TextDrawTextSize(backgroundTextDraw[3], 442.000000, -20.000000);
     TextDrawSetSelectable(backgroundTextDraw[3], 0);
 
-    backgroundTextDraw[4] = TextDrawCreate(240.000000, 370.000000, "Desejamos um bom jogo !");
+    backgroundTextDraw[4] = TextDrawCreate(240.000000, 415.000000, "Desejamos um bom jogo !");
     TextDrawBackgroundColor(backgroundTextDraw[4], 255);
     TextDrawFont(backgroundTextDraw[4], 2);
     TextDrawLetterSize(backgroundTextDraw[4], 0.290000, 1.000000);

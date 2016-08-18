@@ -73,6 +73,8 @@ new gMySQL;
 #define INVALID_DEATHMATCH_ID							-1
 #define MAX_DEATHMATCH_NAME								34
 
+#define MAILER_URL "http://localhost/mailer.php"
+
 //------------------------------------------------------------------------------
 
 // Bibliotecas
@@ -87,6 +89,7 @@ new gMySQL;
 #include <YSI\y_va>
 #include <mSelection>
 #include <md-sort>
+#include <mailer>
 #include <drift>
 #include <utils>
 

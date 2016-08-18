@@ -242,6 +242,7 @@ public OnAccountCheck(playerid)
         else
         {
             cache_get_field_content(0, "password", gPlayerAccountData[playerid][e_player_password], gMySQL, MAX_PLAYER_PASSWORD);
+            cache_get_field_content(0, "email", gPlayerAccountData[playerid][e_player_email], gMySQL, 128);
             gPlayerAccountData[playerid][e_player_database_id]  = cache_get_field_content_int(0, "id", gMySQL);
             gPlayerAccountData[playerid][e_player_skin]         = cache_get_field_content_int(0, "skin", gMySQL);
 

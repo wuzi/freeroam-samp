@@ -1783,36 +1783,6 @@ YCMD:visivel(playerid, params[], help)
     return 1;
 }
 
-//------------------------------------------------------------------------------
-
-GenerateVIPKey()
-{
-    new allowed_characters[] = {
-        'A', 'B', 'C', 'D', 'E',
-        'F', 'G', 'H', 'I', 'J',
-        'K', 'L', 'M', 'N', 'O',
-        'P', 'Q', 'R', 'S', 'T',
-        'U', 'V', 'W', 'X', 'Y',
-        'Z', '0', '1', '2', '3',
-        '4', '5', '6', '7', '8',
-        '9'
-    };
-
-    new key[30], character;
-    for(new i = 0; i < sizeof(key) - 1; i++)
-    {
-        character = random(sizeof(allowed_characters));
-        key[i] = allowed_characters[character];
-
-        if(i == 4 || i == 10 || i == 16 || i == 22)
-        {
-            i++;
-            key[i] = '-';
-        }
-    }
-    return key;
-}
-
 /*
 OOOOOOOOO     WWWWWWWW                           WWWWWWWWNNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRR
 OO:::::::::OO   W::::::W                           W::::::WN:::::::N       N::::::NE::::::::::::::::::::ER::::::::::::::::R
@@ -2068,7 +2038,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         }
 
                         new key[30], type[30];
-                        key = GenerateVIPKey();
+                        key = GenerateKey();
 
                         if(GetPVarInt(playerid, "gen_vip_type") == 0)
                             type = "Bronze";

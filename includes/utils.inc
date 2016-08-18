@@ -320,6 +320,36 @@ stock IsVehicleOccupied(vehicleid)
 
 //------------------------------------------------------------------------------
 
+GenerateKey()
+{
+    new allowed_characters[] = {
+        'A', 'B', 'C', 'D', 'E',
+        'F', 'G', 'H', 'I', 'J',
+        'K', 'L', 'M', 'N', 'O',
+        'P', 'Q', 'R', 'S', 'T',
+        'U', 'V', 'W', 'X', 'Y',
+        'Z', '0', '1', '2', '3',
+        '4', '5', '6', '7', '8',
+        '9'
+    };
+
+    new key[30], character;
+    for(new i = 0; i < sizeof(key) - 1; i++)
+    {
+        character = random(sizeof(allowed_characters));
+        key[i] = allowed_characters[character];
+
+        if(i == 4 || i == 10 || i == 16 || i == 22)
+        {
+            i++;
+            key[i] = '-';
+        }
+    }
+    return key;
+}
+
+//------------------------------------------------------------------------------
+
 stock ConvertToGameText(in[])
 {
     new string[2048];
