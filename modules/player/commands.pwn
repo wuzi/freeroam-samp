@@ -29,6 +29,24 @@ forward OnCheckVipKey(playerid);
 
 //------------------------------------------------------------------------------
 
+static Airplanes = mS_INVALID_LISTID;
+static Bikes = mS_INVALID_LISTID;
+static Boats = mS_INVALID_LISTID;
+static Convertible = mS_INVALID_LISTID;
+static Helicopters = mS_INVALID_LISTID;
+static Industrials = mS_INVALID_LISTID;
+static Lowrider = mS_INVALID_LISTID;
+static OffRoad = mS_INVALID_LISTID;
+static PublicService = mS_INVALID_LISTID;
+static RC = mS_INVALID_LISTID;
+static Saloon = mS_INVALID_LISTID;
+static Sports = mS_INVALID_LISTID;
+static StationWagon = mS_INVALID_LISTID;
+static Trailer = mS_INVALID_LISTID;
+static Unique = mS_INVALID_LISTID;
+
+//------------------------------------------------------------------------------
+
 hook OnGameModeInit()
 {
 	Command_AddAltNamed("comandos",		"cmds");
@@ -41,6 +59,22 @@ hook OnGameModeInit()
 	Command_AddAltNamed("irp",			"irmarca");
 	Command_AddAltNamed("ir",			"goto");
 	Command_AddAltNamed("pm",			"mp");
+	//
+	Airplanes = LoadModelSelectionMenu("vehicles/Airplane.txt");
+	Bikes = LoadModelSelectionMenu("vehicles/Bike.txt");
+	Boats = LoadModelSelectionMenu("vehicles/Boat.txt");
+	Convertible = LoadModelSelectionMenu("vehicles/Convertible.txt");
+	Helicopters = LoadModelSelectionMenu("vehicles/Helicopter.txt");
+	Industrials = LoadModelSelectionMenu("vehicles/Industrial.txt");
+	Lowrider = LoadModelSelectionMenu("vehicles/Lowrider.txt");
+	OffRoad = LoadModelSelectionMenu("vehicles/OffRoad.txt");
+	PublicService = LoadModelSelectionMenu("vehicles/PublicService.txt");
+	RC = LoadModelSelectionMenu("vehicles/RC.txt");
+	Saloon = LoadModelSelectionMenu("vehicles/Saloon.txt");
+	Sports = LoadModelSelectionMenu("vehicles/Sport.txt");
+	StationWagon = LoadModelSelectionMenu("vehicles/StationWagon.txt");
+	Trailer = LoadModelSelectionMenu("vehicles/Trailer.txt");
+	Unique = LoadModelSelectionMenu("vehicles/Unique.txt");
 	return 1;
 }
 
@@ -755,16 +789,8 @@ YCMD:lutas(playerid, params[], help)
 
 YCMD:listadecarros(playerid, params[], help)
 {
-	new output[2706];
-	strcat(output, "ID\tNome\n");
-	for(new i = 0; i < sizeof(aVehicleNames); i++)
-	{
-		new string[32];
-		format(string, sizeof(string), "%i\t%s\n",  i + 400, aVehicleNames[i]);
-		strcat(output, string);
-	}
 	PlayConfirmSound(playerid);
-	ShowPlayerDialog(playerid, DIALOG_VEHICLE_LIST, DIALOG_STYLE_TABLIST_HEADERS, "Lista de Carros", output, "Criar", "Sair");
+	ShowPlayerDialog(playerid, DIALOG_VEHICLE_LIST, DIALOG_STYLE_LIST, "Lista de Carros", "Aviões\nMotos\nBarcos\nConversiveis\nHelicopteros\nIndustriais\nLowrider\nOff Road\nServiços Publico\nRC\nSedan\nEsportivos\nCaminhonete\nTrailers\nUnicos", "Selecionar", "Fechar");
 	return 1;
 }
 
@@ -1023,6 +1049,27 @@ YCMD:lb(playerid, params[], help)
 
 //------------------------------------------------------------------------------
 
+hook OnPlayerModelSelection(playerid, response, listid, modelid)
+{
+	if(listid == Airplanes || listid == Bikes || listid == Boats || listid == Convertible || listid == Helicopters || listid == Industrials || listid == Lowrider || listid == OffRoad || listid == PublicService || listid == RC || listid == Saloon || listid == Sports || listid == StationWagon || listid == Trailer || listid == Unique)
+    {
+        if(response)
+        {
+			new command[140];
+			PlayBuySound(playerid);
+			format(command, sizeof(command), "/car %s", GetVehicleNameFromModel(modelid));
+			CallRemoteFunction("OnPlayerCommandText", "is", playerid, command);
+        }
+        else
+		{
+			PlayCancelSound(playerid);
+		}
+    }
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	switch(dialogid)
@@ -1100,11 +1147,40 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			else
 			{
-				PlayBuySound(playerid);
-
-				new command[32];
-				format(command, sizeof(command), "/car %s", aVehicleNames[listitem]);
-				CallRemoteFunction("OnPlayerCommandText", "is", playerid, command);
+				PlaySelectSound(playerid);
+				switch(listitem)
+				{
+					case 0:
+						ShowModelSelectionMenu(playerid, Airplanes, ConvertToGameText("Aviões"));
+					case 1:
+						ShowModelSelectionMenu(playerid, Bikes, "Motos");
+					case 2:
+						ShowModelSelectionMenu(playerid, Boats, "Barcos");
+					case 3:
+						ShowModelSelectionMenu(playerid, Convertible, "Conversiveis");
+					case 4:
+						ShowModelSelectionMenu(playerid, Helicopters, "Helicopteros");
+					case 5:
+						ShowModelSelectionMenu(playerid, Industrials, "Industriais");
+					case 6:
+						ShowModelSelectionMenu(playerid, Lowrider, "Lowrider");
+					case 7:
+						ShowModelSelectionMenu(playerid, OffRoad, "Off-Road");
+					case 8:
+						ShowModelSelectionMenu(playerid, PublicService, ConvertToGameText("Serviço Publico"));
+					case 9:
+						ShowModelSelectionMenu(playerid, RC, "RC");
+					case 10:
+						ShowModelSelectionMenu(playerid, Saloon, "Sedans");
+					case 11:
+						ShowModelSelectionMenu(playerid, Sports, "Esportivos");
+					case 12:
+						ShowModelSelectionMenu(playerid, StationWagon, "Caminhonetes");
+					case 13:
+						ShowModelSelectionMenu(playerid, Trailer, "Trailers");
+					case 14:
+						ShowModelSelectionMenu(playerid, Unique, "Unicos");
+				}
 			}
 			return -2;
 		}

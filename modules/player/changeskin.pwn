@@ -54,7 +54,7 @@ hook OnPlayerDisconnect(playerid, reason)
 
 //------------------------------------------------------------------------------
 
-public OnPlayerModelSelection(playerid, response, listid, modelid)
+hook OnPlayerModelSelection(playerid, response, listid, modelid)
 {
 	if(listid == skinlist)
 	{

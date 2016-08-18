@@ -288,6 +288,21 @@ stock GetVehicleModelIDFromName(vname[])
 
 //------------------------------------------------------------------------------
 
+stock GetVehicleNameFromModel(modelid)
+{
+	new vehiclename[32];
+	if(modelid < 400 || modelid > 611)
+	{
+		strcat(vehiclename, "invalido");
+		return vehiclename;
+	}
+
+	strcat(vehiclename, aVehicleNames[modelid - 400]);
+	return vehiclename;
+}
+
+//------------------------------------------------------------------------------
+
 stock GetVehicleName(vehicleid)
 {
     new vehiclename[32] = "Nenhum";
