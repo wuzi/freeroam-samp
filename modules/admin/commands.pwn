@@ -51,7 +51,7 @@ YCMD:acmds(playerid, params[], help)
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_MODERATOR)
     {
         strcat(output, "{229f09}Nível 3\n{FFFFFF}/rtc - /ircar - /puxarcar - /tempo - /climatodos - /ejetarp - /setarpos - /setarpontos - /verpos\n");
-        strcat(output, "/banip - /unbanip - /crash - /setarcor - /setarnome - /setarskin - /godmode - /enquete\n\n");
+        strcat(output, "/banip - /unbanip - /crash - /setarcor - /setarnome - /setarskin - /godmode - /enquete - /explodir\n\n");
     }
 
 	if(GetPlayerAdminLevel(playerid) >= PLAYER_RANK_SUB_OWNER)
@@ -944,7 +944,7 @@ YCMD:mutar(playerid, params[], help)
 
 YCMD:desmutar(playerid, params[], help)
 {
-    if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_MODERATOR)
+    if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_HELPER)
         return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
 
     new targetid;
@@ -1037,6 +1037,28 @@ YCMD:rtc(playerid, params[], help)
         return SendClientMessage(playerid, COLOR_ERROR, "* Você não está em um veículo.");
 
 	SetVehicleToRespawn(GetPlayerVehicleID(playerid));
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+
+YCMD:explodir(playerid, params[], help)
+{
+    if(GetPlayerAdminLevel(playerid) < PLAYER_RANK_MODERATOR)
+        return SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
+
+	new targetid;
+	if(sscanf(params, "u", targetid))
+		SendClientMessage(playerid, COLOR_INFO, "* /explodir [playerid]");
+	else
+    {
+		SendClientMessagef(playerid, COLOR_ADMIN_COMMAND, "* Você explodiu %s.", GetPlayerNamef(targetid));
+		SendClientMessagef(targetid, COLOR_ADMIN_COMMAND, "* %s explodiu você.", GetPlayerNamef(playerid));
+
+        new Float:x, Float:y, Float:z;
+        GetPlayerPos(targetid, x, y, z);
+        CreateExplosion(x, y, z, 2, 10.0);
+	}
 	return 1;
 }
 
