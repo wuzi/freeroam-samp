@@ -102,10 +102,19 @@ hook OnGameModeInit()
 {
     EnableAntiCheat(6, false);
     EnableAntiCheat(14, false);
+    EnableAntiCheat(15, false);
+    EnableAntiCheat(16, false);
+    EnableAntiCheat(17, false);
     EnableAntiCheat(21, false);
+    EnableAntiCheat(36, false);
     EnableAntiCheat(37, false);
     EnableAntiCheat(38, false);
     EnableAntiCheat(39, false);
+    EnableAntiCheat(40, false);
+    EnableAntiCheat(44, false);
+    EnableAntiCheat(48, false);
+    EnableAntiCheat(49, false);
+    EnableAntiCheat(50, false);
     EnableAntiCheat(52, false);
     return 1;
 }
