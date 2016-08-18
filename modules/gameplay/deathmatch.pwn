@@ -615,6 +615,16 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 public OnPlayerEnterDeathmatch(playerid, dmid)
 {
+    if(GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+    {
+        ResetPlayerDerbyData(playerid);
+    }
+    else if(GetPlayerGamemode(playerid) == GAMEMODE_RACE)
+    {
+        ResetPlayerRaceData(playerid);
+        DisableRemoteVehicleCollisions(playerid, false);
+    }
+
     HidePlayerLobby(playerid);
     SetPlayerHealth(playerid, 9999.0);
     SetPlayerDeathmatch(playerid, dmid);
@@ -1090,6 +1100,7 @@ timer EndDeathmatch[7500](dmid)
     {
         if(GetPlayerDeathmatch(i) == dmid)
         {
+            SetPlayerDeathmatch(i, 0);
             HidePlayerDeathmatchHud(i);
             if(GetPlayerState(i) == PLAYER_STATE_SPECTATING)
             {
