@@ -624,6 +624,11 @@ public OnPlayerEnterDeathmatch(playerid, dmid)
         ResetPlayerRaceData(playerid);
         DisableRemoteVehicleCollisions(playerid, false);
     }
+    else if(GetPlayerGamemode(playerid) == GAMEMODE_DEATHMATCH)
+    {
+        ResetPlayerDeathmatchData(playerid);
+        ResetPlayerWeapons(playerid);
+    }
 
     SetPlayerHealth(playerid, 9999.0);
     SetPlayerDeathmatch(playerid, dmid);

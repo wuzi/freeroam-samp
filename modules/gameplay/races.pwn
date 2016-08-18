@@ -807,6 +807,11 @@ public OnPlayerEnterRace(playerid, raceid)
         ResetPlayerDeathmatchData(playerid);
         ResetPlayerWeapons(playerid);
     }
+    else if(GetPlayerGamemode(playerid) == GAMEMODE_RACE)
+    {
+        ResetPlayerRaceData(playerid);
+        DisableRemoteVehicleCollisions(playerid, false);
+    }
 
     HidePlayerLobby(playerid);
     SetPlayerRace(playerid, raceid);

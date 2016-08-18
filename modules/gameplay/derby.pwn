@@ -153,6 +153,10 @@ public OnPlayerEnterDerby(playerid, derbyid)
         ResetPlayerDeathmatchData(playerid);
         ResetPlayerWeapons(playerid);
     }
+    else if(GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
+    {
+        ResetPlayerDerbyData(playerid);
+    }
 
     HidePlayerLobby(playerid);
     SetPlayerHealth(playerid, 9999.0);
@@ -594,7 +598,7 @@ SetPlayerDerby(playerid, derbyid)
 GetPlayerDerby(playerid)
 {
     if(GetPlayerGamemode(playerid) == GAMEMODE_DERBY)
-    {        
+    {
         return gPlayerCurrentDerby[playerid];
     }
     return INVALID_DERBY_ID;
