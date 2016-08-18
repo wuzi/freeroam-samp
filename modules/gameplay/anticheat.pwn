@@ -76,6 +76,10 @@ public OnCheatDetected(playerid, ip_address[], type, code)
 {
     if(!type)
     {
+
+        if(GetPlayerGamemode(playerid) == GAMEMODE_DEATHMATCH && (code == 15 || code == 16 || code == 17))
+            return 1;
+
         new count = 0;
         foreach(new i: Player)
         {
@@ -102,9 +106,9 @@ hook OnGameModeInit()
 {
     EnableAntiCheat(6, false);
     EnableAntiCheat(14, false);
-    EnableAntiCheat(15, false);
+    /*EnableAntiCheat(15, false);
     EnableAntiCheat(16, false);
-    EnableAntiCheat(17, false);
+    EnableAntiCheat(17, false);*/
     EnableAntiCheat(21, false);
     EnableAntiCheat(36, false);
     EnableAntiCheat(37, false);
