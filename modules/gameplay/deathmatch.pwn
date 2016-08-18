@@ -625,12 +625,12 @@ public OnPlayerEnterDeathmatch(playerid, dmid)
         DisableRemoteVehicleCollisions(playerid, false);
     }
 
-    HidePlayerLobby(playerid);
     SetPlayerHealth(playerid, 9999.0);
     SetPlayerDeathmatch(playerid, dmid);
     TogglePlayerControllable(playerid, true);
     SetPlayerGamemode(playerid, GAMEMODE_DEATHMATCH);
     SetPlayerVirtualWorld(playerid, (dmid + VIRTUAL_WORLD));
+    HidePlayerLobby(playerid);
 
     if(gDeathmatchData[dmid][e_dm_state] != DM_STATE_STARTED)
     {
@@ -862,7 +862,7 @@ hook OnPlayerSpawn(playerid)
         for(new j = 0; j < 11; j++)
         {
             if(gDeathmatchData[dmid][e_dm_state] == DM_STATE_STARTED)
-                GivePlayerWeapon(playerid, gDeathmatchData[dmid][e_dm_weapon][j], 99999);
+                GivePlayerWeapon(playerid, gDeathmatchData[dmid][e_dm_weapon][j], 9999);
         }
     }
     return 1;
@@ -1215,6 +1215,13 @@ YCMD:deletardm(playerid, params[], help)
 		SendClientMessage(playerid, COLOR_ERROR, "* Você não tem permissão.");
 	}
 	return 1;
+}
+
+//------------------------------------------------------------------------------
+
+GetPlayerDeathmatchState(dmid)
+{
+    return gDeathmatchData[dmid][e_dm_state];
 }
 
 //------------------------------------------------------------------------------

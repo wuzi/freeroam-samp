@@ -39,6 +39,8 @@ ShowPlayerLobby(playerid)
     TextDrawSetString(lobbyTextdraw[12], tempstr);
     ClearPlayerScreen(playerid, 10);
 
+    HidePlayerDeathmatchHud(playerid);
+
     for(new i = 0; i < sizeof(lobbyTextdraw); i++)
     {
         TextDrawShowForPlayer(playerid, lobbyTextdraw[i]);
@@ -64,6 +66,15 @@ HidePlayerLobby(playerid)
         ShowPlayerNameTagForPlayer(playerid, i, true);
     }
     CancelSelectTextDraw(playerid);
+
+    if(GetPlayerGamemode(playerid) == GAMEMODE_DEATHMATCH)
+    {
+        if(GetPlayerDeathmatchState(GetPlayerDeathmatch(playerid)) == 2 || GetPlayerDeathmatchState(GetPlayerDeathmatch(playerid)) == 3) // started or ending
+        {
+            ShowPlayerDeathmatchHud(playerid);
+        }
+    }
+
     gIsLobbyShown[playerid] = false;
 }
 
