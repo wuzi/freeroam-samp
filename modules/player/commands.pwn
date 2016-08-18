@@ -105,6 +105,9 @@ YCMD:kitvip(playerid, params[], help)
 	if(IsPlayerInEvent(playerid))
 		return SendClientMessage(playerid, COLOR_ERROR, "* Você não pode usar este comando em um evento.");
 
+	if(GetPlayerGamemode(playerid) != GAMEMODE_FREEROAM)
+		return SendClientMessage(playerid, COLOR_ERROR, "* Você só pode usar este comando no freeroam.");
+
 	GivePlayerWeapon(playerid, 4, 1);
 	GivePlayerWeapon(playerid, 16, 99999);
 	GivePlayerWeapon(playerid, 24, 99999);
