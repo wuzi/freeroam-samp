@@ -12,6 +12,10 @@
 
 //------------------------------------------------------------------------------
 
+static const VIRTUAL_WORLD = 2000;
+
+//------------------------------------------------------------------------------
+
 forward OnRaceLoad();
 forward OnRaceDelete(playerid, raceid);
 forward OnRaceExport(playerid);
@@ -819,7 +823,7 @@ public OnPlayerEnterRace(playerid, raceid)
     TogglePlayerControllable(playerid, true);
     SetPlayerGamemode(playerid, GAMEMODE_RACE);
     DisableRemoteVehicleCollisions(playerid, true);
-    SetPlayerVirtualWorld(playerid, (raceid + 2000));
+    SetPlayerVirtualWorld(playerid, (raceid + VIRTUAL_WORLD));
 
     if(gRaceData[raceid][e_race_state] == RACE_STATE_WAITING_PLAYERS || gRaceData[raceid][e_race_state] == RACE_STATE_STARTING)
     {
@@ -932,7 +936,7 @@ task OnRaceUpdate[1000]()
                         gPlayerData[i][e_checkpoint_id] = 0;
                         gVehicleData[raceid][racer_id][e_vehicle_id] = CreateVehicle(gRaceData[raceid][e_race_vmodel], gVehicleData[raceid][racer_id][e_vehicle_x], gVehicleData[raceid][racer_id][e_vehicle_y], gVehicleData[raceid][racer_id][e_vehicle_z], gVehicleData[raceid][racer_id][e_vehicle_a], -1, -1, -1);
                         LinkVehicleToInterior(gVehicleData[raceid][racer_id][e_vehicle_id], gRaceData[raceid][e_race_interior]);
-                        SetVehicleVirtualWorld(gVehicleData[raceid][racer_id][e_vehicle_id], (raceid + 2000));
+                        SetVehicleVirtualWorld(gVehicleData[raceid][racer_id][e_vehicle_id], (raceid + VIRTUAL_WORLD));
                         SetPlayerInterior(i, gRaceData[raceid][e_race_interior]);
                         PutPlayerInVehicle(i, gVehicleData[raceid][racer_id][e_vehicle_id], 0);
                         SetCameraBehindPlayer(i);

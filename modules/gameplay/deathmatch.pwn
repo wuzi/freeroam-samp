@@ -14,9 +14,6 @@
 
 static const VIRTUAL_WORLD = 1000;
 
-#define MAX_DEATHMATCHES                                            64
-#define MAX_DEATHMATCH_PLAYERS                                      30
-
 //------------------------------------------------------------------------------
 
 forward OnDeathmatchLoad();

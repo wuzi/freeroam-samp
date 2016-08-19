@@ -30,8 +30,10 @@ new gMySQL;
 
 //------------------------------------------------------------------------------
 
+// Quantidade de buildings (entradas e saidas) o servidor pode carregar
 #define MAX_BUILDINGS									32
 
+// Quantidade de veículos que os jogadores podem criar
 #define MAX_CREATED_VEHICLE_PER_PLAYER					1
 
 // Intervalo entre as mensagens aleatórias do servidor em milisegundos
@@ -40,6 +42,7 @@ new gMySQL;
 // Intervalo entre os nome do servidor aleatórios em milisegundos
 #define UPDATE_HOSTNAME_INTERVAL						15000
 
+// Tamanho máximo da senha dos jogadores
 #define MAX_PLAYER_PASSWORD								32
 
 // Quantidade maxima de corridas que o servidor pode carregar
@@ -63,16 +66,31 @@ new gMySQL;
 // Quantidade máxima de derby no servidor
 #define MAX_DERBY										32
 
+// Quantos segundos o dm irá levar para iniciar após o limite de jogadores ser atingido
 #define DEATHMATCH_COUNT_DOWN							30
 
+// Quantidade maxima de deathmatches que o servidor pode carregar
+#define MAX_DEATHMATCHES								64
+
+// Quantidade máxima de jogadores no deathmatch
+#define MAX_DEATHMATCH_PLAYERS							30
+
+// Tamanho máximo do nome dos mapas
+// Recomendado usar poucos characteres para não ultrapassar o limite do dialog
 #define MAX_RACE_NAME									34
+#define MAX_DEATHMATCH_NAME								34
+
+// Quantidade minima de jogadores para iniciar os modos de jogo
 #define MINIMUM_PLAYERS_TO_START_RACE					2
 #define MINIMUM_PLAYERS_TO_START_DM						2
 #define MINIMUM_PLAYERS_TO_START_DERBY					2
+
+// Constantes de ID inválidos
 #define INVALID_RACE_ID									-1
 #define INVALID_DEATHMATCH_ID							-1
-#define MAX_DEATHMATCH_NAME								34
+#define INVALID_DERBY_ID								-1
 
+// Endereço para o script php de enviar email
 #define MAILER_URL "http://localhost/mailer.php"
 
 //------------------------------------------------------------------------------

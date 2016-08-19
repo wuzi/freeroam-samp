@@ -16,7 +16,7 @@ forward OnPlayerEnterDerby(playerid, derbyid);
 
 static const VIRTUAL_WORLD = 3000;
 
-#define INVALID_DERBY_ID                                        -1
+//------------------------------------------------------------------------------
 
 enum
 {
