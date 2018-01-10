@@ -1,0 +1,13 @@
+{
+  "cmd": "C:\\Users\\lcsde\\Documents\\pawno\\pawncc.exe",
+  "args": [
+    "-i{PROJECT_PATH}\\includes",
+    "-(+",
+    "-;+",
+    "-Z",
+    "{FILE_ACTIVE}"
+  ],
+  "sh": false,
+  "cwd": "{FILE_ACTIVE_PATH}",
+  "errorMatch": "^(?<file>.+)\\((?<line>[0-9]+)\\)"
+}
