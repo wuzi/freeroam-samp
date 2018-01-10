@@ -3984,7 +3984,7 @@ ac_fpublic ac_AntiCheatSetNextDialog(playerid, dialogid)
 	#if !defined _inc_y_hooks && !defined _INC_y_hooks
 		#if defined _ALS_OnPlayerPickUpDynamicPicku\
 			|| defined _ALS_OnPlayerPickUpDynamicPick || defined _ALS_OnPlayer\
-			PickUpDynamicPickup
+			PickUpDynPickup
 			#undef OnPlayerPickUpDynamicPickup
 		#else
 			#define _ALS_OnPlayerPickUpDynamicPickup
@@ -5138,8 +5138,8 @@ ac_fpublic ac_AntiCheatSetNextDialog(playerid, dialogid)
 #if !defined _inc_y_hooks && !defined _INC_y_hooks
 	#if defined _ALS_OnPlayerEnterRaceCheckpoin\
 		|| defined _ALS_OnPlayerEnterRaceCP || defined _ALS_OnPlayer\
-		EnterRaceCheckpoint
-		#undef OnPlayerEnterRaceCheckpoint
+		EnterRaceCP
+		#undef OnPlayerEnterRaceCheckpoin
 	#else
 		#define _ALS_OnPlayerEnterRaceCheckpoint
 	#endif
@@ -5224,7 +5224,7 @@ ac_fpublic ac_AntiCheatSetNextDialog(playerid, dialogid)
 #if !defined _inc_y_hooks && !defined _INC_y_hooks
 	#if defined _ALS_OnPlayerLeaveRaceCheckpoin\
 		|| defined _ALS_OnPlayerLeaveRaceCP || defined _ALS_OnPlayer\
-		LeaveRaceCheckpoint
+		LeaveRaceCP
 		#undef OnPlayerLeaveRaceCheckpoint
 	#else
 		#define _ALS_OnPlayerLeaveRaceCheckpoint
@@ -5261,7 +5261,7 @@ ac_fpublic ac_AntiCheatSetNextDialog(playerid, dialogid)
 #if !defined _inc_y_hooks && !defined _INC_y_hooks
 	#if defined _ALS_OnPlayerClickPlayerTextDra\
 		|| defined _ALS_OnPlayerClickPlayerTD || defined _ALS_OnPlayer\
-		ClickPlayerTextDraw
+		ClickPlayerTD
 		#undef OnPlayerClickPlayerTextDraw
 	#else
 		#define _ALS_OnPlayerClickPlayerTD
@@ -5296,7 +5296,7 @@ ac_fpublic ac_AntiCheatSetNextDialog(playerid, dialogid)
 
 #if !defined _inc_y_hooks && !defined _INC_y_hooks
 	#if defined _ALS_OnVehicleDamageStatusUpdat\
-		|| defined _ALS_OnVehicleDamageStatusUpd || defined _ALS_OnVehicle\
+		|| defined _ALS_OnVehicleDamageStatusUpd || defined _ALS_OnVeh\
 		DamageStatusUpdate
 		#undef OnVehicleDamageStatusUpdate
 	#else
@@ -5378,7 +5378,7 @@ ac_fpublic ac_AntiCheatSetNextDialog(playerid, dialogid)
 	#if !defined _inc_y_hooks && !defined _INC_y_hooks
 		#if defined _ALS_OnPlayerSelectDynamicObjec\
 			|| defined _ALS_OnPlayerSelectDynamicObj || defined _ALS_OnPlayer\
-			SelectDynamicObject
+			SelectDynamicObj
 			#undef OnPlayerSelectDynamicObject
 		#else
 			#define _ALS_OnPlayerSelectDynamicObject
