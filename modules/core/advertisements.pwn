@@ -30,7 +30,7 @@ task SendGlobalAdvertise[ADVERTISE_INTERVAL]()
 //------------------------------------------------------------------------------
 
 static hostnames[][] = {
-    "« LF - Liberty Freeroam (0.3.7) »"
+    "« Freeroam (0.3.7) »"
 };
 
 task UpdateHostName[UPDATE_HOSTNAME_INTERVAL]()

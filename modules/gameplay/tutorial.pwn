@@ -21,7 +21,7 @@ static const gTutorialText[][][] =
 {
     {
         "Bem-Vindo",
-        "Olá, bem vindo ao Liberty Freeroam!~n~~n~Você irá agora passar \
+        "Olá, bem vindo ao Freeroam!~n~~n~Você irá agora passar \
         por um tutorial que irá lhe explicar algumas das possibilidades que você \
         pode fazer em nosso servidor.~n~~n~Esperamos que você se divirta bastante aqui \
         como nós nos divertimos construindo-o!~n~~n~Quaisquer dúvidas utilize o comando \

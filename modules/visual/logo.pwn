@@ -109,7 +109,7 @@ hook OnGameModeInit()
     TextDrawSetShadow(logo[4], 0);
     TextDrawSetSelectable(logo[4], true);
 
-    logo[5] = TextDrawCreate(559.868530, 410.500030, "www.libertyfreeroam.com");
+    logo[5] = TextDrawCreate(559.868530, 410.500030, "www.freeroam.com");
     TextDrawLetterSize(logo[5], 0.272092, 1.436666);
     TextDrawAlignment(logo[5], 2);
     TextDrawColor(logo[5], -1);

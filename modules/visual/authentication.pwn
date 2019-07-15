@@ -131,7 +131,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
         {
             PlaySelectSound(playerid);
             ShowPlayerDialog(playerid, DIALOG_FORUM, DIALOG_STYLE_MSGBOX, "{ffffff}Nosso fórum",
-            "{ffffff}www.libertyfreeroam.com.br/forum", "Fechar", "");
+            "{ffffff}www.freeroam.com.br/forum", "Fechar", "");
         }
         else if(playertextid == loginTextDraw[playerid][5])
         {
@@ -145,7 +145,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
             {
                 strcat(gPlayerRecoverCode[playerid], GenerateKey());
                 format(output, sizeof(output), "Código: %s.", gPlayerRecoverCode[playerid]);
-                SendMail(GetPlayerEmail(playerid), "recover@libertyfreeroam.com", "Liberty Freeroam", "Recuperar Senha", output);
+                SendMail(GetPlayerEmail(playerid), "recover@freeroam.com", "Freeroam", "Recuperar Senha", output);
 
             }
             format(output, sizeof(output), "Enviamos um código para seu e-mail (%s).\nInsira o código abaixo para resetar sua senha:", GetPlayerEmail(playerid));
